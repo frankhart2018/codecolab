@@ -27,6 +27,8 @@ tags_metadata = [
 
 class File(BaseModel):
     url: str
+    pid: str
+    uid: str
 
 
 @app.get("/", tags=["index"], description=tags_metadata[0]["description"])
@@ -41,11 +43,15 @@ def py_version():
 def run(file: File):
     file_url = file.url
 
-    os.system(f"wget {file_url}")
     file_path = os.path.basename(file_url)
+    file_name = ".".join(file_path.split(".")[:-1])
+    file_name = f"{file_name}-{file.pid}-{file.uid}"
+    extension = file_path.split(".")[-1]
+    new_file_name = f"{file_name}.{extension}"
+    os.system(f"wget {file_url} -O {new_file_name}")
 
-    output = subprocess.run(["python", file_path], capture_output=True)
-    os.remove(file_path)
+    output = subprocess.run(["python", new_file_name], capture_output=True)
+    os.remove(new_file_name)
 
     return {"output": output.stdout.decode("utf-8")}
 
