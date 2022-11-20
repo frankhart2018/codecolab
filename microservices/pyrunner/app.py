@@ -18,6 +18,10 @@ tags_metadata = [
     {
         "name": "run",
         "description": "Download and run a python script",
+    },
+    {
+        "name": "packages",
+        "description": "Get installed packages in server",
     }
 ]
 
@@ -44,3 +48,12 @@ def run(file: File):
     os.remove(file_path)
 
     return {"output": output.stdout.decode("utf-8")}
+
+@app.get("/get-packages", tags=["packages"], description=tags_metadata[3]["description"])
+def get_packages():
+    with open("third-party.txt", "r") as f:
+        packages = f.read().splitlines()
+
+    packages = [{"name": package.split("==")[0], "version": package.split("==")[1]} for package in packages]
+
+    return {"packages": packages}
