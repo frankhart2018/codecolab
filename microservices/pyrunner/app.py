@@ -6,19 +6,34 @@ import os
 
 app = FastAPI()
 
+tags_metadata = [
+    {
+        "name": "index",
+        "description": "Get server health",
+    },
+    {
+        "name": "pyver",
+        "description": "Get python version in server",
+    },
+    {
+        "name": "run",
+        "description": "Download and run a python script",
+    }
+]
+
 class File(BaseModel):
     url: str
 
 
-@app.get("/")
+@app.get("/", tags=["index"], description=tags_metadata[0]["description"])
 def index():
     return {"status": "Ok"}
 
-@app.get("/py-version")
+@app.get("/py-version", tags=["pyver"], description=tags_metadata[1]["description"])
 def py_version():
     return {"version": subprocess.check_output(["python", "--version"])}
 
-@app.post("/run")
+@app.post("/run", tags=["run"], description=tags_metadata[2]["description"])
 def run(file: File):
     file_url = file.url
 
@@ -26,4 +41,6 @@ def run(file: File):
     file_path = os.path.basename(file_url)
 
     output = subprocess.run(["python", file_path], capture_output=True)
+    os.remove(file_path)
+
     return {"output": output.stdout.decode("utf-8")}
