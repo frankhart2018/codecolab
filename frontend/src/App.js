@@ -9,6 +9,7 @@ import CodeEditor from "./CodeEditor";
 const socket = io.connect(SOCKET_URL);
 
 const App = () => {
+  console.log("Connected to socket server: ", SOCKET_URL);
   const [shouldDisplayCode, setShouldDisplayCode] = useState(true);
   const [code, setCode] = useState("");
 
@@ -18,16 +19,13 @@ const App = () => {
       code: code,
     });
     socket.on("code", (data) => {
-      console.log("This event is updating!");
       setCode(data);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    console.log("Socket changed!");
     socket.on("recv_code", (data) => {
-      console.log("Other event is updating!", data);
       setCode(data);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
