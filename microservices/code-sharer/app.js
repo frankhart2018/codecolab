@@ -26,6 +26,6 @@ io.on("connection", (socket) => {
   CodeSessionSocketController(socket);
 });
 
-server.listen(8000, "0.0.0.0", () => {
+server.listen(process.env.PORT || 8000, () => {
   console.log("Server started on port 8000");
 });
