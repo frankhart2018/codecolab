@@ -6,7 +6,7 @@ import theme from './theme';
 import Home from "./Home";
 import SignIn from './Home/components/SignIn';
 function App() {
-  return (
+  return ( 
     <div>
       <ThemeProvider theme={theme}>
         <BrowserRouter>
