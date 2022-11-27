@@ -39,9 +39,7 @@ const CodeSharer = () => {
 
   const closeClickHandlder = () => {
     setShouldDisplayCode(false);
-    socket.emit("close_code", {
-      room_id: room_id,
-    });
+    socket.disconnect();
   };
 
   const codeUpdateHandler = (event) => {
@@ -55,7 +53,7 @@ const CodeSharer = () => {
   return (
     <div style={{ padding: "10px" }}>
       <button type="button" onClick={closeClickHandlder}>
-        Close main.py
+        Close {room_id}
       </button>
       <br />
       <br />
