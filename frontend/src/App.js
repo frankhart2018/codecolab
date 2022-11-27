@@ -1,64 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { io } from "socket.io-client";
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import "./App.css";
-import { SOCKET_URL } from "./constants";
-
-import CodeEditor from "./CodeEditor";
-
-const socket = io.connect(SOCKET_URL);
+import CodeSharer from "./CodeSharer";
+import Landing from "./Landing";
 
 const App = () => {
-  console.log("Connected to socket server: ", SOCKET_URL);
-  const [shouldDisplayCode, setShouldDisplayCode] = useState(true);
-  const [code, setCode] = useState("");
-
-  useEffect(() => {
-    socket.emit("view_code", {
-      room_id: "1_sample.py",
-      code: code,
-    });
-    socket.on("code", (data) => {
-      setCode(data);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    socket.on("recv_code", (data) => {
-      setCode(data);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [socket, code]);
-
-  const closeClickHandlder = () => {
-    setShouldDisplayCode(false);
-    socket.emit("close_code", {
-      room_id: "1_sample.py",
-    });
-  };
-
-  const codeUpdateHandler = (event) => {
-    setCode(event.target.value);
-    socket.emit("update_code", {
-      room_id: "1_sample.py",
-      code: event.target.value,
-    });
-    console.log("Updating code to: ", event.target.value);
-  };
-
   return (
-    <div style={{ padding: "10px" }}>
-      <button type="button" onClick={closeClickHandlder}>
-        Close main.py
-      </button>
-      <br />
-      <br />
-      {shouldDisplayCode && (
-        <CodeEditor code={code} codeUpdateHandler={codeUpdateHandler} />
-      )}
-    </div>
-  );
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Landing />} index />
+        <Route path="/view-code/*" element={<CodeSharer />} />
+      </Routes>
+    </BrowserRouter>
+  )
 };
 
 export default App;

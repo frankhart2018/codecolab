@@ -1,7 +1,6 @@
 import React from "react";
 
 const CodeEditor = ({ code, codeUpdateHandler }) => {
-  console.log("CodeEditor is rendering!", code);
   return (
     <div>
       <textarea
