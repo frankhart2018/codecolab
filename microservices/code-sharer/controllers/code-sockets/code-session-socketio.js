@@ -27,14 +27,23 @@ const viewCode = async (socket, data) => {
 
 const removeUser = async (socket) => {
   const socketSession = await socketSessionDao.findSocketSession(socket.id);
-  const room_id = socketSession.room_id;
 
-  let codeSession = await codeSessionDao.findCodeSession(room_id);
-  codeSession.num_active_users -= 1;
+  if (socketSession) {
+    const room_id = socketSession.room_id;
 
-  await codeSessionDao.updateCodeSession(room_id, codeSession);
-  await socketSessionDao.deleteSocketSession(socket.id);
-  socket.leave(room_id);
+    let codeSession = await codeSessionDao.findCodeSession(room_id);
+    codeSession.num_active_users -= 1;
+
+    if (codeSession.num_active_users === 0) {
+      await codeSessionDao.deleteCodeSession(room_id);
+      // Call the API to push code session to MongoDB and S3
+    } else {
+      await codeSessionDao.updateCodeSession(room_id, codeSession);
+    }
+
+    await socketSessionDao.deleteSocketSession(socket.id);
+    socket.leave(room_id);
+  }
 };
 
 const updateCode = async (socket, data) => {
