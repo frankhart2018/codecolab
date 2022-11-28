@@ -9,10 +9,12 @@ import FormFeedback from './form/FormFeedback';
 import FormButton from './form/FormButton';
 import { Typography } from '@mui/material';
 import RFTextField from './form/RFTextField';
+import { useDispatch } from "react-redux";
+import { loginUserThunk } from '../../services/thunks';
 
 function SignIn() {
   const [sent, setSent] = React.useState(false);
-
+  const dispatch = useDispatch();
   const validate = (values) => {
     const errors = required(['email', 'password'], values);
 
@@ -29,6 +31,8 @@ function SignIn() {
   const handleSubmit = (e) => {
     console.log(e)
     setSent(true);
+    dispatch(loginUserThunk(e));
+
   };
 
   return (
@@ -42,7 +46,7 @@ function SignIn() {
           <Typography variant="body2" align="center">
             {'Not a member yet? '}
             <Link
-              href="/premium-themes/onepirate/sign-up/"
+              href="/components/sign-up"
               align="center"
               underline="always"
             >
