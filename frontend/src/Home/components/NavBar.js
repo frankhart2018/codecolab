@@ -1,7 +1,8 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import { AppBar, Link } from '@mui/material';
+import { AppBar } from '@mui/material';
 import Toolbar from './ToolBar';
+import { Link } from 'react-router-dom';
 
 const rightLink = {
     fontSize: 16,
