@@ -1,11 +1,9 @@
-import './App.css';
+import "./App.css";
+
+import FileStructure from "./file-structure/FileStructure";
 
 function App() {
-  return (
-    <div>
-      <h1>Hello World</h1>
-    </div>
-  );
+  return <FileStructure />;
 }
 
 export default App;
