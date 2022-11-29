@@ -31,7 +31,7 @@ function ForgotPassword() {
         setSent(true);
         const response = await dispatch(forgotPasswordThunk(e));
         console.log("response", response)
-        if (response?.payload?.status == 200) {
+        if (response?.payload?.status === 200) {
             setSent(false);
         };
     }

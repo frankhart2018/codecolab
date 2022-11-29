@@ -34,7 +34,7 @@ function SignIn() {
     console.log(e)
     setSent(true);
     const res = await dispatch(loginUserThunk(e));
-    if (res?.payload?.status == "ok") {
+    if (res?.payload?.status === "ok") {
       navigate("/all-projects", { replace: true });
       setSent(false);
 

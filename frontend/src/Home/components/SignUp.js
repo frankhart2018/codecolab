@@ -41,7 +41,7 @@ function SignUp() {
         setSent(true);
         const response = await dispatch(signUpUserThunk(user));
         console.log("response", response)
-        if (response?.payload?.status == "ok") {
+        if (response?.payload?.status === "ok") {
             navigate("/all-projects", { replace: true });
             setSent(false);
 
