@@ -8,7 +8,7 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import FolderIcon from "@mui/icons-material/Folder";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 import "./FileStructure.css";
 
@@ -133,16 +133,18 @@ export default function FileStructure() {
   ];
 
   return (
-    <List
-      sx={{
-        width: "100%",
-        maxWidth: 360,
-      }}
-      component="nav"
-      aria-labelledby="nested-list-subheader"
-      className="background-grayish"
-    >
-      {fileMap.map((root) => generateFileStructure(root))}
-    </List>
+    <Box sx={{ height: "100vh", width: "25%" }} className="background-grayish">
+      <List
+        sx={{
+          width: "100%",
+          maxWidth: 360,
+        }}
+        component="nav"
+        aria-labelledby="nested-list-subheader"
+        className="background-grayish"
+      >
+        {fileMap.map((root) => generateFileStructure(root))}
+      </List>
+    </Box>
   );
 }
