@@ -8,7 +8,8 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import FolderIcon from "@mui/icons-material/Folder";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
-import { Box, Typography } from "@mui/material";
+import { Box, ListSubheader, Typography } from "@mui/material";
+import Editor from "@monaco-editor/react";
 
 import "./FileStructure.css";
 
@@ -133,18 +134,42 @@ export default function FileStructure() {
   ];
 
   return (
-    <Box sx={{ height: "100vh", width: "25%" }} className="background-grayish">
-      <List
-        sx={{
-          width: "100%",
-          maxWidth: 360,
-        }}
-        component="nav"
-        aria-labelledby="nested-list-subheader"
+    <>
+      <Box
+        sx={{ height: "100vh", width: "25%", float: "left" }}
         className="background-grayish"
       >
-        {fileMap.map((root) => generateFileStructure(root))}
-      </List>
-    </Box>
+        <List
+          sx={{
+            width: "100%",
+            maxWidth: 360,
+          }}
+          component="nav"
+          aria-labelledby="nested-list-subheader"
+          className="background-grayish"
+          subheader={
+            <Typography
+              variant="body1"
+              align="center"
+              className="text-gray"
+              sx={{ fontWeight: "bold" }}
+            >
+              Project files
+            </Typography>
+          }
+        >
+          {fileMap.map((root) => generateFileStructure(root))}
+        </List>
+      </Box>
+
+      <Editor
+        height="100vh"
+        width={"75%"}
+        style={{ float: "left" }}
+        defaultLanguage="python"
+        defaultValue="# some comment"
+        theme="vs-dark"
+      />
+    </>
   );
 }
