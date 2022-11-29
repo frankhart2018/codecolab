@@ -8,10 +8,10 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import FolderIcon from "@mui/icons-material/Folder";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 import "./FileStructure.css";
-import { getPythonVersionThunk } from "../../../services/pyrunner-thunk";
+// import { getPythonVersionThunk } from "../../../services/pyrunner-thunk";
 
 const generateFileStructure = (root, level = 1) => {
   if (root.type === "file") {
