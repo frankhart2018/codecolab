@@ -28,7 +28,7 @@ function NavBar() {
                             color="inherit"
                             variant="h6"
                             underline="none"
-                            href={"/login"}
+                            to={"/login"}
                             sx={rightLink}
                         >
                             Sign In
