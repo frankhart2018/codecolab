@@ -19,7 +19,6 @@ function NavBar() {
                         variant="h6"
                         underline="none"
                         color="inherit"
-                        // href="/premium-themes/onepirate/"
                         sx={{ fontSize: 24 }}
                     >
                         Codify
@@ -29,7 +28,7 @@ function NavBar() {
                             color="inherit"
                             variant="h6"
                             underline="none"
-                            href={"/components/login"}
+                            href={"/login"}
                             sx={rightLink}
                         >
                             Sign In
@@ -37,7 +36,7 @@ function NavBar() {
                         <Link
                             variant="h6"
                             underline="none"
-                            href={"/components/sign-up"}
+                            href={"/sign-up"}
                             sx={{ ...rightLink, color: 'secondary.main' }}
                         >
                             Sign Up

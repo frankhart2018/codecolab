@@ -15,3 +15,9 @@ export const signUpUserThunk = createAsyncThunk(
         const response = await service.registerUser(user)
         return response
     })
+
+    export const forgotPasswordThunk = createAsyncThunk(
+        '/user/forgotPassword', async (email) => {
+            const response = await service.forgotPasword(email)
+            return response
+        })

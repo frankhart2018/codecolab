@@ -11,10 +11,12 @@ import { Typography } from '@mui/material';
 import RFTextField from './form/RFTextField';
 import { useDispatch } from "react-redux";
 import { loginUserThunk } from '../../services/thunks';
+import { useNavigate } from 'react-router-dom';
 
 function SignIn() {
   const [sent, setSent] = React.useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const validate = (values) => {
     const errors = required(['email', 'password'], values);
 
@@ -28,11 +30,15 @@ function SignIn() {
     return errors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     console.log(e)
     setSent(true);
-    dispatch(loginUserThunk(e));
+    const res = await dispatch(loginUserThunk(e));
+    if (res?.payload?.status == "ok") {
+      navigate("/all-projects", { replace: true });
+      setSent(false);
 
+    }
   };
 
   return (
@@ -46,7 +52,7 @@ function SignIn() {
           <Typography variant="body2" align="center">
             {'Not a member yet? '}
             <Link
-              href="/components/sign-up"
+              href="/sign-up"
               align="center"
               underline="always"
             >
@@ -107,7 +113,7 @@ function SignIn() {
           )}
         </Form>
         <Typography align="center">
-          <Link underline="always" href="/premium-themes/onepirate/forgot-password/">
+          <Link underline="always" href="/forgot-password">
             Forgot password?
           </Link>
         </Typography>

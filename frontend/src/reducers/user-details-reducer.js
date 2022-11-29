@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { loginUserThunk } from "../services/thunks";
+import { loginUserThunk, signUpUserThunk } from "../services/thunks";
 
 const initialState = {
     user: {},
-    sent: false,
+    isLoggedIn: false,
+    token: "",
 }
 
 const userDetailsSlice = createSlice({
@@ -12,19 +13,20 @@ const userDetailsSlice = createSlice({
     extraReducers: {
         [loginUserThunk.fulfilled]:
             (state, { payload }) => {
-                state.sent = false
-                state.user = payload
+                state.isLoggedIn = true
+                state.token = payload.data
+                console.log("state", state);
+                console.log("payload", payload);
+                console.log("initialState", initialState);
             },
-    },
-    reducers: {
-        loginUser(state, action) {
-            state.sent = true
-            console.log("action", action)
-            state = action.payload
-            console.log("state", state)
-        },
+        [signUpUserThunk.fulfilled]:
+            (state, { payload }) => {
+                if (payload.status === 201) {
+                    state.isLoggedIn = true
+                }
+            },
+
     }
 });
 
-export const { loginUser } = userDetailsSlice.actions;
 export default userDetailsSlice.reducer;

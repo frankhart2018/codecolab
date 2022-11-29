@@ -44,7 +44,7 @@ const createUser = async (req, res) => {
         return
     }
     await userDao.createUser(email, encryptedPassword, name, username);
-    res.status(201).json({ message: 'User created successfully' });
+    res.status(201).json({ message: 'User created successfully', status: "ok" });
 }
 
 
@@ -94,7 +94,7 @@ const forgetPassword = async (req, res) => {
             console.log("Email sent: " + info.response);
         }
     });
-    res.status(200).json({ message: "Email sent" });
+    res.status(200).json({ status: "ok", message: "Email sent" });
 }
 
 const resetPassword = async (req, res) => {

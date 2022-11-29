@@ -12,3 +12,9 @@ export const registerUser = async (user) => {
     console.log("response", response);
     return response.data;
 }
+
+export const forgotPasword = async (email) => {
+    const response = await axios.post(`${API_BASE}/api/forget-password`, email)
+    console.log("response", response);
+    return response
+}

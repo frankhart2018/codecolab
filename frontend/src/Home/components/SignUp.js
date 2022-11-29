@@ -11,10 +11,12 @@ import { Grid, Typography } from '@mui/material';
 import RFTextField from './form/RFTextField';
 import { useDispatch } from "react-redux";
 import { signUpUserThunk } from '../../services/thunks';
+import { useNavigate } from 'react-router-dom';
 
 function SignUp() {
     const [sent, setSent] = React.useState(false);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const validate = (values) => {
         const errors = required(['firstName', 'lastName', 'email', 'username', 'password'], values);
 
@@ -28,7 +30,7 @@ function SignUp() {
         return errors;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         const user = {
             name: e.firstName + " " + e.lastName,
             email: e.email,
@@ -36,8 +38,15 @@ function SignUp() {
             password: e.password
         }
         console.log("user", user)
-        dispatch(signUpUserThunk(user));
         setSent(true);
+        const response = await dispatch(signUpUserThunk(user));
+        console.log("response", response)
+        if (response?.payload?.status == "ok") {
+            navigate("/all-projects", { replace: true });
+            setSent(false);
+
+        }
+
     };
 
     return (
@@ -49,7 +58,7 @@ function SignUp() {
                         Sign Up
                     </Typography>
                     <Typography variant="body2" align="center">
-                        <Link href="/components/login" underline="always">
+                        <Link href="/login" underline="always">
                             Already have an account?
                         </Link>
                     </Typography>
