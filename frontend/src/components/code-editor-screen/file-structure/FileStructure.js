@@ -8,10 +8,10 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import FolderIcon from "@mui/icons-material/Folder";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
-import { Box, ListSubheader, Typography } from "@mui/material";
-import Editor from "@monaco-editor/react";
+import { Box, Stack, Typography } from "@mui/material";
 
 import "./FileStructure.css";
+import { getPythonVersionThunk } from "../../../services/pyrunner-thunk";
 
 const generateFileStructure = (root, level = 1) => {
   if (root.type === "file") {
@@ -133,43 +133,31 @@ export default function FileStructure() {
     },
   ];
 
-  return (
-    <>
-      <Box
-        sx={{ height: "100vh", width: "25%", float: "left" }}
-        className="background-grayish"
-      >
-        <List
-          sx={{
-            width: "100%",
-            maxWidth: 360,
-          }}
-          component="nav"
-          aria-labelledby="nested-list-subheader"
-          className="background-grayish"
-          subheader={
-            <Typography
-              variant="body1"
-              align="center"
-              className="text-gray"
-              sx={{ fontWeight: "bold" }}
-            >
-              Project files
-            </Typography>
-          }
-        >
-          {fileMap.map((root) => generateFileStructure(root))}
-        </List>
-      </Box>
+  // console.log(getPythonVersionThunk());
 
-      <Editor
-        height="100vh"
-        width={"75%"}
-        style={{ float: "left" }}
-        defaultLanguage="python"
-        defaultValue="# some comment"
-        theme="vs-dark"
-      />
-    </>
+  return (
+    <Box sx={{ height: "100vh", width: "25%" }} className="background-grayish">
+      <List
+        sx={{
+          width: "100%",
+          maxWidth: 360,
+        }}
+        component="nav"
+        aria-labelledby="nested-list-subheader"
+        className="background-grayish"
+        subheader={
+          <Typography
+            variant="body1"
+            align="center"
+            className="text-gray"
+            sx={{ fontWeight: "bold" }}
+          >
+            Project files
+          </Typography>
+        }
+      >
+        {fileMap.map((root) => generateFileStructure(root))}
+      </List>
+    </Box>
   );
 }

@@ -1,9 +1,9 @@
 import "./App.css";
 
-import FileStructure from "./file-structure/FileStructure";
+import CodeEditorScreen from "./components/code-editor-screen/CodeEditorScreen";
 
 function App() {
-  return <FileStructure />;
+  return <CodeEditorScreen />;
 }
 
 export default App;
