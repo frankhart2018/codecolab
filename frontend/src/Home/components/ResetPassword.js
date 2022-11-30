@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import * as React from 'react';
 import { Field, Form, FormSpy } from 'react-final-form';
 import Box from '@mui/material/Box';
-import { email, password, required } from './form/validation';
+import { password, required } from './form/validation';
 import NavBar from './NavBar';
 import AppForm from './AppForm';
 import FormFeedback from './form/FormFeedback';
@@ -65,7 +65,7 @@ function ResetPassword() {
             .catch((error) => {
                 console.error('Error:', error);
             });
-    }, []);
+    }, [id, token]);
 
     return (
         <React.Fragment>
