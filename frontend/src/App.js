@@ -12,8 +12,8 @@ import SignUp from "./Home/components/SignUp";
 import ForgotPassword from "./Home/components/ForgotPassword";
 import AllProjects from "./Home/components/AllProjects";
 import CodeEditorScreen from "./components/code-editor-screen/CodeEditorScreen";
-import ResetPassword from './Home/components/ResetPassword';
-
+import ResetPassword from "./Home/components/ResetPassword";
+import CodeSharer from "./components/code-sharer/CodeSharer";
 const store = configureStore({
   reducer: {
     userDetails: userDetailsReducer,
@@ -21,8 +21,7 @@ const store = configureStore({
   },
 });
 
-
-function App() {
+const App = () => {
   return (
     <div>
       <Provider store={store}>
@@ -30,20 +29,23 @@ function App() {
           <div className="container">
             <Routes>
               <Route path="/*" element={<Home />} />
-              <Route path="/*"
-                element={<Home />} />
+              <Route path="/*" element={<Home />} />
               <Route path="/login" element={<SignIn />} />
               <Route path="/sign-up" element={<SignUp />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/all-projects" element={<AllProjects />} />
               <Route path="/code-editor" element={<CodeEditorScreen />} />
-              <Route path="/api/reset-password/:id/:token" element={<ResetPassword />} />
+              <Route path="/code-sharer" element={<CodeSharer />} />
+              <Route
+                path="/api/reset-password/:id/:token"
+                element={<ResetPassword />}
+              />
             </Routes>
           </div>
         </ThemeProvider>
       </Provider>
     </div>
   );
-}
+};
 
 export default App;
