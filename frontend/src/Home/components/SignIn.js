@@ -19,7 +19,6 @@ function SignIn() {
   const navigate = useNavigate();
   const validate = (values) => {
     const errors = required(['email', 'password'], values);
-
     if (!errors.email) {
       const emailError = email(values.email);
       if (emailError) {

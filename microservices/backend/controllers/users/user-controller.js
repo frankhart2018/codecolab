@@ -101,15 +101,14 @@ const resetPassword = async (req, res) => {
     const { id, token } = req.params;
     const oldUser = await userDao.findUserById({ _id: id });
     if (!oldUser) {
-        return res.json({ message: "User Not Exists!!" });
+        return res.status(400).json({ status: 400, message: "User Not Exists!!" });
     }
     const secret = JWT_SECRET + oldUser.password;
     try {
         const verify = Jwt.verify(token, secret);
-        return res.status(200).json({ message: "ok" });
-        // res.render("index", { email: verify.email, status: "Not Verified" });
+        return res.status(200).json({ status: 200, message: "ok" });
     } catch (error) {
-        return res.status(400).json({ message: "Invalid Token" });
+        return res.status(400).json({ status: 400, message: "Invalid Token" });
     }
 }
 

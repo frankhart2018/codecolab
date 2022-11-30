@@ -10,6 +10,7 @@ import userDetailsReducer from './reducers/user-details-reducer';
 import SignUp from './Home/components/SignUp';
 import ForgotPassword from './Home/components/ForgotPassword';
 import AllProjects from './Home/components/AllProjects';
+import ResetPassword from './Home/components/ResetPassword';
 function App() {
   const store = configureStore({
     reducer: {
@@ -20,16 +21,17 @@ function App() {
     <div>
       <Provider store={store}>
         <ThemeProvider theme={theme}>
-            <div className="container">
-              <Routes>
-                <Route path="/*"
-                  element={<Home />} />
-                <Route path="/login" element={<SignIn />} />
-                <Route path="/sign-up" element={<SignUp />} />
-                <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route path="/all-projects" element={<AllProjects />} />
-              </Routes>
-            </div>
+          <div className="container">
+            <Routes>
+              <Route path="/*"
+                element={<Home />} />
+              <Route path="/login" element={<SignIn />} />
+              <Route path="/sign-up" element={<SignUp />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/all-projects" element={<AllProjects />} />
+              <Route path="/api/reset-password/:id/:token" element={<ResetPassword />} />
+            </Routes>
+          </div>
         </ThemeProvider>
       </Provider>
     </div>
