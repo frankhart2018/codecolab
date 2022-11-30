@@ -35,7 +35,7 @@ const App = () => {
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/all-projects" element={<AllProjects />} />
               <Route path="/code-editor" element={<CodeEditorScreen />} />
-              <Route path="/code-sharer" element={<CodeSharer />} />
+              <Route path="/code-sharer/*" element={<CodeSharer />} />
               <Route
                 path="/api/reset-password/:id/:token"
                 element={<ResetPassword />}
