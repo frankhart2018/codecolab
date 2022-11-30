@@ -12,6 +12,7 @@ import SignUp from "./Home/components/SignUp";
 import ForgotPassword from "./Home/components/ForgotPassword";
 import AllProjects from "./Home/components/AllProjects";
 import CodeEditorScreen from "./components/code-editor-screen/CodeEditorScreen";
+import ResetPassword from './Home/components/ResetPassword';
 
 const store = configureStore({
   reducer: {
@@ -19,6 +20,7 @@ const store = configureStore({
     pyrunner: pyrunnerReducer,
   },
 });
+
 
 function App() {
   return (
@@ -28,11 +30,14 @@ function App() {
           <div className="container">
             <Routes>
               <Route path="/*" element={<Home />} />
+              <Route path="/*"
+                element={<Home />} />
               <Route path="/login" element={<SignIn />} />
               <Route path="/sign-up" element={<SignUp />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/all-projects" element={<AllProjects />} />
               <Route path="/code-editor" element={<CodeEditorScreen />} />
+              <Route path="/api/reset-password/:id/:token" element={<ResetPassword />} />
             </Routes>
           </div>
         </ThemeProvider>
