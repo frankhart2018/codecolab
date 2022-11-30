@@ -35,6 +35,9 @@ function ResetPassword() {
                 errors.confirmpassword = confirmpasswordError;
             }
         }
+        if (values.password !== values.confirmpassword) {
+            errors.confirmpassword = 'Passwords do not match';
+        }
 
         return errors;
     };
