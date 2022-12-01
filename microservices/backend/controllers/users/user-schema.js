@@ -1,8 +1,11 @@
-import mongoose from 'mongoose';
-const schema = mongoose.Schema({
+import mongoose from "mongoose";
+const schema = mongoose.Schema(
+  {
     email: String,
     password: String,
     name: String,
     username: String,
-}, { collection: 'users' });
+  },
+  { collection: "users" }
+);
 export default schema;

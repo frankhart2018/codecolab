@@ -1,8 +1,8 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
+import * as React from "react";
+import PropTypes from "prop-types";
 
-import defer from './defer';
-import Button from './Button';
+import defer from "./defer";
+import Button from "./Button";
 
 function FormButton(props) {
   const { disabled, mounted, ...others } = props;
