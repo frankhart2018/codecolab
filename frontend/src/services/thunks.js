@@ -16,8 +16,14 @@ export const signUpUserThunk = createAsyncThunk(
         return response
     })
 
-    export const forgotPasswordThunk = createAsyncThunk(
-        '/user/forgotPassword', async (email) => {
-            const response = await service.forgotPasword(email)
-            return response
-        })
+export const forgotPasswordThunk = createAsyncThunk(
+    '/user/forgotPassword', async (email) => {
+        const response = await service.forgotPasword(email)
+        return response
+    })
+
+export const updatePasswordThunk = createAsyncThunk(
+    '/user/update-password/', async (data) => {
+        const response = await service.updatePassword(data)
+        return response
+    })
