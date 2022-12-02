@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import * as React from 'react';
 import { Field, Form, FormSpy } from 'react-final-form';
 import Box from '@mui/material/Box';
@@ -11,7 +11,8 @@ import FormButton from './form/FormButton';
 import { Typography } from '@mui/material';
 import RFTextField from './form/RFTextField';
 import { useDispatch } from 'react-redux';
-import { forgotPasswordThunk } from '../../services/thunks';
+import { forgotPasswordThunk, updatePasswordThunk } from '../../services/thunks';
+import { useSnackbar } from "notistack";
 
 function ResetPassword() {
     const { pathname } = useLocation();
@@ -20,6 +21,8 @@ function ResetPassword() {
     const token = active[4];
     const [sent, setSent] = React.useState(false);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { enqueueSnackbar } = useSnackbar();
     const validate = (values) => {
         const errors = required(['password', 'confirmpassword'], values);
         console.log("errors", errors);
@@ -35,20 +38,24 @@ function ResetPassword() {
                 errors.confirmpassword = confirmpasswordError;
             }
         }
-        if (values.password !== values.confirmpassword) {
-            errors.confirmpassword = 'Passwords do not match';
-        }
 
         return errors;
     };
 
     const handleSubmit = async (e) => {
+        console.log(e);
         setSent(true);
-        const response = await dispatch(forgotPasswordThunk(e));
+
+        const response = await dispatch(updatePasswordThunk({ password: e.password, id, token }));
         console.log("response", response)
         if (response?.payload?.status === 200) {
             setSent(false);
-        };
+            enqueueSnackbar(response?.payload?.data?.message, { variant: "success" });
+            navigate("/login", { replace: true });
+        }
+        else {
+            enqueueSnackbar(response?.payload?.data?.message, { variant: "error" });
+        }
     }
     useEffect(() => {
         fetch(`${process.env.REACT_APP_API_URL}/api/reset-password/${id}/${token}`, {
@@ -62,8 +69,10 @@ function ResetPassword() {
                 return response.json();
             })
             .then((data) => {
-
-                console.log('Success:', data);
+                console.log("data", data)
+                if (data.status === 400) {
+                    enqueueSnackbar(data?.message, { variant: "error" });
+                }
             })
             .catch((error) => {
                 console.error('Error:', error);
@@ -72,6 +81,7 @@ function ResetPassword() {
 
     return (
         <React.Fragment>
+
             <NavBar />
             <AppForm>
                 <React.Fragment>
