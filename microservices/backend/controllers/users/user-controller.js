@@ -28,7 +28,7 @@ const findUser = async (req, res) => {
             expiresIn: 86400
         });
         if (res.status(201)) {
-            return res.json({ status: "ok", data: token, user: user });
+            return res.json({ status: "ok", data: token});
         } else {
             return res.json({ error: "error" });
         }

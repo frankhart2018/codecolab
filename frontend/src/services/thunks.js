@@ -29,3 +29,8 @@ export const updatePasswordThunk = createAsyncThunk(
         return response
     })
 
+export const tokenUserThunk = createAsyncThunk (
+    '/user/tokenUser/', async (token) => {
+        const response = await service.tokenUser(token)
+        return response
+    })

@@ -26,3 +26,8 @@ export const updatePassword = async ({ password, id, token }) => {
     console.log("response", response);
     return response
 }
+export const tokenUser = async ({token}) => {
+    const response = await axios.get(`${API_BASE}/api/userData`, token)
+    console.log("response", response);
+    return response.data
+}
