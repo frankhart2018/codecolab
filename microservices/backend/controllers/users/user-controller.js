@@ -15,7 +15,7 @@ const UsersController = (app) => {
 
 const findUser = async (req, res) => {
     const { email, password } = req.body;
-    const user = await userDao.findUser(email);
+    const user = await userDao.findUser({email});
     if (!user) {
         return res.json({ message: "User Not found" });
     }
@@ -23,11 +23,12 @@ const findUser = async (req, res) => {
         return res.json({ message: "Invalid Credentials" });
     }
     else {
+        req.session['currentUser'] = user
         const token = Jwt.sign({ email: email }, JWT_SECRET, {
             expiresIn: 86400
         });
         if (res.status(201)) {
-            return res.json({ status: "ok", data: token });
+            return res.json({ status: "ok", data: token, user: user });
         } else {
             return res.json({ error: "error" });
         }

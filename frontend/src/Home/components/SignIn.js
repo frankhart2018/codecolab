@@ -12,8 +12,9 @@ import RFTextField from './form/RFTextField';
 import { useDispatch } from "react-redux";
 import { loginUserThunk } from '../../services/thunks';
 import { useNavigate } from 'react-router-dom';
+import {useEffect} from "react";
 
-function SignIn() {
+const SignIn = () => {
   const [sent, setSent] = React.useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -30,15 +31,14 @@ function SignIn() {
   };
 
   const handleSubmit = async (e) => {
-    console.log(e)
     setSent(true);
     const res = await dispatch(loginUserThunk(e));
     if (res?.payload?.status === "ok") {
       navigate("/all-projects", { replace: true });
       setSent(false);
-
     }
   };
+
 
   return (
     <React.Fragment>
