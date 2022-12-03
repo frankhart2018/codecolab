@@ -23,7 +23,7 @@ export const forgotPasswordThunk = createAsyncThunk(
     })
 
 export const updatePasswordThunk = createAsyncThunk(
-    '/user/update-password/', async (data) => {
+    '/user/updatePassword/', async (data) => {
         const response = await service.updatePassword(data)
         return response
     })
