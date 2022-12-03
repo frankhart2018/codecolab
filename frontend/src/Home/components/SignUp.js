@@ -12,11 +12,13 @@ import RFTextField from './form/RFTextField';
 import { useDispatch } from "react-redux";
 import { signUpUserThunk } from '../../services/thunks';
 import { useNavigate } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 
 function SignUp() {
     const [sent, setSent] = React.useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { enqueueSnackbar } = useSnackbar();
     const validate = (values) => {
         const errors = required(['firstName', 'lastName', 'email', 'username', 'password'], values);
 
@@ -42,9 +44,14 @@ function SignUp() {
         const response = await dispatch(signUpUserThunk(user));
         console.log("response", response)
         if (response?.payload?.status === "ok") {
+            enqueueSnackbar(response?.payload?.message, { variant: "success" });
             navigate("/all-projects", { replace: true });
             setSent(false);
 
+        }
+        else{
+            enqueueSnackbar(response?.payload?.message, { variant: "error" });
+            setSent(false);
         }
 
     };

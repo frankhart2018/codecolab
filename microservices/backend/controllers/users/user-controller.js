@@ -40,8 +40,8 @@ const createUser = async (req, res) => {
     const encryptedPassword = await bcrypt.hash(password, 10);
     const userPresent = await userDao.findUser(email);
     if (userPresent) {
-        res.status(400).json({ message: 'User already exists' });
-        return
+        return res.status(400).json({ message: 'User already exists' });
+
     }
     await userDao.createUser(email, encryptedPassword, name, username);
     res.status(201).json({ message: 'User created successfully', status: "ok" });
@@ -54,7 +54,7 @@ const userData = async (req, res) => {
         const user = Jwt.verify(token, JWT_SECRET);
         const useremail = user.email;
         userDao.findUser(useremail).then((user) => {
-            res.status(200).json({ user: user });
+            res.status(201).json({ user: user });
         });
     } catch (error) {
         res.status(401).json({ message: 'Invalid token' });
@@ -66,7 +66,7 @@ const forgetPassword = async (req, res) => {
     const { email } = req.body;
     const user = await userDao.findUser(email);
     if (!user) {
-        return res.json({ message: "User Not found" });
+        return res.json({ status: '404', message: "User Not found" });
     }
     const secret = JWT_SECRET + user.password;
     const token = Jwt.sign({ email: user.email, id: user._id }, secret, {
@@ -94,7 +94,7 @@ const forgetPassword = async (req, res) => {
             console.log("Email sent: " + info.response);
         }
     });
-    res.status(200).json({ status: "ok", message: "Email sent" });
+    res.status(201).json({ status: "ok", message: "Email sent" });
 }
 
 const resetPassword = async (req, res) => {
@@ -106,7 +106,7 @@ const resetPassword = async (req, res) => {
     const secret = JWT_SECRET + oldUser.password;
     try {
         const verify = Jwt.verify(token, secret);
-        return res.status(200).json({ status: 200, message: "ok" });
+        return res.status(201).json({ status: 201, message: "ok" });
     } catch (error) {
         return res.status(400).json({ status: 400, message: "Invalid Token" });
     }
@@ -117,17 +117,20 @@ const updatePassword = async (req, res) => {
     const { password } = req.body;
     const oldUser = await userDao.findUserById({ _id: id });
     if (!oldUser) {
-        return res.json({ message: "User Not Exists!!" });
+        return res.json({ status: 400, message: "User Not Exists!!" });
     }
     const secret = JWT_SECRET + oldUser.password;
     try {
         const verify = Jwt.verify(token, secret);
         const encryptedPassword = await bcrypt.hash(password, 10);
         await userDao.updatePassword(id, encryptedPassword);
-        return res.status(200).json({ message: "Password Updated Successfully" });
+        return res.status(201).json({
+            status: 201,
+            message: "Password Updated Successfully"
+        });
     }
     catch (error) {
-        return res.status(400).json({ message: "Invalid Token" });
+        return res.status(400).json({ status: 400, message: "Invalid Token" });
     }
 }
 export default UsersController;

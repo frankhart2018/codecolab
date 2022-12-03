@@ -18,3 +18,8 @@ export const forgotPasword = async (email) => {
     console.log("response", response);
     return response
 }
+export const updatePassword = async ({ password, id, token }) => {
+    const response = await axios.post(`${API_BASE}/api/update-password/${id}/${token}`, { password: password })
+    console.log("response", response);
+    return response
+}
