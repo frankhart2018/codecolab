@@ -48,7 +48,7 @@ function ResetPassword() {
 
         const response = await dispatch(updatePasswordThunk({ password: e.password, id, token }));
         console.log("response", response)
-        if (response?.payload?.status === 200) {
+        if (response?.payload?.status === 201) {
             setSent(false);
             enqueueSnackbar(response?.payload?.data?.message, { variant: "success" });
             navigate("/login", { replace: true });
