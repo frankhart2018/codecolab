@@ -11,7 +11,7 @@ import FormButton from './form/FormButton';
 import { Typography } from '@mui/material';
 import RFTextField from './form/RFTextField';
 import { useDispatch } from 'react-redux';
-import { forgotPasswordThunk, updatePasswordThunk } from '../../services/thunks';
+import { updatePasswordThunk } from '../../services/thunks';
 import { useSnackbar } from "notistack";
 
 function ResetPassword() {
@@ -77,7 +77,7 @@ function ResetPassword() {
             .catch((error) => {
                 console.error('Error:', error);
             });
-    }, [id, token]);
+    }, [id, token, enqueueSnackbar]);
 
     return (
         <React.Fragment>
