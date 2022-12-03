@@ -21,3 +21,11 @@ export const forgotPasswordThunk = createAsyncThunk(
         const response = await service.forgotPasword(email)
         return response
     })
+
+
+export const updatePasswordThunk = createAsyncThunk(
+    '/user/updatePassword/', async (data) => {
+        const response = await service.updatePassword(data)
+        return response
+    })
+

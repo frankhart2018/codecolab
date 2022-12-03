@@ -11,13 +11,17 @@ import { Typography } from '@mui/material';
 import RFTextField from './form/RFTextField';
 import { useDispatch } from "react-redux";
 import { loginUserThunk } from '../../services/thunks';
-import { useNavigate } from 'react-router-dom';
 import {useEffect} from "react";
+
+import { useNavigate } from 'react-router';
+import { useSnackbar } from 'notistack';
+
 
 const SignIn = () => {
   const [sent, setSent] = React.useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
   const validate = (values) => {
     const errors = required(['email', 'password'], values);
     if (!errors.email) {
@@ -30,15 +34,22 @@ const SignIn = () => {
     return errors;
   };
 
+
   const handleSubmit = async (e) => {
+    console.log(e)
     setSent(true);
     const res = await dispatch(loginUserThunk(e));
+    console.log("res", res);
     if (res?.payload?.status === "ok") {
+      enqueueSnackbar("Login Successful", { variant: "success" });
       navigate("/all-projects", { replace: true });
       setSent(false);
     }
+    else {
+      enqueueSnackbar(res?.payload?.message, { variant: "error" });
+      setSent(false);
+    }
   };
-
 
   return (
     <React.Fragment>
