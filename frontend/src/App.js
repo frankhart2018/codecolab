@@ -29,7 +29,6 @@ const App = () => {
       <Provider store={store}>
         <ThemeProvider theme={theme}>
           <div className="container">
-          {/*  <BrowserRouter>*/}
               <CurrentUser>
                 <Routes>
                   <Route path="/*" element={<Home />} />
@@ -46,7 +45,6 @@ const App = () => {
                   />
                 </Routes>
               </CurrentUser>
-            {/*</BrowserRouter>*/}
           </div>
         </ThemeProvider>
       </Provider>

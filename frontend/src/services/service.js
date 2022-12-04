@@ -2,7 +2,7 @@ import axios from 'axios';
 const API_BASE = process.env.REACT_APP_API_URL
 console.log("API_BASE ", API_BASE);
 
-const api = axios.create({withCredentials: true});
+const api = axios.create({ withCredentials: true });
 
 export const loginUser = async (user) => {
     const response = await api.post(`${API_BASE}/api/login`, user)
@@ -26,8 +26,8 @@ export const updatePassword = async ({ password, id, token }) => {
     console.log("response", response);
     return response
 }
-export const tokenUser = async ({token}) => {
-    const response = await axios.get(`${API_BASE}/api/userData`, token)
+export const userData = async ({ token }) => {
+    const response = await axios.post(`${API_BASE}/api/userData`, { token: token })
     console.log("response", response);
     return response.data
 }

@@ -1,10 +1,10 @@
 import React from "react";
 import NavBar from "./NavBar";
-import {useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 
 function AllProjects() {
-    const {currentUser} = useSelector((state) => state.userDetails)
-
+    const { currentUser } = useSelector((state) => state.userDetails)
+    console.log("currentUser", currentUser)
     return (
         <React.Fragment>
             <NavBar />
