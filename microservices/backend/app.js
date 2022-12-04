@@ -11,9 +11,9 @@ console.log("CONNECTION_STRING ", CONNECTION_STRING);
 mongoose.connect(CONNECTION_STRING);
 
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin: "*",
   credentials: true, //access-control-allow-credentials:true
-  optionSuccessStatus: 201,
+  optionSuccessStatus: 200,
 };
 const app = express();
 app.use(cors(corsOptions));
