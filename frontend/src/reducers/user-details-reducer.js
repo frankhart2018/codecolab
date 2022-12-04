@@ -13,9 +13,8 @@ const userDetailsSlice = createSlice({
             (state, { payload }) => {
                 state.isLoggedIn = true
                 state.token = payload.data
-                // state.currentUser = payload
                 console.log("state", state);
-                // console.log("currentUser", state.currentUser);
+                localStorage.setItem('token', state.token);
             },
 
         [signUpUserThunk.fulfilled]:
@@ -26,7 +25,6 @@ const userDetailsSlice = createSlice({
             },
         [userDataThunk.fulfilled]:
             (state, action) => {
-                console.log("action", action)
                 state.currentUser = action.payload.user
             }
 
