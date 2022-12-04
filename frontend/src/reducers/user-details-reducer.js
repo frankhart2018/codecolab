@@ -5,7 +5,8 @@ const userDetailsSlice = createSlice({
     name: "userDetails",
     initialState: {
         currentUser: null,
-        token: ""
+        token: "",
+        isLoggedIn: false
     },
     extraReducers: {
         [loginUserThunk.fulfilled]:
@@ -16,6 +17,7 @@ const userDetailsSlice = createSlice({
                 console.log("state", state);
                 // console.log("currentUser", state.currentUser);
             },
+
         [signUpUserThunk.fulfilled]:
             (state, { payload }) => {
                 if (payload.status === 201) {
@@ -23,9 +25,9 @@ const userDetailsSlice = createSlice({
                 }
             },
         [userDataThunk.fulfilled]:
-            (state, { payload }) => {
-                console.log("payload", payload)
-                state.currentUser = payload.user
+            (state, action) => {
+                console.log("action", action)
+                state.currentUser = action.payload.user
             }
 
 

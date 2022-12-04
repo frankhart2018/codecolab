@@ -30,7 +30,7 @@ export const updatePasswordThunk = createAsyncThunk(
     })
 
 export const userDataThunk = createAsyncThunk (
-    '/user/tokenUser/', async (token) => {
+    '/user/userData/', async (token) => {
         const response = await service.userData(token)
         return response
     })
