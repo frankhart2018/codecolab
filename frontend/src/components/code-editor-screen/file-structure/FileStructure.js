@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -11,9 +13,10 @@ import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import { Box, Typography } from "@mui/material";
 
 import "./FileStructure.css";
-// import { getPythonVersionThunk } from "../../../services/pyrunner-thunk";
+import { getProjectByIdThunk } from "../../../services/project-thunk";
+import { updateFileMap } from "../../../reducers/project-reducer";
 
-const generateFileStructure = (root, level = 1) => {
+const generateFileStructure = (root, path, dispatch, idx, level = 1) => {
   if (root.type === "file") {
     return (
       <ListItemButton sx={{ pl: 4 * level }}>
@@ -27,7 +30,7 @@ const generateFileStructure = (root, level = 1) => {
         />
       </ListItemButton>
     );
-  } else if (root.type === "directory" && root.children.length === 0) {
+  } else if (root.type === "dir" && root.children.length === 0) {
     return (
       <ListItemButton sx={{ pl: 4 * level }}>
         <ListItemIcon>
@@ -41,24 +44,36 @@ const generateFileStructure = (root, level = 1) => {
   return (
     <>
       <ListItemButton
-        onClick={() => root.openState[1](!root.openState[0])}
+        onClick={() => {
+          console.log(path);
+          dispatch(updateFileMap({ path, idx }));
+        }}
         sx={{ pl: 4 * level }}
       >
         <ListItemIcon>
           <FolderIcon className="text-gray" />
         </ListItemIcon>
         <ListItemText primary={root.name} className="text-gray" />
-        {root.openState[0] ? (
+        {root.openState ? (
           <ExpandLess className="text-gray" />
         ) : (
           <ExpandMore className="text-gray" />
         )}
+        {/* <ExpandMore className="text-gray" /> */}
       </ListItemButton>
-      <Collapse in={root.openState[0]} timeout="auto" unmountOnExit>
+      <Collapse in={root.openState} timeout="auto" unmountOnExit>
+        {/* <Collapse timeout="auto" unmountOnExit> */}
         <List component="div" disablePadding>
-          {root.children.map((child) =>
-            generateFileStructure(child, level + 1)
-          )}
+          {root.children.length > 0 &&
+            root.children.map((child) =>
+              generateFileStructure(
+                child,
+                path + "/" + child.name,
+                dispatch,
+                idx,
+                level + 1
+              )
+            )}
         </List>
       </Collapse>
     </>
@@ -66,74 +81,18 @@ const generateFileStructure = (root, level = 1) => {
 };
 
 export default function FileStructure() {
-  const fileMap = [
-    {
-      name: "src",
-      type: "directory",
-      openState: useState(false),
-      children: [
-        {
-          name: "App.css",
-          type: "file",
-        },
-        {
-          name: "App.js",
-          type: "file",
-        },
-        {
-          name: "file-structure",
-          type: "directory",
-          openState: useState(false),
-          children: [
-            {
-              name: "FileStructure.css",
-              type: "file",
-            },
-            {
-              name: "FileStructure.js",
-              type: "file",
-            },
-            {
-              name: "inner-component",
-              type: "directory",
-              openState: useState(false),
-              children: [
-                {
-                  name: "InnerComponentInnerComponentInnerComponent.css",
-                  type: "file",
-                },
-                {
-                  name: "InnerComponent.js",
-                  type: "file",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          name: "index.css",
-          type: "file",
-        },
-        {
-          name: "index.js",
-          type: "file",
-        },
-      ],
-    },
-    {
-      name: "test",
-      type: "directory",
-      openState: useState(false),
-      children: [
-        {
-          name: "App.test.js",
-          type: "file",
-        },
-      ],
-    },
-  ];
+  const { fileMap, fileMapLoading } = useSelector((state) => state.project);
 
-  // console.log(getPythonVersionThunk());
+  const { pathname } = useLocation();
+  const path_split = pathname.split("/");
+  const project_id = path_split[path_split.length - 1];
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getProjectByIdThunk(project_id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Box sx={{ height: "100vh", width: "25%" }} className="background-grayish">
@@ -156,7 +115,13 @@ export default function FileStructure() {
           </Typography>
         }
       >
-        {fileMap.map((root) => generateFileStructure(root))}
+        {fileMapLoading && "Loading..."}
+        {!fileMapLoading &&
+          fileMap !== null &&
+          fileMap.map((root, i) => {
+            let path = root.name;
+            return generateFileStructure(root, path, dispatch, i);
+          })}
       </List>
     </Box>
   );

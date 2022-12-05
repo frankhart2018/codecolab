@@ -18,6 +18,9 @@ const pythonRunner = createSlice({
       state.pythonVersion = action.payload;
       state.pythonVersionLoading = false;
     },
+    [getPythonVersionThunk.rejected]: (state) => {
+      state.pythonVersionLoading = true;
+    },
   },
   reducers: {},
 });

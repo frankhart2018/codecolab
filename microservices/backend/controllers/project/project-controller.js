@@ -57,7 +57,6 @@ const findProjectById = async (req, res) => {
   if (!project) {
     res.status(400).send("Project doesn't exist");
   } else {
-    console.log(project.file_structure);
     res.status(200).send(project);
   }
 };
