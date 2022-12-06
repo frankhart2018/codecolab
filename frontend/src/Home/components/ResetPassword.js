@@ -1,17 +1,18 @@
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import * as React from "react";
-import { Field, Form, FormSpy } from "react-final-form";
-import Box from "@mui/material/Box";
-import { password, required } from "./form/validation";
-import NavBar from "./NavBar";
-import AppForm from "./AppForm";
-import FormFeedback from "./form/FormFeedback";
-import FormButton from "./form/FormButton";
-import { Typography } from "@mui/material";
-import RFTextField from "./form/RFTextField";
-import { useDispatch } from "react-redux";
-import { forgotPasswordThunk } from "../../services/thunks";
+import { useLocation, useNavigate } from "react-router-dom";
+import * as React from 'react';
+import { Field, Form, FormSpy } from 'react-final-form';
+import Box from '@mui/material/Box';
+import { password, required } from './form/validation';
+import NavBar from './NavBar';
+import AppForm from './AppForm';
+import FormFeedback from './form/FormFeedback';
+import FormButton from './form/FormButton';
+import { Typography } from '@mui/material';
+import RFTextField from './form/RFTextField';
+import { useDispatch } from 'react-redux';
+import { updatePasswordThunk } from '../../services/thunks';
+import { useSnackbar } from "notistack";
 
 function ResetPassword() {
   const { pathname } = useLocation();
@@ -20,8 +21,10 @@ function ResetPassword() {
   const token = active[4];
   const [sent, setSent] = React.useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
   const validate = (values) => {
-    const errors = required(["password", "confirmpassword"], values);
+    const errors = required(['password', 'confirmpassword'], values);
     console.log("errors", errors);
     if (!errors.password) {
       const passwordError = password(values.password);
@@ -40,37 +43,45 @@ function ResetPassword() {
   };
 
   const handleSubmit = async (e) => {
+    console.log(e);
     setSent(true);
-    const response = await dispatch(forgotPasswordThunk(e));
-    console.log("response", response);
-    if (response?.payload?.status === 200) {
+
+    const response = await dispatch(updatePasswordThunk({ password: e.password, id, token }));
+    console.log("response", response)
+    if (response?.payload?.status === 201) {
       setSent(false);
+      enqueueSnackbar(response?.payload?.data?.message, { variant: "success" });
+      navigate("/login", { replace: true });
     }
-  };
+    else {
+      enqueueSnackbar(response?.payload?.data?.message, { variant: "error" });
+    }
+  }
   useEffect(() => {
-    fetch(
-      `${process.env.REACT_APP_API_URL}/api/reset-password/${id}/${token}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
+    fetch(`${process.env.REACT_APP_API_URL}/api/reset-password/${id}/${token}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
       .then((response) => {
-        console.log("response", response);
+        console.log('response', response);
         return response.json();
       })
       .then((data) => {
-        console.log("Success:", data);
+        console.log("data", data)
+        if (data.status === 400) {
+          enqueueSnackbar(data?.message, { variant: "error" });
+        }
       })
       .catch((error) => {
-        console.error("Error:", error);
+        console.error('Error:', error);
       });
-  }, [id, token]);
+  }, [id, token, enqueueSnackbar]);
 
   return (
     <React.Fragment>
+
       <NavBar />
       <AppForm>
         <React.Fragment>
@@ -88,12 +99,7 @@ function ResetPassword() {
           validate={validate}
         >
           {({ handleSubmit: handleSubmit2, submitting }) => (
-            <Box
-              component="form"
-              onSubmit={handleSubmit2}
-              noValidate
-              sx={{ mt: 6 }}
-            >
+            <Box component="form" onSubmit={handleSubmit2} noValidate sx={{ mt: 6 }}>
               <Field
                 fullWidth
                 component={RFTextField}
@@ -132,14 +138,15 @@ function ResetPassword() {
                 color="secondary"
                 fullWidth
               >
-                {submitting || sent ? "In progress…" : "Update Password"}
+                {submitting || sent ? 'In progress…' : 'Update Password'}
               </FormButton>
             </Box>
           )}
         </Form>
       </AppForm>
-    </React.Fragment>
-  );
+    </React.Fragment >
+  )
+
 }
 
 export default ResetPassword;
