@@ -18,13 +18,18 @@ export const signUpUserThunk = createAsyncThunk(
 );
 
 export const forgotPasswordThunk = createAsyncThunk(
-    '/user/forgotPassword', async (email) => {
-        const response = await service.forgotPasword(email)
-        return response
-    })
+  '/user/forgotPassword', async (email) => {
+    const response = await service.forgotPasword(email)
+    return response
+  })
 
 export const updatePasswordThunk = createAsyncThunk(
-    '/user/updatePassword/', async (data) => {
-        const response = await service.updatePassword(data)
-        return response
-    })
+  '/user/updatePassword/', async (data) => {
+    const response = await service.updatePassword(data)
+    return response
+  })
+export const userDataThunk = createAsyncThunk(
+  '/user/userData/', async (token) => {
+    const response = await service.userData(token)
+    return response
+  })
