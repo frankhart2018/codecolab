@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   getProjectByIdThunk,
   createDirInProjectThunk,
+  createFileInProjectThunk,
 } from "../services/project-thunk";
 
 let initialState = {
@@ -76,6 +77,22 @@ const projectSlice = createSlice({
         setOpenState(child);
         return child;
       });
+    },
+    [createDirInProjectThunk.rejected]: (state, action) => {
+      state.fileMapLoading = true;
+    },
+    [createFileInProjectThunk.pending]: (state, action) => {
+      state.fileMapLoading = true;
+    },
+    [createFileInProjectThunk.fulfilled]: (state, action) => {
+      state.fileMapLoading = false;
+      state.fileMap = action.payload.file_structure.children.map((child) => {
+        setOpenState(child);
+        return child;
+      });
+    },
+    [createFileInProjectThunk.rejected]: (state, action) => {
+      state.fileMapLoading = true;
     },
   },
 });

@@ -20,3 +20,15 @@ export const createDirInProjectThunk = createAsyncThunk(
     return response;
   }
 );
+
+export const createFileInProjectThunk = createAsyncThunk(
+  "/project/createFileInProject",
+  async (payload) => {
+    const response = await project_service.createFileInProject(
+      payload.project_id,
+      payload.file_name,
+      payload.path
+    );
+    return response;
+  }
+);

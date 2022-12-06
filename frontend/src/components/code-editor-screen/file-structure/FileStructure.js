@@ -40,7 +40,12 @@ const generateFileStructure = (
     );
   } else if (root.type === "dir" && root.children.length === 0) {
     return (
-      <ListItemButton sx={{ pl: 4 * level }}>
+      <ListItemButton
+        sx={{ pl: 4 * level }}
+        onContextMenu={() => {
+          setCurrentPath(path);
+        }}
+      >
         <ListItemIcon>
           <FolderIcon className="text-gray" />
         </ListItemIcon>
@@ -55,8 +60,7 @@ const generateFileStructure = (
         onClick={() => {
           dispatch(updateFileMap({ path, idx }));
         }}
-        onContextMenu={(e) => {
-          e.preventDefault();
+        onContextMenu={() => {
           setCurrentPath(path);
         }}
         sx={{ pl: 4 * level }}

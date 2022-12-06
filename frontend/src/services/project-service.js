@@ -17,3 +17,14 @@ export const createDirInProject = async (project_id, dir_name, path) => {
   );
   return response.data;
 };
+
+export const createFileInProject = async (project_id, file_name, path) => {
+  const response = await axios.post(
+    `${API_BASE}/create-project/file/${project_id}`,
+    {
+      file_name,
+      path,
+    }
+  );
+  return response.data;
+};
