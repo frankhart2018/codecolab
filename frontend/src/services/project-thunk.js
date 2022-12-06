@@ -8,3 +8,15 @@ export const getProjectByIdThunk = createAsyncThunk(
     return response;
   }
 );
+
+export const createDirInProjectThunk = createAsyncThunk(
+  "/project/createDirInProject",
+  async (payload) => {
+    const response = await project_service.createDirInProject(
+      payload.project_id,
+      payload.dir_name,
+      payload.path
+    );
+    return response;
+  }
+);

@@ -6,3 +6,14 @@ export const getProjectById = async (id) => {
   const response = await axios.get(`${API_BASE}/project/${id}`);
   return response.data;
 };
+
+export const createDirInProject = async (project_id, dir_name, path) => {
+  const response = await axios.post(
+    `${API_BASE}/create-project/dir/${project_id}`,
+    {
+      dir_name,
+      path,
+    }
+  );
+  return response.data;
+};

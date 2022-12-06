@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router";
 import List from "@mui/material/List";
@@ -15,8 +15,16 @@ import { Box, Typography } from "@mui/material";
 import "./FileStructure.css";
 import { getProjectByIdThunk } from "../../../services/project-thunk";
 import { updateFileMap } from "../../../reducers/project-reducer";
+import FileStructureMenu from "./FileStructureMenu";
 
-const generateFileStructure = (root, path, dispatch, idx, level = 1) => {
+const generateFileStructure = (
+  root,
+  path,
+  dispatch,
+  idx,
+  setCurrentPath,
+  level = 1
+) => {
   if (root.type === "file") {
     return (
       <ListItemButton sx={{ pl: 4 * level }}>
@@ -45,8 +53,11 @@ const generateFileStructure = (root, path, dispatch, idx, level = 1) => {
     <>
       <ListItemButton
         onClick={() => {
-          console.log(path);
           dispatch(updateFileMap({ path, idx }));
+        }}
+        onContextMenu={(e) => {
+          e.preventDefault();
+          setCurrentPath(path);
         }}
         sx={{ pl: 4 * level }}
       >
@@ -59,10 +70,8 @@ const generateFileStructure = (root, path, dispatch, idx, level = 1) => {
         ) : (
           <ExpandMore className="text-gray" />
         )}
-        {/* <ExpandMore className="text-gray" /> */}
       </ListItemButton>
       <Collapse in={root.openState} timeout="auto" unmountOnExit>
-        {/* <Collapse timeout="auto" unmountOnExit> */}
         <List component="div" disablePadding>
           {root.children.length > 0 &&
             root.children.map((child) =>
@@ -71,6 +80,7 @@ const generateFileStructure = (root, path, dispatch, idx, level = 1) => {
                 path + "/" + child.name,
                 dispatch,
                 idx,
+                setCurrentPath,
                 level + 1
               )
             )}
@@ -82,6 +92,7 @@ const generateFileStructure = (root, path, dispatch, idx, level = 1) => {
 
 export default function FileStructure() {
   const { fileMap, fileMapLoading } = useSelector((state) => state.project);
+  const [currentPath, setCurrentPath] = useState("");
 
   const { pathname } = useLocation();
   const path_split = pathname.split("/");
@@ -93,6 +104,10 @@ export default function FileStructure() {
     dispatch(getProjectByIdThunk(project_id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const getCurrentPath = () => {
+    return currentPath;
+  };
 
   return (
     <Box sx={{ height: "100vh", width: "25%" }} className="background-grayish">
@@ -120,9 +135,20 @@ export default function FileStructure() {
           fileMap !== null &&
           fileMap.map((root, i) => {
             let path = root.name;
-            return generateFileStructure(root, path, dispatch, i);
+            return generateFileStructure(
+              root,
+              path,
+              dispatch,
+              i,
+              setCurrentPath
+            );
           })}
       </List>
+
+      <FileStructureMenu
+        projectId={project_id}
+        getCurrentPath={getCurrentPath}
+      />
     </Box>
   );
 }

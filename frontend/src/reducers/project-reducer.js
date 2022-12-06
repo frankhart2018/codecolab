@@ -1,6 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { getProjectByIdThunk } from "../services/project-thunk";
+import {
+  getProjectByIdThunk,
+  createDirInProjectThunk,
+} from "../services/project-thunk";
 
 let initialState = {
   fileMap: null,
@@ -63,6 +66,16 @@ const projectSlice = createSlice({
     },
     [getProjectByIdThunk.rejected]: (state, action) => {
       state.fileMapLoading = true;
+    },
+    [createDirInProjectThunk.pending]: (state, action) => {
+      state.fileMapLoading = true;
+    },
+    [createDirInProjectThunk.fulfilled]: (state, action) => {
+      state.fileMapLoading = false;
+      state.fileMap = action.payload.file_structure.children.map((child) => {
+        setOpenState(child);
+        return child;
+      });
     },
   },
 });
