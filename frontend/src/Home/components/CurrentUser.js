@@ -14,7 +14,7 @@ const CurrentUser = ({ children }) => {
             const res = dispatch(userDataThunk({ token }));
             console.log("res", res)
         }
-    }, [token])
+    }, [token, dispatch, currentUser])
     return (children)
 }
 
