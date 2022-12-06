@@ -12,6 +12,7 @@ const CurrentUser = ({ children }) => {
     useEffect(() => {
         if (currentUser === null && token) {
             const res = dispatch(userDataThunk({ token }));
+            console.log("res", res)
         }
     }, [token])
     return (children)

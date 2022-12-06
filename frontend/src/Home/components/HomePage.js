@@ -1,6 +1,6 @@
 import React from "react";
 import Container from '@mui/material/Container';
-import { Grid, ListItem, Stack, Typography } from "@mui/material";
+import { ListItem, Stack, Typography } from "@mui/material";
 import Button from "./form/Button";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
