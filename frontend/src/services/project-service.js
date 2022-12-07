@@ -41,3 +41,12 @@ export const deleteInProject = async (project_id, name, path) => {
   );
   return response.data;
 };
+
+export const renameInProject = async (project_id, name, new_name, path) => {
+  const response = await axios.put(`${API_BASE}/rename-project/${project_id}`, {
+    name,
+    new_name,
+    path,
+  });
+  return response.data;
+};

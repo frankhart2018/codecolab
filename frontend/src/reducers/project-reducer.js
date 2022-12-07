@@ -5,6 +5,7 @@ import {
   createDirInProjectThunk,
   createFileInProjectThunk,
   deleteInProjectThunk,
+  renameInProjectThunk,
 } from "../services/project-thunk";
 
 let initialState = {
@@ -106,6 +107,19 @@ const projectSlice = createSlice({
       });
     },
     [deleteInProjectThunk.rejected]: (state, action) => {
+      state.fileMapLoading = true;
+    },
+    [renameInProjectThunk.pending]: (state, action) => {
+      state.fileMapLoading = true;
+    },
+    [renameInProjectThunk.fulfilled]: (state, action) => {
+      state.fileMapLoading = false;
+      state.fileMap = action.payload.file_structure.children.map((child) => {
+        setOpenState(child);
+        return child;
+      });
+    },
+    [renameInProjectThunk.rejected]: (state, action) => {
       state.fileMapLoading = true;
     },
   },

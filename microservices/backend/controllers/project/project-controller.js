@@ -80,12 +80,33 @@ const deleteInProject = async (req, res) => {
   }
 };
 
+const findInProject = async (req, res) => {
+  const { project_id } = req.params;
+  const { name, new_name, path } = req.body;
+
+  const project = await projectDao.findProjectById(project_id);
+
+  if (!project) {
+    res.status(400).send("Project doesn't exist");
+  } else {
+    const updated_project = await projectDao.renameInProject(
+      project,
+      project_id,
+      name,
+      new_name,
+      path
+    );
+    res.status(201).send(updated_project);
+  }
+};
+
 const ProjectController = (app) => {
   app.post("/api/create-project", createProject);
   app.post("/api/create-project/dir/:project_id", createDirInProject);
   app.post("/api/create-project/file/:project_id", createFileInProject);
   app.get("/api/project/:project_id", findProjectById);
   app.delete("/api/delete-project/:project_id", deleteInProject);
+  app.put("/api/rename-project/:project_id", findInProject);
 };
 
 export default ProjectController;

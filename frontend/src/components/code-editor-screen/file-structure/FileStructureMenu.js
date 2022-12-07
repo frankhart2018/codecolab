@@ -14,6 +14,7 @@ import {
   createDirInProjectThunk,
   createFileInProjectThunk,
   deleteInProjectThunk,
+  renameInProjectThunk,
 } from "../../../services/project-thunk";
 
 const FileStructureMenu = ({ projectId, getCurrentPath, getCurrentType }) => {
@@ -23,6 +24,8 @@ const FileStructureMenu = ({ projectId, getCurrentPath, getCurrentType }) => {
   const [newDirName, setNewDirName] = useState("");
   const [openNewFileDialog, setOpenNewFileDialog] = useState(false);
   const [newFileName, setNewFileName] = useState("");
+  const [openRenameDialog, setOpenRenameDialog] = useState(false);
+  const [newName, setNewName] = useState("");
 
   const handleOpenNewDirDialogOpen = () => {
     setOpenNewDirDialog(true);
@@ -30,6 +33,10 @@ const FileStructureMenu = ({ projectId, getCurrentPath, getCurrentType }) => {
 
   const handleOpenNewFileDialogOpen = () => {
     setOpenNewFileDialog(true);
+  };
+
+  const handleOpenRenameDialogOpen = () => {
+    setOpenRenameDialog(true);
   };
 
   const handleOpenNewDirDialogClose = () => {
@@ -40,6 +47,11 @@ const FileStructureMenu = ({ projectId, getCurrentPath, getCurrentType }) => {
   const handleOpenNewFileDialogClose = () => {
     setOpenNewFileDialog(false);
     setNewFileName("");
+  };
+
+  const handleOpenRenameDialogClose = () => {
+    setOpenRenameDialog(false);
+    setNewName("");
   };
 
   const handleNewDirCreateBtnClicked = () => {
@@ -64,6 +76,21 @@ const FileStructureMenu = ({ projectId, getCurrentPath, getCurrentType }) => {
     );
     setOpenNewFileDialog(false);
     setNewFileName("");
+  };
+
+  const handleRenameBtnClicked = () => {
+    const path = getCurrentPath().split("/").slice(0, -1).join("/");
+    const name = getCurrentPath().split("/").slice(-1)[0];
+    dispatch(
+      renameInProjectThunk({
+        project_id: projectId,
+        path: path,
+        name: name,
+        new_name: newName,
+      })
+    );
+    setOpenRenameDialog(false);
+    setNewName("");
   };
 
   const handleDeleteClicked = () => {
@@ -97,13 +124,17 @@ const FileStructureMenu = ({ projectId, getCurrentPath, getCurrentType }) => {
           <Icon.Delete size={20} className="menu__icon" />
           Delete
         </li>
+        <li className="menu__item" onClick={handleOpenRenameDialogOpen}>
+          <Icon.Edit size={20} className="menu__icon" />
+          Rename
+        </li>
       </ul>
     );
   }
 
   return (
     <>
-      <Dialog open={openNewFileDialog} onClose={handleOpenNewFileDialogOpen}>
+      <Dialog open={openNewFileDialog} onClose={handleOpenNewFileDialogClose}>
         <DialogContent>
           <DialogContentText>Add new file</DialogContentText>
           <TextField
@@ -142,6 +173,27 @@ const FileStructureMenu = ({ projectId, getCurrentPath, getCurrentType }) => {
         <DialogActions>
           <Button onClick={handleOpenNewDirDialogClose}>Cancel</Button>
           <Button onClick={handleNewDirCreateBtnClicked}>Create</Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={openRenameDialog} onClose={handleOpenRenameDialogClose}>
+        <DialogContent>
+          <DialogContentText>Rename</DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="newname"
+            label="New name"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={newName}
+            onChange={(e) => setNewName(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleOpenRenameDialogClose}>Cancel</Button>
+          <Button onClick={handleRenameBtnClicked}>Rename</Button>
         </DialogActions>
       </Dialog>
     </>

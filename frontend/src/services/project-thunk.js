@@ -44,3 +44,16 @@ export const deleteInProjectThunk = createAsyncThunk(
     return response;
   }
 );
+
+export const renameInProjectThunk = createAsyncThunk(
+  "/project/renameInProject",
+  async (payload) => {
+    const response = await project_service.renameInProject(
+      payload.project_id,
+      payload.name,
+      payload.new_name,
+      payload.path
+    );
+    return response;
+  }
+);
