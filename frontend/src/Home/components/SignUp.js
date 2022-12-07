@@ -10,18 +10,17 @@ import FormButton from "./form/FormButton";
 import { Grid, Typography } from "@mui/material";
 import RFTextField from "./form/RFTextField";
 import { useDispatch } from "react-redux";
-import { signUpUserThunk } from "../../services/thunks";
-import { useNavigate } from "react-router-dom";
+import { signUpUserThunk } from '../../services/thunks';
+import { useNavigate } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 
 function SignUp() {
   const [sent, setSent] = React.useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
   const validate = (values) => {
-    const errors = required(
-      ["firstName", "lastName", "email", "username", "password"],
-      values
-    );
+    const errors = required(['firstName', 'lastName', 'email', 'username', 'password'], values);
 
     if (!errors.email) {
       const emailError = email(values.email);
@@ -38,16 +37,23 @@ function SignUp() {
       name: e.firstName + " " + e.lastName,
       email: e.email,
       username: e.username,
-      password: e.password,
-    };
-    console.log("user", user);
+      password: e.password
+    }
+    console.log("user", user)
     setSent(true);
     const response = await dispatch(signUpUserThunk(user));
-    console.log("response", response);
+    console.log("response", response)
     if (response?.payload?.status === "ok") {
+      enqueueSnackbar(response?.payload?.message, { variant: "success" });
       navigate("/all-projects", { replace: true });
       setSent(false);
+
     }
+    else {
+      enqueueSnackbar(response?.payload?.message, { variant: "error" });
+      setSent(false);
+    }
+
   };
 
   return (
@@ -70,12 +76,7 @@ function SignUp() {
           validate={validate}
         >
           {({ handleSubmit: handleSubmit2, submitting }) => (
-            <Box
-              component="form"
-              onSubmit={handleSubmit2}
-              noValidate
-              sx={{ mt: 6 }}
-            >
+            <Box component="form" onSubmit={handleSubmit2} noValidate sx={{ mt: 6 }}>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
                   <Field
@@ -147,7 +148,7 @@ function SignUp() {
                 color="secondary"
                 fullWidth
               >
-                {submitting || sent ? "In progress…" : "Sign Up"}
+                {submitting || sent ? 'In progress…' : 'Sign Up'}
               </FormButton>
             </Box>
           )}
@@ -155,6 +156,7 @@ function SignUp() {
       </AppForm>
     </React.Fragment>
   );
+
 }
 
-export default SignUp;
+export default (SignUp);

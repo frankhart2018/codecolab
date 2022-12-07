@@ -14,7 +14,17 @@ export const registerUser = async (user) => {
 };
 
 export const forgotPasword = async (email) => {
-  const response = await axios.post(`${API_BASE}/api/forget-password`, email);
+  const response = await axios.post(`${API_BASE}/api/forget-password`, email)
   console.log("response", response);
-  return response;
-};
+  return response
+}
+export const updatePassword = async ({ password, id, token }) => {
+  const response = await axios.post(`${API_BASE}/api/update-password/${id}/${token}`, { password: password })
+  console.log("response", response);
+  return response
+}
+export const userData = async ({ token }) => {
+  const response = await axios.post(`${API_BASE}/api/userData`, { token: token })
+  console.log("response", response);
+  return response.data
+}
