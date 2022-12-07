@@ -4,12 +4,13 @@ import { useEffect } from "react";
 import { getPythonVersionThunk } from "../../../services/pyrunner-thunk";
 
 const OutputWindow = () => {
-  const { pythonVersion, loading } = useSelector((state) => state.pyrunner);
+  const { pythonVersion, pythonVersionLoading } = useSelector(
+    (state) => state.pyrunner
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getPythonVersionThunk());
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -23,8 +24,10 @@ const OutputWindow = () => {
       }}
     >
       <Typography variant="body1" sx={{ padding: "10px" }}>
-        {loading && "Loading..."}
-        {!loading && pythonVersion !== null && pythonVersion.version}
+        {pythonVersionLoading && "Loading..."}
+        {!pythonVersionLoading &&
+          pythonVersion !== null &&
+          pythonVersion.version}
       </Typography>
     </Box>
   );
