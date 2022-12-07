@@ -95,3 +95,30 @@ export const createFileInProject = (project, project_id, file_name, path) => {
     { new: true }
   );
 };
+
+export const deleteInProject = (project, project_id, file_name, path) => {
+  const path_split = path.split("/");
+
+  let current_dir = project.file_structure;
+
+  if (path_split.length === 1 && path_split[0] === "") {
+    current_dir.children = current_dir.children.filter(
+      (child) => child.name !== file_name
+    );
+  } else {
+    for (let i = 0; i < path_split.length; i++) {
+      const dir_name = path_split[i];
+      current_dir = current_dir.children.find(
+        (child) => child.name === dir_name
+      );
+    }
+
+    current_dir.children = current_dir.children.filter(
+      (child) => child.name !== file_name
+    );
+  }
+
+  return projectModel.findByIdAndUpdate(project_id, {
+    file_structure: project.file_structure,
+  });
+};

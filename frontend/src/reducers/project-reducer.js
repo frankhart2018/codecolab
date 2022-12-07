@@ -11,12 +11,21 @@ let initialState = {
   fileMapLoading: false,
 };
 
-const setOpenState = (root) => {
+const setOpenState = (root, currentRoot) => {
   if (root.type === "dir") {
-    root.openState = false;
-    root.children.forEach((child) => {
+    root.openState =
+      currentRoot !== null && currentRoot.hasOwnProperty("openState")
+        ? currentRoot.openState
+        : false;
+    root.children.forEach((child, i) => {
       if (child.type === "dir") {
-        setOpenState(child);
+        let curRoot =
+          currentRoot !== null &&
+          currentRoot.hasOwnProperty("children") &&
+          i < currentRoot.children.length
+            ? currentRoot.children[i]
+            : {};
+        setOpenState(child, curRoot);
       }
     });
   }
@@ -61,7 +70,7 @@ const projectSlice = createSlice({
     [getProjectByIdThunk.fulfilled]: (state, action) => {
       state.fileMapLoading = false;
       state.fileMap = action.payload.file_structure.children.map((child) => {
-        setOpenState(child);
+        setOpenState(child, null);
         return child;
       });
     },
@@ -74,7 +83,7 @@ const projectSlice = createSlice({
     [createDirInProjectThunk.fulfilled]: (state, action) => {
       state.fileMapLoading = false;
       state.fileMap = action.payload.file_structure.children.map((child) => {
-        setOpenState(child);
+        setOpenState(child, {});
         return child;
       });
     },
@@ -86,8 +95,9 @@ const projectSlice = createSlice({
     },
     [createFileInProjectThunk.fulfilled]: (state, action) => {
       state.fileMapLoading = false;
-      state.fileMap = action.payload.file_structure.children.map((child) => {
-        setOpenState(child);
+      const currentMap = JSON.parse(JSON.stringify(state.fileMap));
+      state.fileMap = action.payload.file_structure.children.map((child, i) => {
+        setOpenState(child, currentMap[i]);
         return child;
       });
     },
