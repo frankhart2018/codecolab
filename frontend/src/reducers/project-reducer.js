@@ -4,6 +4,7 @@ import {
   getProjectByIdThunk,
   createDirInProjectThunk,
   createFileInProjectThunk,
+  deleteInProjectThunk,
 } from "../services/project-thunk";
 
 let initialState = {
@@ -11,21 +12,12 @@ let initialState = {
   fileMapLoading: false,
 };
 
-const setOpenState = (root, currentRoot) => {
+const setOpenState = (root) => {
   if (root.type === "dir") {
-    root.openState =
-      currentRoot !== null && currentRoot.hasOwnProperty("openState")
-        ? currentRoot.openState
-        : false;
+    root.openState = false;
     root.children.forEach((child, i) => {
       if (child.type === "dir") {
-        let curRoot =
-          currentRoot !== null &&
-          currentRoot.hasOwnProperty("children") &&
-          i < currentRoot.children.length
-            ? currentRoot.children[i]
-            : {};
-        setOpenState(child, curRoot);
+        setOpenState(child);
       }
     });
   }
@@ -83,7 +75,7 @@ const projectSlice = createSlice({
     [createDirInProjectThunk.fulfilled]: (state, action) => {
       state.fileMapLoading = false;
       state.fileMap = action.payload.file_structure.children.map((child) => {
-        setOpenState(child, {});
+        setOpenState(child);
         return child;
       });
     },
@@ -95,13 +87,25 @@ const projectSlice = createSlice({
     },
     [createFileInProjectThunk.fulfilled]: (state, action) => {
       state.fileMapLoading = false;
-      const currentMap = JSON.parse(JSON.stringify(state.fileMap));
-      state.fileMap = action.payload.file_structure.children.map((child, i) => {
-        setOpenState(child, currentMap[i]);
+      state.fileMap = action.payload.file_structure.children.map((child) => {
+        setOpenState(child);
         return child;
       });
     },
     [createFileInProjectThunk.rejected]: (state, action) => {
+      state.fileMapLoading = true;
+    },
+    [deleteInProjectThunk.pending]: (state, action) => {
+      state.fileMapLoading = true;
+    },
+    [deleteInProjectThunk.fulfilled]: (state, action) => {
+      state.fileMapLoading = false;
+      state.fileMap = action.payload.file_structure.children.map((child) => {
+        setOpenState(child);
+        return child;
+      });
+    },
+    [deleteInProjectThunk.rejected]: (state, action) => {
       state.fileMapLoading = true;
     },
   },

@@ -13,9 +13,10 @@ import "./FileStructureMenu.css";
 import {
   createDirInProjectThunk,
   createFileInProjectThunk,
+  deleteInProjectThunk,
 } from "../../../services/project-thunk";
 
-const FileStructureMenu = ({ projectId, getCurrentPath }) => {
+const FileStructureMenu = ({ projectId, getCurrentPath, getCurrentType }) => {
   const dispatch = useDispatch();
   const { anchorPoint, show } = useContextMenu();
   const [openNewDirDialog, setOpenNewDirDialog] = useState(false);
@@ -65,16 +66,36 @@ const FileStructureMenu = ({ projectId, getCurrentPath }) => {
     setNewFileName("");
   };
 
+  const handleDeleteClicked = () => {
+    const path = getCurrentPath().split("/").slice(0, -1).join("/");
+    const name = getCurrentPath().split("/").slice(-1)[0];
+    dispatch(
+      deleteInProjectThunk({
+        project_id: projectId,
+        path: path,
+        name: name,
+      })
+    );
+  };
+
   if (show) {
     return (
       <ul className="menu" style={{ top: anchorPoint.y, left: anchorPoint.x }}>
-        <li className="menu__item" onClick={handleOpenNewDirDialogOpen}>
-          <Icon.Folder size={20} className="menu__icon" />
-          New Directory
-        </li>
-        <li className="menu__item" onClick={handleOpenNewFileDialogOpen}>
-          <Icon.File size={20} className="menu__icon" />
-          New File
+        {getCurrentType() === "dir" && (
+          <>
+            <li className="menu__item" onClick={handleOpenNewDirDialogOpen}>
+              <Icon.Folder size={20} className="menu__icon" />
+              New Directory
+            </li>
+            <li className="menu__item" onClick={handleOpenNewFileDialogOpen}>
+              <Icon.File size={20} className="menu__icon" />
+              New File
+            </li>
+          </>
+        )}
+        <li className="menu__item" onClick={handleDeleteClicked}>
+          <Icon.Delete size={20} className="menu__icon" />
+          Delete
         </li>
       </ul>
     );

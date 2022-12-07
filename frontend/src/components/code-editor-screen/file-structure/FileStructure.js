@@ -23,11 +23,18 @@ const generateFileStructure = (
   dispatch,
   idx,
   setCurrentPath,
+  setCurrentType,
   level = 1
 ) => {
   if (root.type === "file") {
     return (
-      <ListItemButton sx={{ pl: 4 * level }}>
+      <ListItemButton
+        sx={{ pl: 4 * level }}
+        onContextMenu={() => {
+          setCurrentPath(path);
+          setCurrentType("file");
+        }}
+      >
         <ListItemIcon>
           <InsertDriveFileIcon className="text-gray" />
         </ListItemIcon>
@@ -44,6 +51,7 @@ const generateFileStructure = (
         sx={{ pl: 4 * level }}
         onContextMenu={() => {
           setCurrentPath(path);
+          setCurrentType("dir");
         }}
       >
         <ListItemIcon>
@@ -62,6 +70,7 @@ const generateFileStructure = (
         }}
         onContextMenu={() => {
           setCurrentPath(path);
+          setCurrentType("dir");
         }}
         sx={{ pl: 4 * level }}
       >
@@ -85,6 +94,7 @@ const generateFileStructure = (
                 dispatch,
                 idx,
                 setCurrentPath,
+                setCurrentType,
                 level + 1
               )
             )}
@@ -97,6 +107,7 @@ const generateFileStructure = (
 export default function FileStructure() {
   const { fileMap, fileMapLoading } = useSelector((state) => state.project);
   const [currentPath, setCurrentPath] = useState("");
+  const [currentType, setCurrentType] = useState("");
 
   const { pathname } = useLocation();
   const path_split = pathname.split("/");
@@ -111,6 +122,10 @@ export default function FileStructure() {
 
   const getCurrentPath = () => {
     return currentPath;
+  };
+
+  const getCurrentType = () => {
+    return currentType;
   };
 
   return (
@@ -144,7 +159,8 @@ export default function FileStructure() {
               path,
               dispatch,
               i,
-              setCurrentPath
+              setCurrentPath,
+              setCurrentType
             );
           })}
       </List>
@@ -152,6 +168,7 @@ export default function FileStructure() {
       <FileStructureMenu
         projectId={project_id}
         getCurrentPath={getCurrentPath}
+        getCurrentType={getCurrentType}
       />
     </Box>
   );

@@ -85,8 +85,7 @@ const ProjectController = (app) => {
   app.post("/api/create-project/dir/:project_id", createDirInProject);
   app.post("/api/create-project/file/:project_id", createFileInProject);
   app.get("/api/project/:project_id", findProjectById);
-  app.delete("/api/delete-project/file/:project_id", deleteInProject);
-  app.delete("/api/delete-project/dir/:project_id", deleteInProject);
+  app.delete("/api/delete-project/:project_id", deleteInProject);
 };
 
 export default ProjectController;

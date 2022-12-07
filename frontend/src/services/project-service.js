@@ -28,3 +28,16 @@ export const createFileInProject = async (project_id, file_name, path) => {
   );
   return response.data;
 };
+
+export const deleteInProject = async (project_id, name, path) => {
+  const response = await axios.delete(
+    `${API_BASE}/delete-project/${project_id}`,
+    {
+      data: {
+        name,
+        path,
+      },
+    }
+  );
+  return response.data;
+};

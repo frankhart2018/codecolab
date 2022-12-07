@@ -96,14 +96,14 @@ export const createFileInProject = (project, project_id, file_name, path) => {
   );
 };
 
-export const deleteInProject = (project, project_id, file_name, path) => {
+export const deleteInProject = (project, project_id, name, path) => {
   const path_split = path.split("/");
 
   let current_dir = project.file_structure;
 
   if (path_split.length === 1 && path_split[0] === "") {
     current_dir.children = current_dir.children.filter(
-      (child) => child.name !== file_name
+      (child) => child.name !== name
     );
   } else {
     for (let i = 0; i < path_split.length; i++) {
@@ -114,11 +114,15 @@ export const deleteInProject = (project, project_id, file_name, path) => {
     }
 
     current_dir.children = current_dir.children.filter(
-      (child) => child.name !== file_name
+      (child) => child.name !== name
     );
   }
 
-  return projectModel.findByIdAndUpdate(project_id, {
-    file_structure: project.file_structure,
-  });
+  return projectModel.findByIdAndUpdate(
+    project_id,
+    {
+      file_structure: project.file_structure,
+    },
+    { new: true }
+  );
 };
