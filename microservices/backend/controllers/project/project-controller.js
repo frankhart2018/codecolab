@@ -100,7 +100,38 @@ const findInProject = async (req, res) => {
   }
 };
 
+const fetchS3URL = async (req, res) => {
+  const { project_id } = req.params;
+  const { path } = req.body;
+  const project = await projectDao.findProjectById(project_id);
+  if (!project) {
+    return res.status(400).json({ status: 400, message: "Project not found" });
+  }
+  const s3URL = await projectDao.getS3URL(project, project_id, path);
+
+  return res.status(200).json({ status: 200, url: s3URL });
+}
+const updateCodeInProject = async (req, res) => {
+  const { project_id } = req.params;
+  const { path, code } = req.body;
+  console.log("path, code", path, code)
+  console.log("project_id", project_id)
+  const project = await projectDao.findProjectById(project_id);
+  if (!project) {
+    return res.status(400).json({ status: 400, message: "Project not found" });
+  }
+  const updated_project = await projectDao.getS3URL(
+    project,
+    project_id,
+    path,
+    code,
+    true
+  );
+  return res.status(200).json({ status: 200, projectUrl: updated_project, message: "Code updated successfully" });
+}
 const ProjectController = (app) => {
+  app.get("/api/get-project/:project_id", fetchS3URL);
+  app.post("/api/update-project/:project_id", updateCodeInProject);
   app.post("/api/create-project", createProject);
   app.post("/api/create-project/dir/:project_id", createDirInProject);
   app.post("/api/create-project/file/:project_id", createFileInProject);

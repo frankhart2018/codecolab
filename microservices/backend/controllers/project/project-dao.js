@@ -1,5 +1,11 @@
 import projectModel from "./project-model.js";
-
+import AWS from 'aws-sdk'
+const s3 = new AWS.S3({
+  // accessKeyId: process.env.AWS_S3_ACCESS_KEY_ID,
+  // secretAccessKey: process.env.AWS_S3_SECRET_ACCESS_KEY,
+  accessKeyId: "AKIA6PYYRQR36PAYRLES",
+  secretAccessKey: "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",
+})
 export const createProject = (name, owner_id) => {
   return projectModel.create({
     name: name,
@@ -155,3 +161,73 @@ export const renameInProject = (project, project_id, name, new_name, path) => {
     { new: true }
   );
 };
+
+
+export const getS3URL = async (project, project_id, path, code = "#Type here...", updateCode = false) => {
+  const path_split = path.split("/");
+
+  let current_dir = project.file_structure;
+  //if path length is 1
+  if (path_split.length === 1 && path_split[0] != "") {
+
+    //check if s3_url is exist
+    const file = current_dir.children.find((child) => child.name === path_split[0]);
+    const s3_uri = file.s3_uri;
+    if (s3_uri != "" && !updateCode) {
+      return s3_uri;
+    }
+    //if s3_url doesn't exist
+    else {
+      const uri = await createS3URL(project_id, path, code)
+      const file = current_dir.children.find((child) => child.name === path_split[0]);
+      console.log(file);
+      file.s3_uri = uri;
+      await projectModel.findByIdAndUpdate(
+        project_id,
+        {
+          file_structure: project.file_structure,
+        },
+        { new: true }
+      );
+
+      return uri;
+    }
+  } else {
+    for (let i = 0; i < path_split.length; i++) {
+      const dir_name = path_split[i];
+      current_dir = current_dir.children.find(
+        (child) => child.name === dir_name
+      );
+    }
+
+    const s3_uri = current_dir.s3_uri;
+    if (s3_uri != "" && !updateCode) {
+      return s3_uri;
+    }
+    else {
+      const uri = await createS3URL(project_id, path, code)
+      current_dir.s3_uri = uri;
+      await projectModel.findByIdAndUpdate(
+        project_id,
+        {
+          file_structure: project.file_structure,
+        },
+        { new: true }
+      );
+      return uri;
+    }
+  }
+
+}
+
+export const createS3URL = async (project_id, path, code) => {
+
+  const data = await s3.upload({
+    Bucket: 'code-connect',
+    Body: code,
+    Key: project_id + '/' + path,
+    ACL: 'public-read'
+  }).promise()
+  return data.Location;
+
+}

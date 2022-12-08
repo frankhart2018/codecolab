@@ -5,32 +5,32 @@ import nodemailer from "nodemailer";
 const JWT_SECRET = process.env.JWT_SECRET;
 
 const UsersController = (app) => {
-  app.post("/api/login", findUser);
-  app.post("/api/register", createUser);
-  app.post("/api/userData", userData);
-  app.post("/api/forget-password", forgetPassword);
-  app.get("/api/reset-password/:id/:token", resetPassword);
-  app.post("/api/update-password/:id/:token", updatePassword);
+    app.post("/api/login", findUser);
+    app.post("/api/register", createUser);
+    app.post("/api/userData", userData);
+    app.post("/api/forget-password", forgetPassword);
+    app.get("/api/reset-password/:id/:token", resetPassword);
+    app.post("/api/update-password/:id/:token", updatePassword);
 };
 
 const findUser = async (req, res) => {
-  const { email, password } = req.body;
-  const user = await userDao.findUser(email);
-  if (!user) {
-    return res.json({ message: "User Not found" });
-  }
-  if (!(await bcrypt.compare(password, user.password))) {
-    return res.json({ message: "Invalid Credentials" });
-  } else {
-    const token = Jwt.sign({ email: email }, JWT_SECRET, {
-      expiresIn: 86400,
-    });
-    if (res.status(201)) {
-      return res.json({ status: "ok", data: token });
-    } else {
-      return res.json({ error: "error" });
+    const { email, password } = req.body;
+    const user = await userDao.findUser(email);
+    if (!user) {
+        return res.json({ message: "User Not found" });
     }
-  }
+    if (!(await bcrypt.compare(password, user.password))) {
+        return res.json({ message: "Invalid Credentials" });
+    } else {
+        const token = Jwt.sign({ email: email }, JWT_SECRET, {
+            expiresIn: 86400,
+        });
+        if (res.status(201)) {
+            return res.json({ status: "ok", data: token });
+        } else {
+            return res.json({ error: "error" });
+        }
+    }
 };
 
 const createUser = async (req, res) => {
