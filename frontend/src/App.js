@@ -14,10 +14,14 @@ import AllProjects from "./Home/components/AllProjects";
 import CodeEditorScreen from "./components/code-editor-screen/CodeEditorScreen";
 import ResetPassword from "./Home/components/ResetPassword";
 import CodeSharer from "./components/code-sharer/CodeSharer";
+import projectReducer from "./reducers/project-reducer";
+import CurrentUser from "./Home/components/CurrentUser";
+
 const store = configureStore({
   reducer: {
     userDetails: userDetailsReducer,
     pyrunner: pyrunnerReducer,
+    project: projectReducer,
   },
 });
 
@@ -27,20 +31,21 @@ const App = () => {
       <Provider store={store}>
         <ThemeProvider theme={theme}>
           <div className="container">
-            <Routes>
-              <Route path="/*" element={<Home />} />
-              <Route path="/*" element={<Home />} />
-              <Route path="/login" element={<SignIn />} />
-              <Route path="/sign-up" element={<SignUp />} />
-              <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route path="/all-projects" element={<AllProjects />} />
-              <Route path="/code-editor" element={<CodeEditorScreen />} />
-              <Route path="/code-sharer/*" element={<CodeSharer />} />
-              <Route
-                path="/api/reset-password/:id/:token"
-                element={<ResetPassword />}
-              />
-            </Routes>
+            <CurrentUser>
+              <Routes>
+                <Route path="/*" element={<Home />} />
+                <Route path="/login" element={<SignIn />} />
+                <Route path="/sign-up" element={<SignUp />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/all-projects" element={<AllProjects />} />
+                <Route path="/code-editor/*" element={<CodeEditorScreen />} />
+                <Route path="/code-sharer/*" element={<CodeSharer />} />
+                <Route
+                  path="/api/reset-password/:id/:token"
+                  element={<ResetPassword />}
+                />
+              </Routes>
+            </CurrentUser>
           </div>
         </ThemeProvider>
       </Provider>

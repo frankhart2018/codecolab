@@ -1,14 +1,14 @@
-import * as React from 'react';
-import { Field, Form, FormSpy } from 'react-final-form';
-import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
-import { email, required } from './form/validation';
-import NavBar from './NavBar';
-import AppForm from './AppForm';
-import FormFeedback from './form/FormFeedback';
-import FormButton from './form/FormButton';
-import { Typography } from '@mui/material';
-import RFTextField from './form/RFTextField';
+import * as React from "react";
+import { Field, Form, FormSpy } from "react-final-form";
+import Box from "@mui/material/Box";
+import Link from "@mui/material/Link";
+import { email, required } from "./form/validation";
+import NavBar from "./NavBar";
+import AppForm from "./AppForm";
+import FormFeedback from "./form/FormFeedback";
+import FormButton from "./form/FormButton";
+import { Typography } from "@mui/material";
+import RFTextField from "./form/RFTextField";
 import { useDispatch } from "react-redux";
 import { loginUserThunk } from '../../services/thunks';
 import { useNavigate } from 'react-router';
@@ -20,7 +20,7 @@ function SignIn() {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const validate = (values) => {
-    const errors = required(['email', 'password'], values);
+    const errors = required(["email", "password"], values);
     if (!errors.email) {
       const emailError = email(values.email);
       if (emailError) {
@@ -33,7 +33,7 @@ function SignIn() {
 
 
   const handleSubmit = async (e) => {
-    console.log(e)
+    console.log(e);
     setSent(true);
     const res = await dispatch(loginUserThunk(e));
     console.log("res", res);
@@ -59,12 +59,8 @@ function SignIn() {
             Sign In
           </Typography>
           <Typography variant="body2" align="center">
-            {'Not a member yet? '}
-            <Link
-              href="/sign-up"
-              align="center"
-              underline="always"
-            >
+            {"Not a member yet? "}
+            <Link href="/sign-up" align="center" underline="always">
               Sign Up here
             </Link>
           </Typography>
@@ -75,7 +71,12 @@ function SignIn() {
           validate={validate}
         >
           {({ handleSubmit: handleSubmit2, submitting }) => (
-            <Box component="form" onSubmit={handleSubmit2} noValidate sx={{ mt: 6 }}>
+            <Box
+              component="form"
+              onSubmit={handleSubmit2}
+              noValidate
+              sx={{ mt: 6 }}
+            >
               <Field
                 autoComplete="email"
                 autoFocus
@@ -116,7 +117,7 @@ function SignIn() {
                 color="secondary"
                 fullWidth
               >
-                {submitting || sent ? 'In progress…' : 'Sign In'}
+                {submitting || sent ? "In progress…" : "Sign In"}
               </FormButton>
             </Box>
           )}
