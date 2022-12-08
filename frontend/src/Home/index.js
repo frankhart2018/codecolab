@@ -2,6 +2,7 @@ import NavBar from "./components/NavBar.js";
 import HomePage from "./components/HomePage";
 
 function Home() {
+<<<<<<< HEAD
     return (
         <div>
             <NavBar />
@@ -9,6 +10,14 @@ function Home() {
         </div>
     );
 
+=======
+  return (
+    <div>
+      <NavBar />
+      <HomePage/>
+    </div>
+  );
+>>>>>>> master
 }
 
 export default Home;

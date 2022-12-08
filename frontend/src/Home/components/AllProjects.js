@@ -1,4 +1,6 @@
+import { Grid, Typography } from "@mui/material";
 import React from "react";
+import { useSelector } from "react-redux";
 import NavBar from "./NavBar";
 import {useDispatch, useSelector } from "react-redux";
 import {logoutUserThunk} from "../../services/thunks";

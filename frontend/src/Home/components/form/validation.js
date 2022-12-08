@@ -11,10 +11,12 @@ function isEmail(string) {
 }
 
 export function email(value) {
-  return value && !isEmail(value.trim()) ? 'Invalid email' : null;
+  return value && !isEmail(value.trim()) ? "Invalid email" : null;
 }
 export function password(value) {
-  return value && value.trim().length < 6 ? 'Password length should be atleast six characters' : null;
+  return value && value.trim().length < 6
+    ? "Password length should be atleast six characters"
+    : null;
 }
 
 function isDirty(value) {
@@ -25,8 +27,8 @@ export function required(requiredFields, values) {
   return requiredFields.reduce(
     (fields, field) => ({
       ...fields,
-      ...(isDirty(values[field]) ? undefined : { [field]: 'Required' }),
+      ...(isDirty(values[field]) ? undefined : { [field]: "Required" }),
     }),
-    {},
+    {}
   );
 }
