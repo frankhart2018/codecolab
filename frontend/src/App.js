@@ -16,12 +16,14 @@ import ResetPassword from "./Home/components/ResetPassword";
 import CodeSharer from "./components/code-sharer/CodeSharer";
 import projectReducer from "./reducers/project-reducer";
 import CurrentUser from "./Home/components/CurrentUser";
+import fileReducer from "./reducers/file-reducer";
 
 const store = configureStore({
   reducer: {
     userDetails: userDetailsReducer,
     pyrunner: pyrunnerReducer,
     project: projectReducer,
+    file: fileReducer,
   },
 });
 

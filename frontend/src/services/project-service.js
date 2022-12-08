@@ -50,3 +50,11 @@ export const renameInProject = async (project_id, name, new_name, path) => {
   });
   return response.data;
 };
+
+export const openFileInProject = async (project_id, path) => {
+  const response = await axios.post(`${API_BASE}/get-project/${project_id}`, {
+    path,
+  });
+
+  return response.data;
+};

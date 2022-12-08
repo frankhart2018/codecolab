@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 import * as project_service from "./project-service";
 
 export const getProjectByIdThunk = createAsyncThunk(
@@ -55,5 +56,20 @@ export const renameInProjectThunk = createAsyncThunk(
       payload.path
     );
     return response;
+  }
+);
+
+export const openFileInProjectThunk = createAsyncThunk(
+  "/project/openFileInProject",
+  async (payload) => {
+    const response = await project_service.openFileInProject(
+      payload.project_id,
+      payload.path
+    );
+
+    const url = response.url;
+    const responseContent = await axios.get(url);
+
+    return responseContent.data;
   }
 );

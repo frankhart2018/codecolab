@@ -27,6 +27,7 @@ import {
   createDirInProjectThunk,
   createFileInProjectThunk,
   getProjectByIdThunk,
+  openFileInProjectThunk,
 } from "../../../services/project-thunk";
 import { updateFileMap } from "../../../reducers/project-reducer";
 import FileStructureMenu from "./FileStructureMenu";
@@ -38,12 +39,16 @@ const generateFileStructure = (
   idx,
   setCurrentPath,
   setCurrentType,
+  handleFileClicked,
   level = 1
 ) => {
   if (root.type === "file") {
     return (
       <ListItemButton
         sx={{ pl: 4 * level }}
+        onClick={() => {
+          handleFileClicked(path);
+        }}
         onContextMenu={() => {
           setCurrentPath(path);
           setCurrentType("file");
@@ -109,6 +114,7 @@ const generateFileStructure = (
                 idx,
                 setCurrentPath,
                 setCurrentType,
+                handleFileClicked,
                 level + 1
               )
             )}
@@ -188,6 +194,15 @@ export default function FileStructure() {
     setNewFileName("");
   };
 
+  const handleFileClicked = (path) => {
+    dispatch(
+      openFileInProjectThunk({
+        project_id: project_id,
+        path: path,
+      })
+    );
+  };
+
   return (
     <>
       <Box
@@ -240,7 +255,8 @@ export default function FileStructure() {
                 dispatch,
                 i,
                 setCurrentPath,
-                setCurrentType
+                setCurrentType,
+                handleFileClicked
               );
             })}
         </List>
