@@ -6,7 +6,6 @@ import * as service
 export const loginUserThunk = createAsyncThunk(
     '/user/loginUser', async (user) => {
         const response = await service.loginUser(user)
-        console.log("response in thunk", response)
         return response
     })
 
@@ -35,4 +34,8 @@ export const userDataThunk = createAsyncThunk (
         return response
     })
 
-
+export const logoutUserThunk = createAsyncThunk (
+    '/user/logoutUser', async () => {
+        const response = await service.logoutUser()
+        return response
+    })

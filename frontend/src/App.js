@@ -4,6 +4,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "./theme";
 import Home from "./Home";
 import SignIn from "./Home/components/SignIn";
+import ProfilePage from "./Home/components/ProfilePage";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import userDetailsReducer from "./reducers/user-details-reducer";
@@ -32,8 +33,10 @@ const App = () => {
               <CurrentUser>
                 <Routes>
                   <Route path="/*" element={<Home />} />
+                  <Route path="/logout" element={<Home />} />
                   <Route path="/login" element={<SignIn />} />
                   <Route path="/sign-up" element={<SignUp />} />
+                  <Route path="/profile" element={<ProfilePage />} />
                   <Route path="/forgot-password" element={<ForgotPassword />} />
                   <Route path="/all-projects" element={<AllProjects />} />
                   <Route path="/code-editor" element={<CodeEditorScreen />} />

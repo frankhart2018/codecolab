@@ -5,6 +5,7 @@ import cors from 'cors';
 import session from 'express-session'
 import UsersController from './controllers/users/user-controller.js';
 import mongoose from "mongoose";
+import SessionController from "./controllers/session/session-controller.js";
 const CONNECTION_STRING = process.env.DB_CONNECTION_STRING
     || 'mongodb://localhost:27017/Codify';
 const JWT_SECRET = process.env.JWT_SECRET
@@ -12,7 +13,7 @@ console.log(CONNECTION_STRING)
 
 
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: '*',
     credentials: true,            //access-control-allow-credentials:true
     optionSuccessStatus: 200
 }
@@ -39,5 +40,6 @@ app.use(session({
 app.use(express.json());
 
 UsersController(app);
+// SessionController(app)
 
-app.listen(process.env.PORT || 4000);
+app.listen(process.env.PORT || 3000);

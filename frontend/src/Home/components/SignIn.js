@@ -9,15 +9,15 @@ import FormFeedback from './form/FormFeedback';
 import FormButton from './form/FormButton';
 import { Typography } from '@mui/material';
 import RFTextField from './form/RFTextField';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginUserThunk } from '../../services/thunks';
-import {useEffect} from "react";
 
-import { useNavigate } from 'react-router';
+import { Navigate, useNavigate } from 'react-router';
 import { useSnackbar } from 'notistack';
 
 
 const SignIn = () => {
+  const { currentUser } = useSelector((state) => state.userDetails)
   const [sent, setSent] = React.useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -36,10 +36,8 @@ const SignIn = () => {
 
 
   const handleSubmit = async (e) => {
-    console.log(e)
     setSent(true);
     const res = await dispatch(loginUserThunk(e));
-    console.log("res", res);
     if (res?.payload?.status === "ok") {
       enqueueSnackbar("Login Successful", { variant: "success" });
       navigate("/all-projects", { replace: true });
@@ -50,6 +48,10 @@ const SignIn = () => {
       setSent(false);
     }
   };
+
+  if (currentUser) {
+    return (<Navigate to={'/all-projects'}/>)
+  }
 
   return (
     <React.Fragment>
