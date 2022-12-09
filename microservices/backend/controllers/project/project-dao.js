@@ -229,3 +229,8 @@ export const createS3URL = async (project_id, path, code) => {
   return data.Location;
 
 }
+
+export const fetchAllProjects = async (owner_id) => {
+  const projects = await projectModel.find({ owner_id: owner_id}, {file_structure: false});
+  return projects;
+}

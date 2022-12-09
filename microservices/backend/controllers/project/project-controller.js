@@ -129,8 +129,19 @@ const updateCodeInProject = async (req, res) => {
   );
   return res.status(200).json({ status: 200, projectUrl: updated_project, message: "Code updated successfully" });
 }
+
+const getAllProject = async (req, res) => {
+  const { owner_id } = req.params;
+  const projects = await projectDao.fetchAllProjects(owner_id);
+  if (!projects) {
+    return res.status(400).json({ status: 400, message: "No projects available" });
+  }
+  return res.status(200).json({ status: 200, projects: projects });
+}
+
 const ProjectController = (app) => {
   app.get("/api/get-project/:project_id", fetchS3URL);
+  app.post("/api/get-all-project/:owner_id", getAllProject);
   app.post("/api/update-project/:project_id", updateCodeInProject);
   app.post("/api/create-project", createProject);
   app.post("/api/create-project/dir/:project_id", createDirInProject);
