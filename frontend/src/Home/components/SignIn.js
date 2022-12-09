@@ -1,31 +1,15 @@
-<<<<<<< HEAD
 import * as React from 'react';
 import { Field, Form, FormSpy } from 'react-final-form';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import { email, required } from './form/validation';
-import NavBar from './NavBar';
 import AppForm from './AppForm';
 import FormFeedback from './form/FormFeedback';
 import FormButton from './form/FormButton';
 import { Typography } from '@mui/material';
 import RFTextField from './form/RFTextField';
 import { useDispatch, useSelector } from "react-redux";
-=======
-import * as React from "react";
-import { Field, Form, FormSpy } from "react-final-form";
-import Box from "@mui/material/Box";
-import Link from "@mui/material/Link";
-import { email, required } from "./form/validation";
-import NavBar from "./NavBar";
-import AppForm from "./AppForm";
-import FormFeedback from "./form/FormFeedback";
-import FormButton from "./form/FormButton";
-import { Typography } from "@mui/material";
-import RFTextField from "./form/RFTextField";
-import { useDispatch } from "react-redux";
->>>>>>> master
-import { loginUserThunk } from '../../services/thunks';
+import {loginUserThunk, userDataThunk} from '../../services/thunks';
 
 import { Navigate, useNavigate } from 'react-router';
 import { useSnackbar } from 'notistack';
@@ -51,30 +35,25 @@ const SignIn = () => {
 
 
   const handleSubmit = async (e) => {
-<<<<<<< HEAD
-=======
-    console.log(e);
->>>>>>> master
     setSent(true);
     const res = await dispatch(loginUserThunk(e));
     if (res?.payload?.status === "ok") {
       enqueueSnackbar("Login Successful", { variant: "success" });
-      navigate("/all-projects", { replace: true });
+      navigate("/profile", { replace: true });
       setSent(false);
     }
     else {
       enqueueSnackbar(res?.payload?.message, { variant: "error" });
       setSent(false);
     }
+    if (res?.payload?.data) {
+      await dispatch(userDataThunk(res?.payload?.data))
+    }
   };
-
-  if (currentUser) {
-    return (<Navigate to={'/all-projects'}/>)
-  }
 
   return (
     <React.Fragment>
-      <NavBar />
+      {/*<NavBar />*/}
       <AppForm>
         <React.Fragment>
           <Typography variant="h3" gutterBottom marked="center" align="center">

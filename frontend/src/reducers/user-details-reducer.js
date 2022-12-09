@@ -1,5 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {loginUserThunk, logoutUserThunk, signUpUserThunk, userDataThunk} from "../services/thunks";
+import {
+    loginUserThunk,
+    logoutUserThunk,
+    profileThunk,
+    signUpUserThunk,
+    updateUserThunk,
+    userDataThunk
+} from "../services/thunks";
 
 const userDetailsSlice = createSlice({
     name: "userDetails",
@@ -13,7 +20,6 @@ const userDetailsSlice = createSlice({
             (state, { payload }) => {
                 state.isLoggedIn = true
                 state.token = payload.data
-                console.log("state", state);
                 localStorage.setItem('token', state.token);
             },
 
@@ -29,8 +35,14 @@ const userDetailsSlice = createSlice({
             },
         [logoutUserThunk.fulfilled]:
             (state, action) => {
+                state.isLoggedIn = false
                 state.currentUser = null
                 state.token = ""
+                localStorage.setItem('token', state.token)
+            },
+        [updateUserThunk.fulfilled]:
+            (state, action) => {
+                state.currentUser = action.payload.user
             }
     }
 });

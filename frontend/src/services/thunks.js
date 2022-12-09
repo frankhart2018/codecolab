@@ -32,6 +32,7 @@ export const updatePasswordThunk = createAsyncThunk(
 export const userDataThunk = createAsyncThunk (
     '/user/userData/', async (token) => {
         const response = await service.userData(token)
+        console.log("user data thunk response", response)
         return response
     })
 
@@ -41,3 +42,16 @@ export const logoutUserThunk = createAsyncThunk (
         return response
     })
 
+export const updateUserThunk = createAsyncThunk (
+    'user/updateUser', async (user) => {
+        const response = await service.updateUser(user)
+        return response
+    })
+
+export const profileThunk = createAsyncThunk (
+    'user/profile', async () => {
+        const response = await service.profile()
+        console.log("in profile thunk", response)
+        return response
+    }
+)

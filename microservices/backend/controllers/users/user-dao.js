@@ -5,17 +5,6 @@ export const findUser = (email) => {
 };
 
 export const createUser = (email, encryptedPassword, name, username) => {
-<<<<<<< HEAD
-    return userModel.create({ email: email, password: encryptedPassword, name: name, username: username });
-};
-
-export const findUserById = (id) => {
-    return userModel.findOne({ _id: id })
-};
-
-export const updatePassword = (id, password) => {
-    return userModel.updateOne({ _id: id }, { password: password })
-=======
   return userModel.create({
     email: email,
     password: encryptedPassword,
@@ -27,7 +16,11 @@ export const updatePassword = (id, password) => {
 export const findUserById = (id) => {
   return userModel.findOne({ _id: id });
 };
+
 export const updatePassword = (id, password) => {
   return userModel.updateOne({ _id: id }, { password: password });
->>>>>>> master
 };
+
+export const updateUser = (id, content) => {
+  return userModel.updateOne({_id: id}, {$set: content})
+}

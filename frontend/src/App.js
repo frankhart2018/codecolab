@@ -17,6 +17,9 @@ import ResetPassword from "./Home/components/ResetPassword";
 import CodeSharer from "./components/code-sharer/CodeSharer";
 import projectReducer from "./reducers/project-reducer";
 import CurrentUser from "./Home/components/CurrentUser";
+import EditProfilePage from "./Home/components/EditProfilePage";
+import ProtectedRoute from "./Home/components/ProtectedRoute";
+import NavBar from "./NavBar";
 
 const store = configureStore({
   reducer: {
@@ -33,16 +36,20 @@ const App = () => {
         <ThemeProvider theme={theme}>
           <div className="container">
               <CurrentUser>
+                <NavBar/>
                 <Routes>
                   <Route path="/*" element={<Home />} />
-                  <Route path="/logout" element={<Home />} />
                   <Route path="/login" element={<SignIn />} />
                   <Route path="/sign-up" element={<SignUp />} />
-                  <Route path="/profile" element={<ProfilePage />} />
+                  <Route path="/profile" element={
+                      <ProfilePage />
+                  } />
+                  <Route path="/edit-profile" element={<EditProfilePage />} />
                   <Route path="/forgot-password" element={<ForgotPassword />} />
-                  <Route path="/all-projects" element={<AllProjects />} />
+                  <Route path="/all-projects" element={<AllProjects />}/>
+
                   <Route path="/code-editor" element={<CodeEditorScreen />} />
-                  <Route path="/code-sharer/*" element={<CodeSharer />} />
+                  <Route path="/code-sharer" element={<CodeSharer />} />
                   <Route
                     path="/api/reset-password/:id/:token"
                     element={<ResetPassword />}

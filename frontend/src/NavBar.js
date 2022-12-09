@@ -1,16 +1,8 @@
-<<<<<<< HEAD
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import { AppBar, Link } from '@mui/material';
-import Toolbar from './ToolBar';
+import Toolbar from "./Home/components/ToolBar";
 import {useDispatch, useSelector} from "react-redux";
-import {logoutUserThunk} from "../../services/thunks";
-=======
-import * as React from "react";
-import Box from "@mui/material/Box";
-import { AppBar, Link } from "@mui/material";
-import Toolbar from "./ToolBar";
->>>>>>> master
 
 const rightLink = {
   fontSize: 16,
@@ -19,7 +11,6 @@ const rightLink = {
 };
 
 function NavBar() {
-<<<<<<< HEAD
     const { currentUser } = useSelector((state) => state.userDetails)
     const dispatch = useDispatch()
     return (
@@ -74,45 +65,6 @@ function NavBar() {
             <Toolbar />
         </div >
     );
-=======
-  return (
-    <div>
-      <AppBar position="fixed">
-        <Toolbar sx={{ justifyContent: "space-between" }}>
-          <Box sx={{ flex: 1 }} />
-          <Link
-            variant="h6"
-            underline="none"
-            color="inherit"
-            sx={{ fontSize: 24 }}
-          >
-            Codify
-          </Link>
-          <Box sx={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
-            <Link
-              color="inherit"
-              variant="h6"
-              underline="none"
-              href={"/login"}
-              sx={rightLink}
-            >
-              Sign In
-            </Link>
-            <Link
-              variant="h6"
-              underline="none"
-              href={"/sign-up"}
-              sx={{ ...rightLink, color: "secondary.main" }}
-            >
-              Sign Up
-            </Link>
-          </Box>
-        </Toolbar>
-      </AppBar>
-      <Toolbar />
-    </div>
-  );
->>>>>>> master
 }
 
 export default NavBar;

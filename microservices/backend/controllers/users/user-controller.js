@@ -2,12 +2,12 @@ import * as userDao from "./user-dao.js";
 import bcrypt from "bcryptjs";
 import Jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
-const JWT_SECRET = process.env.JWT_SECRET;
+// const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = 'hfdjkfsfjsfjdsfkhfoihfi0933j&*092jdd&(@!2jfdfj'
 
 let currentUser = null
 
 const UsersController = (app) => {
-<<<<<<< HEAD
     app.post('/api/login', findUser);
     app.post('/api/register', createUser);
     app.post('/api/userData', userData);
@@ -15,42 +15,15 @@ const UsersController = (app) => {
     app.get('/api/reset-password/:id/:token', resetPassword);
     app.post('/api/update-password/:id/:token', updatePassword);
     app.post('/api/logout', logoutUser);
+    app.put('/api/update/:id', updateUser);
+    app.post('/api/profile', profile);
 }
-
-const findUser = async (req, res) => {
-    const { email, password } = req.body;
-    const user = await userDao.findUser({email});
-    if (!user) {
-        return res.json({ message: "User Not found" });
-    }
-    if (!await bcrypt.compare(password, user.password)) {
-        return res.json({ message: "Invalid Credentials" });
-    }
-    else {
-        req.session['currentUser'] = user
-        const token = Jwt.sign({ email: email }, JWT_SECRET, {
-            expiresIn: 86400
-        });
-        if (res.status(201)) {
-            return res.json({ status: "ok", data: token});
-        } else {
-            return res.json({ error: "error" });
-        }
-    }
-
-}
-=======
-  app.post("/api/login", findUser);
-  app.post("/api/register", createUser);
-  app.post("/api/userData", userData);
-  app.post("/api/forget-password", forgetPassword);
-  app.get("/api/reset-password/:id/:token", resetPassword);
-  app.post("/api/update-password/:id/:token", updatePassword);
-};
 
 const findUser = async (req, res) => {
   const { email, password } = req.body;
   const user = await userDao.findUser(email);
+  req.session['currentUser'] = user
+    req.session.save()
   if (!user) {
     return res.json({ message: "User Not found" });
   }
@@ -66,8 +39,8 @@ const findUser = async (req, res) => {
       return res.json({ error: "error" });
     }
   }
+
 };
->>>>>>> master
 
 const createUser = async (req, res) => {
     const { email, password, name, username } = req.body;
@@ -85,19 +58,31 @@ const createUser = async (req, res) => {
 
 const userData = async (req, res) => {
     const { token } = req.body;
-    if (req.session['currentUser']) {
-        res.status(201).json({ user: currentUser });
-    }
-    else {
-        try {
-            const user = Jwt.verify(token, JWT_SECRET);
-            const useremail = user.email;
-            userDao.findUser(useremail).then((user) => {
-                res.status(201).json({ user: user });
-            });
-        } catch (error) {
-            res.status(401).json({ message: 'Invalid token' });
-        }
+    // if (req.session['currentUser']) {
+    //     res.status(201).json({ user: currentUser });
+    // }
+    // else {
+    //     try {
+    //         const user = Jwt.verify(token, JWT_SECRET);
+    //         const useremail = user.email;
+    //         userDao.findUser(useremail).then((user) => {
+    //             req.session['currentUser'] = user
+    //             res.status(201).json({ user: user });
+    //         });
+    //     } catch (error) {
+    //         res.status(401).json({ message: 'Invalid token' });
+    //     }
+    // }
+    // req.session.save()
+    // const { token } = req.body;
+    try {
+        const user = Jwt.verify(token, JWT_SECRET);
+        const useremail = user.email;
+        userDao.findUser(useremail).then((user) => {
+            res.status(201).json({ user: user });
+        });
+    } catch (error) {
+        res.status(401).json({ message: 'Invalid token' });
     }
 }
 
@@ -173,11 +158,12 @@ const updatePassword = async (req, res) => {
     }
 }
 
-const logoutUser = async (req, res) => {
+const logoutUser = (req, res) => {
     console.log("Hitting api")
     const authHeader = req.headers["authorization"];
     Jwt.sign(authHeader, "", { expiresIn: 1 } , (logout, err) => {
         if (logout) {
+            req.session.destroy()
             res.send({msg: "Logged out successfully"})
         }
         else {
@@ -185,4 +171,22 @@ const logoutUser = async (req, res) => {
         }
     })
 }
+
+const updateUser = async (req, res) => {
+    const userIdToUpdate = req.params.id;
+    const updates = req.body;
+    const status = await userDao.updateUser(userIdToUpdate, updates)
+    res.json(status);
+}
+
+const profile = (req, res) => {
+    console.log("in server, profile", req.session['currentUser'])
+    if (req.session['currentUser']) {
+        res.send(req.session['currentUser'])
+    } else {
+        res.sendStatus(403)
+    }
+    req.session.save()
+}
+
 export default UsersController;
