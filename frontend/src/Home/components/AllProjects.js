@@ -1,108 +1,90 @@
-import {IconButton, ListItem, Stack, Typography} from "@mui/material";
+import { Card, Divider, Grid, Typography } from "@mui/material";
 import React from "react";
 import { useSelector } from "react-redux";
+import CreateButton from "./CreateButton";
 import NavBar from "./NavBar";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import List from "@mui/material/List";
-import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
+import CardContent from '@mui/material/CardContent';
+import { CardActionArea } from '@mui/material';
 
 function AllProjects() {
   const { currentUser } = useSelector((state) => state.userDetails)
+  const [projects, setProjects] = React.useState([]);
+  const [username, setUsername] = React.useState("");
+  React.useEffect(() => {
+    const fetchProjects = async () => {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/get-all-projects/${currentUser?._id}`);
+      const data = await res.json();
+      setProjects(data?.projects);
+      setUsername(currentUser?.username);
+    };
+    fetchProjects();
+  }, [currentUser?._id, currentUser?.username]);
+
+  const handleOpenProject = (id) => {
+    console.log("project id", id)
+  }
+  const onCreateProject = async () => {
+    const res = await fetch(`${process.env.REACT_APP_API_URL}/api/get-all-projects/${currentUser?._id}`);
+    const data = await res.json();
+    setProjects(data?.projects);
+
+  }
   return (
-    <React.Fragment>
+    <Grid container>
       <NavBar />
-        <Box
-            sx={{
-                bgcolor: 'background.paper',
-                pt: 5,
-                pb: 3,
-                mt: 10,
-                flexGrow: 1
-            }}
-        >
-            <Container>
-                <Stack
-                    sx={{ pt: 4 }}
-                    direction="row"
-                    spacing={2}
-                >
-                    <Container>
-                        <Typography
-                            variant="h4"
-                            noWrap
-                            component="div"
-                            sx={{ display: { xs: 'none', sm: 'block' } }}
-                        >
-                            All Projects
-                        </Typography>
-                        {currentUser &&
-                            <Typography
-                                variant="inherit"
-                                noWrap
-                                component="div"
-                                color="text.secondary"
-                                sx={{display: {xs: 'none', sm: 'block'}}}
-                            >
-                                {currentUser.username}/
-                            </Typography>
-                        }
-                    </Container>
-                    <Container>
-                        <Stack
-                            direction="row-reverse"
-                            spacing={2}
-                            alignItems="right"
-                        >
-                            <IconButton aria-label="delete" size="large">
-                                <AddCircleRoundedIcon fontSize="large" />
-                            </IconButton>
-                        </Stack>
-                    </Container>
-                </Stack>
-            </Container>
-            <Container>
-                <List>
-                    <ListItem>
-                        <Box
-                            sx={{
-                                width: "100%",
-                                height: 50,
-                                backgroundColor: 'lightgrey',
-                                '&:hover': {
-                                    backgroundColor: 'grey',
-                                    opacity: [0.9, 0.8, 0.7],
-                                },
-                            }}
-                        >
-                            <Typography
-                                variant="h6"
-                                noWrap
-                                component="div"
-                                color="text.secondary"
-                                sx={{pt:1.5, pl:1, display: {xs: 'none', sm: 'block'}}}
-                            >
-                                First Project
-                            </Typography>
-                        </Box>
-                    </ListItem>
-                    <ListItem>
-                        <Box
-                            sx={{
-                                width: "100%",
-                                height: 50,
-                                backgroundColor: 'lightgrey',
-                                '&:hover': {
-                                    backgroundColor: 'grey',
-                                    opacity: [0.9, 0.8, 0.7],
-                                },
-                            }}
-                        >Second project</Box>
-                    </ListItem>
-                </List>
-            </Container>
-        </Box>
-    </React.Fragment>
+      <Grid container spacing={4}>
+        <Grid item xs={12} md={12} spacing={4}>
+          <Typography variant="h2" component="h1" gutterBottom style={{ marginLeft: '15px', paddingTop: 10 }}>
+            Welcome, <u>{currentUser?.name}</u>
+          </Typography>
+
+        </Grid>
+        <Grid item xs={6} md={6} spacing={4}>
+          <Typography variant="h4" component="h1" style={{ marginLeft: '15px' }} gutterBottom>
+            <b>All Projects</b>
+          </Typography>
+          <Typography variant="h5" style={{ marginLeft: '15px' }} >
+            {username}
+          </Typography>
+        </Grid>
+
+        <Grid item xs={6} md={6} spacing={4}>
+          <CreateButton owner_id={currentUser?._id} handleProjectList={onCreateProject} />
+        </Grid>
+      </Grid>
+      <Grid container spacing={4}>
+        <Grid item xs={12} md={12} spacing={2} >
+          <Divider style={{ padding: 2 }} gutterBottom />
+          <div style={{ display: "flex", padding: 20, flexWrap: "wrap", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+            {projects?.map((project) => (
+              <div style={{
+                padding: 15
+              }}>
+                <Card sx={{
+                  maxWidth: 345, width: 300,
+                  height: 300,
+                }}
+                  onClick={() => handleOpenProject(project?._id)} >
+                  <CardActionArea>
+                    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: 200 }}>
+                      <img src="/python_logo.png" alt="python logo" style={{ width: '100px' }}></img>
+                    </div>
+                    <CardContent>
+                      <Typography gutterBottom variant="h4" component="div">
+                        {project?.name}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        {project?.description}
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              </div>
+            ))}
+          </div>
+        </Grid>
+      </Grid >
+    </Grid >
   );
 }
 

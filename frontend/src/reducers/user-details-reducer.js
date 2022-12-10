@@ -19,9 +19,11 @@ const userDetailsSlice = createSlice({
 
     [signUpUserThunk.fulfilled]:
       (state, { payload }) => {
-        if (payload.status === 201) {
-          state.isLoggedIn = true
-        }
+
+        state.isLoggedIn = true;
+        state.token = payload.data;
+        localStorage.setItem('token', state.token);
+
       },
     [userDataThunk.fulfilled]:
       (state, action) => {

@@ -2,7 +2,7 @@ import * as React from "react";
 import { Field, Form, FormSpy } from "react-final-form";
 import Box from "@mui/material/Box";
 import Link from "@mui/material/Link";
-import { email, required } from "./form/validation";
+import { email, password, required } from "./form/validation";
 import NavBar from "./NavBar";
 import AppForm from "./AppForm";
 import FormFeedback from "./form/FormFeedback";
@@ -29,6 +29,13 @@ function SignUp() {
       }
     }
 
+    if (!errors.password) {
+      const passwordError = password(values.password);
+      if (passwordError) {
+        errors.password = passwordError;
+      }
+    }
+
     return errors;
   };
 
@@ -39,10 +46,8 @@ function SignUp() {
       username: e.username,
       password: e.password
     }
-    console.log("user", user)
     setSent(true);
     const response = await dispatch(signUpUserThunk(user));
-    console.log("response", response)
     if (response?.payload?.status === "ok") {
       enqueueSnackbar(response?.payload?.message, { variant: "success" });
       navigate("/all-projects", { replace: true });

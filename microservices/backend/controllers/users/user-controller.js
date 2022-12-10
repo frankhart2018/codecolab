@@ -2,8 +2,8 @@ import * as userDao from "./user-dao.js";
 import bcrypt from "bcryptjs";
 import Jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
-const JWT_SECRET = process.env.JWT_SECRET;
-
+// const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET='hfdjkfsfjsfjdsfkhfoihfi0933j&*092jdd&(@!2jfdfj'
 const UsersController = (app) => {
   app.post("/api/login", findUser);
   app.post("/api/register", createUser);
@@ -39,15 +39,20 @@ const createUser = async (req, res) => {
     const { email, password, name, username } = req.body;
     const encryptedPassword = await bcrypt.hash(password, 10);
     const userPresent = await userDao.findUser(email);
+    const token = Jwt.sign({ email: email }, JWT_SECRET, {
+        expiresIn: 86400,
+    });
+    console.log("token")
     if (userPresent) {
         return res.status(400).json({ message: 'User already exists' });
 
     }
-    await userDao.createUser(email, encryptedPassword, name, username);
-    res.status(201).json({ message: 'User created successfully', status: "ok" });
+    else {
+        await userDao.createUser(email, encryptedPassword, name, username);
+        res.status(201).json({ message: 'User created successfully', status: "ok", data: token });
+    }
+
 }
-
-
 const userData = async (req, res) => {
     const { token } = req.body;
     try {

@@ -23,7 +23,7 @@ function NavBar() {
             color="inherit"
             sx={{ fontSize: 24 }}
           >
-            Codify
+            Code Connect
           </Link>
           {!currentUser &&
               <Box sx={{flex: 1, display: 'flex', justifyContent: 'flex-end'}}>

@@ -32,7 +32,6 @@ function ForgotPassword() {
   const handleSubmit = async (e) => {
     setSent(true);
     const response = await dispatch(forgotPasswordThunk(e));
-    console.log("response", response)
     if (response?.payload?.status === 201) {
       enqueueSnackbar(response?.payload?.data?.message, { variant: "success" });
       setSent(false);
