@@ -8,9 +8,9 @@ const CurrentUser = ({ children }) => {
     const { currentUser } = useSelector((state) => state.userDetails)
     console.log("token", token)
     const dispatch = useDispatch()
-    useEffect(() => {
+    useEffect(async () => {
         if (currentUser === null && token) {
-            const res = dispatch(userDataThunk({ token }));
+            await dispatch(userDataThunk({ token }));
         }
     }, [token, dispatch, currentUser])
     return (children)
