@@ -2,8 +2,11 @@ import {useDispatch, useSelector} from "react-redux";
 import React, {useState} from "react";
 import {updateUserThunk, userDataThunk} from "../../services/thunks";
 import {Link} from "react-router-dom";
-import {Navigate} from "react-router";
 import NavBar from "./NavBar";
+import Box from "@mui/material/Box";
+import {Card, CardContent, Divider, Grid, Typography} from "@mui/material";
+import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
 
 const EditProfilePage = () => {
     const token = useSelector((state) => state.userDetails.token) || localStorage.getItem('token');
@@ -24,11 +27,29 @@ const EditProfilePage = () => {
     const updateProfileData = async () => {
         await dispatch(updateUserThunk({currentUser, profileData}));
         await dispatch(userDataThunk({ token }));
-        // navigate("/profile", {replace: true});
     }
 
-    if (!currentUser) {
-        return (<Navigate to={'/login'}/>)
+    const WelcomeCard = () => {
+        return (
+            <>
+                <Box sx={{ pt: 10 }}>
+                    <Card variant="outlined" align="center">
+                        <CardContent>
+                            <Typography sx={{fontSize: 24}} component="div">
+                                Welcome {currentUser.name}
+                            </Typography>
+                        </CardContent>
+                        <Box justifyContent={"center"} pb={2}>
+                        <Link to="/profile" style={{ textDecoration: 'none'}}>
+                            <Button onClick={updateProfileData} variant="contained">
+                                Save
+                            </Button>
+                        </Link>
+                        </Box>
+                    </Card>
+                </Box>
+            </>
+        )
     }
 
     return (
@@ -36,74 +57,66 @@ const EditProfilePage = () => {
             <NavBar/>
             {currentUser &&
                 <>
-                    <div className="container">
-                        <div className="row mt-4">
-                            <div className="col-md-4 mb-3">
-                                <div className="card">
-                                    <div className="card-body">
-                                        <div className="d-flex flex-column align-items-center text-center">
-                                            <div className="mt-3">
-                                                <h4>Welcome {currentUser.name}</h4>
-                                                <hr/>
-                                                <Link to="/profile">
-                                                    <button onClick={updateProfileData}
-                                                            className="btn btn-dark">Save
-                                                    </button>
-                                                </Link>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-md-8 mb-3">
-                                <div className="card mb-3">
-                                    <div className="card-body">
-                                        <div className="row">
-                                            <div className="col-sm-3">
-                                                <h6 className="mb-0">Full Name</h6>
-                                            </div>
-                                            <div className="col-sm-9">
-                                                <input className="text-secondary form-control"
-                                                       id="name"
-                                                       name="name"
-                                                       defaultValue={currentUser.name}
-                                                       onChange={changeProfileField}>
-                                                </input>
-                                            </div>
-                                        </div>
-                                        <hr/>
-                                        <div className="row">
-                                            <div className="col-sm-3">
-                                                <h6 className="mb-0">Username</h6>
-                                            </div>
-                                            <div className="col-sm-9">
-                                                <input className="text-secondary form-control"
-                                                       id="username"
-                                                       name="username"
-                                                       defaultValue={currentUser.username}
-                                                       onChange={changeProfileField}>
-                                                </input>
-                                            </div>
-                                        </div>
-                                        <hr/>
-                                        <div className="row">
-                                            <div className="col-sm-3">
-                                                <h6 className="mb-0">Email</h6>
-                                            </div>
-                                            <div className="col-sm-9">
-                                                <input className="text-secondary form-control"
-                                                       id="email"
-                                                       name="email"
-                                                       defaultValue={currentUser.email}
-                                                       onChange={changeProfileField}>
-                                                </input>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <Box justifyContent={"center"}>
+                        <Container>
+                            <Grid container spacing={2}>
+                                <Grid item xs={6} md={4}>
+                                    <WelcomeCard>xs=6 md=4</WelcomeCard>
+                                </Grid>
+                                <Grid item xs={6} md={8}>
+                                    <Box sx={{ pt: 10 }}>
+                                        <Card variant="outlined" align="center">
+                                            <CardContent>
+                                                <Typography sx={{fontSize: 18}} component="div">
+                                                    <Grid container spacing={2} pb={2}>
+                                                        <Grid item xs={6} md={4} textAlign='left'>
+                                                            Name
+                                                        </Grid>
+                                                        <Grid item xs={6} md={8} textAlign='left'>
+                                                            <input
+                                                                id="name"
+                                                                name="name"
+                                                                defaultValue={currentUser.name}
+                                                                onChange={changeProfileField}>
+                                                            </input>
+                                                        </Grid>
+                                                    </Grid>
+                                                    <Divider/>
+                                                    <Grid container spacing={2} pt={2} pb={2}>
+                                                        <Grid item xs={6} md={4} textAlign='left'>
+                                                            Username
+                                                        </Grid>
+                                                        <Grid item xs={6} md={8} textAlign='left'>
+                                                            <input
+                                                                id="username"
+                                                                name="username"
+                                                                defaultValue={currentUser.username}
+                                                                onChange={changeProfileField}>
+                                                            </input>
+                                                        </Grid>
+                                                    </Grid>
+                                                    <Divider/>
+                                                    <Grid container spacing={2} pt={2}>
+                                                        <Grid item xs={6} md={4} textAlign='left'>
+                                                            Email
+                                                        </Grid>
+                                                        <Grid item xs={6} md={8} textAlign='left'>
+                                                            <input
+                                                                id="email"
+                                                                name="email"
+                                                                defaultValue={currentUser.email}
+                                                                onChange={changeProfileField}>
+                                                            </input>
+                                                        </Grid>
+                                                    </Grid>
+                                                </Typography>
+                                            </CardContent>
+                                        </Card>
+                                    </Box>
+                                </Grid>
+                            </Grid>
+                        </Container>
+                    </Box>
                 </>
             }
         </div>
