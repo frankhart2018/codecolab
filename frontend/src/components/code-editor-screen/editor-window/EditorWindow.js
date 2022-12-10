@@ -5,13 +5,19 @@ import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
-import TabPanel from "@mui/lab/TabPanel";
 
 import NoFileSelected from "../no-file-selected/NoFileSelected";
+import RunTaskBar from "../run-taskbar/RunTaskBar";
 
 const EditorWindow = () => {
-  const { fileContents, fileContentsLoading, noFileSelected, openFileStack } =
-    useSelector((state) => state.file);
+  const {
+    fileContents,
+    fileContentsLoading,
+    s3URI,
+    noFileSelected,
+    openFileMap,
+    openFileStack,
+  } = useSelector((state) => state.file);
 
   const [value, setValue] = useState("1");
 
@@ -19,9 +25,11 @@ const EditorWindow = () => {
     setValue(newValue);
   };
 
-  useEffect(() => {
-    console.log(openFileStack);
-  }, [openFileStack]);
+  const handleRunCode = () => {
+    console.log("Run code");
+    console.log(fileContents);
+    console.log(s3URI);
+  };
 
   return (
     <>
@@ -46,14 +54,14 @@ const EditorWindow = () => {
                 {openFileStack.map((file, index) => (
                   <Tab
                     label={file}
-                    value={index + 1}
+                    value={(index + 1).toString()}
                     style={{ color: "#cdcdcc", textTransform: "none" }}
-                    autoCapitalize="none"
                   />
                 ))}
               </TabList>
             </Box>
           </TabContext>
+          <RunTaskBar handleRunCode={handleRunCode} />
           <Editor
             height="100vh"
             defaultLanguage="python"

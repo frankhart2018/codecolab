@@ -4,7 +4,9 @@ import { openFileInProjectThunk } from "../services/project-thunk";
 let initialState = {
   fileContents: null,
   fileContentsLoading: false,
+  s3URI: null,
   noFileSelected: true,
+  openFileMap: {},
   openFileStack: [],
 };
 
@@ -21,7 +23,12 @@ const fileSlice = createSlice({
       state.fileContentsLoading = false;
       state.noFileSelected = false;
       state.fileContents = action.payload.contents;
-      state.openFileStack.push(action.payload.path);
+      state.s3URI = action.payload.s3URI;
+
+      if (!state.openFileMap.hasOwnProperty(action.payload.path)) {
+        state.openFileStack.push(action.payload.path);
+      }
+      state.openFileMap[action.payload.path] = 1;
     },
     [openFileInProjectThunk.rejected]: (state, action) => {
       state.fileContentsLoading = false;

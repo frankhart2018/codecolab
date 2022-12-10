@@ -70,6 +70,10 @@ export const openFileInProjectThunk = createAsyncThunk(
     const url = response.url;
     const responseContent = await axios.get(url);
 
-    return { contents: responseContent.data, path: payload.path };
+    return {
+      contents: responseContent.data,
+      path: payload.path,
+      s3URI: response.url,
+    };
   }
 );
