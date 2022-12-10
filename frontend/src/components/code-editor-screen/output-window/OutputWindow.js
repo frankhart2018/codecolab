@@ -7,6 +7,7 @@ const OutputWindow = () => {
   const { pythonVersion, pythonVersionLoading } = useSelector(
     (state) => state.pyrunner
   );
+  const { output, outputLoading } = useSelector((state) => state.run);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -28,6 +29,15 @@ const OutputWindow = () => {
         {!pythonVersionLoading &&
           pythonVersion !== null &&
           pythonVersion.version}
+      </Typography>
+      <Typography variant="body1" sx={{ padding: "10px" }}>
+        {outputLoading && "Loading..."}
+        {!outputLoading && output !== null && (
+          <Typography variant="body1">
+            Output: <br />
+            {output}
+          </Typography>
+        )}
       </Typography>
     </Box>
   );

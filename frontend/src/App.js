@@ -17,6 +17,7 @@ import CodeSharer from "./components/code-sharer/CodeSharer";
 import projectReducer from "./reducers/project-reducer";
 import CurrentUser from "./Home/components/CurrentUser";
 import fileReducer from "./reducers/file-reducer";
+import runReducer from "./reducers/run-reducer";
 
 const store = configureStore({
   reducer: {
@@ -24,6 +25,7 @@ const store = configureStore({
     pyrunner: pyrunnerReducer,
     project: projectReducer,
     file: fileReducer,
+    run: runReducer,
   },
 });
 

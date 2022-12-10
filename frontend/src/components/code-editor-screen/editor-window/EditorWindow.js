@@ -1,6 +1,6 @@
 import Editor from "@monaco-editor/react";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
@@ -8,6 +8,7 @@ import TabList from "@mui/lab/TabList";
 
 import NoFileSelected from "../no-file-selected/NoFileSelected";
 import RunTaskBar from "../run-taskbar/RunTaskBar";
+import { runCodeThunk } from "../../../services/run-thunk";
 
 const EditorWindow = () => {
   const {
@@ -20,15 +21,14 @@ const EditorWindow = () => {
   } = useSelector((state) => state.file);
 
   const [value, setValue] = useState("1");
+  const dispatch = useDispatch();
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   const handleRunCode = () => {
-    console.log("Run code");
-    console.log(fileContents);
-    console.log(s3URI);
+    dispatch(runCodeThunk({ s3URI }));
   };
 
   return (
