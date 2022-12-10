@@ -1,5 +1,5 @@
 import {useSelector} from "react-redux";
-import {Navigate, useNavigate} from "react-router";
+import {Navigate} from "react-router";
 
 const ProtectedRoute = ({children}) => {
     const token = useSelector((state) => state.userDetails.token) || localStorage.getItem('token');

@@ -2,7 +2,7 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import { AppBar, Link } from "@mui/material";
 import Toolbar from "./ToolBar";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 
 const rightLink = {
   fontSize: 16,
@@ -12,7 +12,6 @@ const rightLink = {
 
 function NavBar() {
   const { currentUser } = useSelector((state) => state.userDetails)
-  const dispatch = useDispatch()
   return (
     <div>
       <AppBar position="fixed">

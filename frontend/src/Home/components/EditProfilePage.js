@@ -1,7 +1,7 @@
 import {useDispatch, useSelector} from "react-redux";
 import React, {useState} from "react";
 import {updateUserThunk, userDataThunk} from "../../services/thunks";
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {Navigate} from "react-router";
 import NavBar from "./NavBar";
 
@@ -9,7 +9,6 @@ const EditProfilePage = () => {
     const token = useSelector((state) => state.userDetails.token) || localStorage.getItem('token');
     const { currentUser } = useSelector((state) => state.userDetails)
     const dispatch = useDispatch()
-    const navigate = useNavigate()
 
     const [profileData, setProfileData] = useState({
         name: currentUser.name,

@@ -3,7 +3,6 @@ import {useDispatch, useSelector} from "react-redux";
 import {Link} from "react-router-dom";
 import * as React from "react";
 import NavBar from "./NavBar";
-import {useEffect} from "react";
 
 
 const ProfilePage = () => {
