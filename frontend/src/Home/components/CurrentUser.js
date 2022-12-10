@@ -8,10 +8,13 @@ const CurrentUser = ({ children }) => {
     const { currentUser } = useSelector((state) => state.userDetails)
     console.log("token", token)
     const dispatch = useDispatch()
-    useEffect(async () => {
-        if (currentUser === null && token) {
-            await dispatch(userDataThunk({ token }));
+    useEffect(() => {
+        const fetchUser = async () => {
+            if (currentUser === null && token) {
+                await dispatch(userDataThunk({ token }));
+            }
         }
+        fetchUser();
     }, [token, dispatch, currentUser])
     return (children)
 }

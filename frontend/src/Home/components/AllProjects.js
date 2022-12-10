@@ -8,27 +8,23 @@ import { CardActionArea } from '@mui/material';
 
 function AllProjects() {
   const { currentUser } = useSelector((state) => state.userDetails)
-  console.log("currentUser", currentUser)
   const [projects, setProjects] = React.useState([]);
   const [username, setUsername] = React.useState("");
   React.useEffect(() => {
     const fetchProjects = async () => {
       const res = await fetch(`${process.env.REACT_APP_API_URL}/api/get-all-projects/${currentUser?._id}`);
-      console.log("res", res)
       const data = await res.json();
       setProjects(data?.projects);
       setUsername(currentUser?.username);
     };
     fetchProjects();
   }, [currentUser?._id, currentUser?.username]);
-  console.log("projects", projects)
 
   const handleOpenProject = (id) => {
     console.log("project id", id)
   }
   const onCreateProject = async () => {
     const res = await fetch(`${process.env.REACT_APP_API_URL}/api/get-all-projects/${currentUser?._id}`);
-    console.log("res", res)
     const data = await res.json();
     setProjects(data?.projects);
 
