@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/frankhart2018/cs5610-404-not-found#readme",
   "dependencies": {
+    "aws-sdk": "^2.1270.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "express": "^4.18.2",
