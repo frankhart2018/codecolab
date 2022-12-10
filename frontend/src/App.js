@@ -16,6 +16,9 @@ import ResetPassword from "./Home/components/ResetPassword";
 import CodeSharer from "./components/code-sharer/CodeSharer";
 import projectReducer from "./reducers/project-reducer";
 import CurrentUser from "./Home/components/CurrentUser";
+import ProfilePage from "./Home/components/ProfilePage";
+import EditProfilePage from "./Home/components/EditProfilePage";
+import ProtectedRoute from "./Home/components/ProtectedRoute";
 
 const store = configureStore({
   reducer: {
@@ -36,8 +39,22 @@ const App = () => {
                 <Route path="/*" element={<Home />} />
                 <Route path="/login" element={<SignIn />} />
                 <Route path="/sign-up" element={<SignUp />} />
+                <Route path="/profile" element={
+                  <ProtectedRoute>
+                    <ProfilePage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/edit-profile" element={
+                  <ProtectedRoute>
+                    <EditProfilePage />
+                  </ProtectedRoute>
+                } />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route path="/all-projects" element={<AllProjects />} />
+                <Route path="/all-projects" element={
+                  <ProtectedRoute>
+                    <AllProjects />
+                  </ProtectedRoute>
+                } />
                 <Route path="/code-editor/*" element={<CodeEditorScreen />} />
                 <Route path="/code-sharer/*" element={<CodeSharer />} />
                 <Route
