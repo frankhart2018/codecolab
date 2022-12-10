@@ -1,7 +1,11 @@
 .container-div {
-    background-color: black;
+    background-color: #1E1E1E;
     width: 50%;
     height: 100vh;
-    color: white;
+    color: #cdcdcc;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-weight: bold;
 }

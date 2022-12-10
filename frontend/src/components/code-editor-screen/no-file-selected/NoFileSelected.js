@@ -1,10 +1,11 @@
+import { Box } from "@mui/material";
 import "./NoFileSelected.css";
 
-const NoFileSelected = ({ message = "No file selected!" }) => {
+const NoFileSelected = ({ message = "Code Connect" }) => {
   return (
-    <div className="container-div">
+    <Box className="container-div">
       <p>{message}</p>
-    </div>
+    </Box>
   );
 };
 
