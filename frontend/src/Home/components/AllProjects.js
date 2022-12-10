@@ -5,7 +5,6 @@ import CreateButton from "./CreateButton";
 import NavBar from "./NavBar";
 import CardContent from '@mui/material/CardContent';
 import { CardActionArea } from '@mui/material';
-import { Box } from "react-feather";
 
 function AllProjects() {
   const { currentUser } = useSelector((state) => state.userDetails)
@@ -21,7 +20,7 @@ function AllProjects() {
       setUsername(currentUser?.username);
     };
     fetchProjects();
-  }, [currentUser?._id]);
+  }, [currentUser?._id, currentUser?.username]);
   console.log("projects", projects)
 
   const handleOpenProject = (id) => {
