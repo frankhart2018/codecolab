@@ -33,3 +33,4 @@ export const userDataThunk = createAsyncThunk(
     const response = await service.userData(token)
     return response
   })
+

@@ -1,15 +1,15 @@
 import * as projectDao from "./project-dao.js";
 
 const createProject = async (req, res) => {
-  const { name, owner_id } = req.body;
+  const { name, description, owner_id } = req.body;
 
   const project = await projectDao.findProjectByName(name, owner_id);
 
   if (project) {
-    res.status(400).send("Project already exists");
+    return res.status(400).json({ message: 'Project already exists' });
   } else {
-    const newProject = await projectDao.createProject(name, owner_id);
-    res.status(201).send(newProject);
+    const newProject = await projectDao.createProject(name, description, owner_id);
+    return res.status(201).json({ status: 201, message: "Project created successfully", newProject });
   }
 };
 
@@ -141,7 +141,7 @@ const getAllProject = async (req, res) => {
 
 const ProjectController = (app) => {
   app.get("/api/get-project/:project_id", fetchS3URL);
-  app.post("/api/get-all-project/:owner_id", getAllProject);
+  app.get("/api/get-all-projects/:owner_id", getAllProject);
   app.post("/api/update-project/:project_id", updateCodeInProject);
   app.post("/api/create-project", createProject);
   app.post("/api/create-project/dir/:project_id", createDirInProject);

@@ -13,6 +13,13 @@ function isEmail(string) {
 export function email(value) {
   return value && !isEmail(value.trim()) ? "Invalid email" : null;
 }
+
+export function projectName(value) {
+  return value && value.trim().length < 3
+    ? "Project name length should be atleast three characters"
+    : null;
+}
+
 export function password(value) {
   return value && value.trim().length < 6
     ? "Password length should be atleast six characters"
@@ -31,4 +38,10 @@ export function required(requiredFields, values) {
     }),
     {}
   );
+}
+
+export function description(value) {
+  return value && (value.trim().length < 10 || value.trim().length > 120)
+    ? "Description length should be between 10 and 120 characters"
+    : null;
 }

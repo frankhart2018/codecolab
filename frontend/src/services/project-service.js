@@ -50,3 +50,10 @@ export const renameInProject = async (project_id, name, new_name, path) => {
   });
   return response.data;
 };
+
+export const createProject = async (payload) => {
+  console.log("payload", payload);
+  const response = await axios.post(`${API_BASE}/create-project`, payload);
+  console.log("response", response);
+  return response.data;
+}
