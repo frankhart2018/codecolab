@@ -2,7 +2,7 @@ import * as userDao from "./user-dao.js";
 import bcrypt from "bcryptjs";
 import Jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
-const JWT_SECRET = process.env.JWT_SECRET || 'hfdjkfsfjsfjdsfkhfoihfi0933j&*092jdd&(@!2jfdfj';
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const UsersController = (app) => {
   app.post("/api/login", findUser);
