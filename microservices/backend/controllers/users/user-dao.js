@@ -19,3 +19,6 @@ export const findUserById = (id) => {
 export const updatePassword = (id, password) => {
   return userModel.updateOne({ _id: id }, { password: password });
 };
+export const updateUser = (id, content) => {
+  return userModel.updateOne({_id: id}, {$set: content})
+};
