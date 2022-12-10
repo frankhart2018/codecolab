@@ -28,3 +28,16 @@ export const userData = async ({ token }) => {
   console.log("response", response);
   return response.data
 }
+
+export const logoutUser = async () => {
+  const response = await axios.post(`${API_BASE}/api/logout`)
+  console.log("response in logout", response)
+  return response.data;
+};
+
+export const updateUser = async (user) => {
+  const {currentUser, profileData} = user
+  const response = await axios.put(`${API_BASE}/api/update/${currentUser._id}`, profileData);
+  console.log("response", response);
+  return response;
+};

@@ -5,12 +5,14 @@ import nodemailer from "nodemailer";
 // const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_SECRET='hfdjkfsfjsfjdsfkhfoihfi0933j&*092jdd&(@!2jfdfj'
 const UsersController = (app) => {
-    app.post("/api/login", findUser);
-    app.post("/api/register", createUser);
-    app.post("/api/userData", userData);
-    app.post("/api/forget-password", forgetPassword);
-    app.get("/api/reset-password/:id/:token", resetPassword);
-    app.post("/api/update-password/:id/:token", updatePassword);
+  app.post("/api/login", findUser);
+  app.post("/api/register", createUser);
+  app.post("/api/userData", userData);
+  app.post("/api/forget-password", forgetPassword);
+  app.get("/api/reset-password/:id/:token", resetPassword);
+  app.post("/api/update-password/:id/:token", updatePassword);
+  app.put('/api/update/:id', updateUser);
+  app.post('/api/logout', logoutUser);
 };
 
 const findUser = async (req, res) => {
@@ -135,5 +137,24 @@ const updatePassword = async (req, res) => {
     catch (error) {
         return res.status(400).json({ status: 400, message: "Invalid Token" });
     }
+}
+
+const updateUser = async (req, res) => {
+    const userIdToUpdate = req.params.id;
+    const updates = req.body;
+    const status = await userDao.updateUser(userIdToUpdate, updates)
+    res.json(status);
+}
+
+const logoutUser = (req, res) => {
+    const authHeader = req.headers["authorization"];
+    Jwt.sign(authHeader, "", { expiresIn: 1 } , (logout, err) => {
+        if (logout) {
+            res.send({msg: "Logged out successfully"})
+        }
+        else {
+            res.send({err})
+        }
+    })
 }
 export default UsersController;
