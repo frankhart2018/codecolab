@@ -110,12 +110,13 @@ const fetchS3URL = async (req, res) => {
   const s3URL = await projectDao.getS3URL(project, project_id, path);
 
   return res.status(200).json({ status: 200, url: s3URL });
-}
+};
+
 const updateCodeInProject = async (req, res) => {
   const { project_id } = req.params;
   const { path, code } = req.body;
-  console.log("path, code", path, code)
-  console.log("project_id", project_id)
+  console.log("path, code", path, code);
+  console.log("project_id", project_id);
   const project = await projectDao.findProjectById(project_id);
   if (!project) {
     return res.status(400).json({ status: 400, message: "Project not found" });
@@ -127,8 +128,31 @@ const updateCodeInProject = async (req, res) => {
     code,
     true
   );
-  return res.status(200).json({ status: 200, projectUrl: updated_project, message: "Code updated successfully" });
-}
+  return res.status(200).json({
+    status: 200,
+    projectUrl: updated_project,
+    message: "Code updated successfully",
+  });
+};
+
+const starProject = async (req, res) => {
+  const { project_id } = req.params;
+  const { user_id } = req.body;
+
+  const project = await projectDao.findProjectById(project_id);
+
+  if (!project) {
+    res.status(400).send("Project doesn't exist");
+  } else {
+    const updated_project = await projectDao.starProject(
+      project,
+      project_id,
+      user_id
+    );
+    res.status(201).send(updated_project);
+  }
+};
+
 const ProjectController = (app) => {
   app.get("/api/get-project/:project_id", fetchS3URL);
   app.post("/api/update-project/:project_id", updateCodeInProject);
@@ -138,6 +162,7 @@ const ProjectController = (app) => {
   app.get("/api/project/:project_id", findProjectById);
   app.delete("/api/delete-project/:project_id", deleteInProject);
   app.put("/api/rename-project/:project_id", findInProject);
+  app.post("/api/star-project/:project_id", starProject);
 };
 
 export default ProjectController;
