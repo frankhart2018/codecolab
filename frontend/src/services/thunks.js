@@ -33,3 +33,15 @@ export const userDataThunk = createAsyncThunk(
     const response = await service.userData(token)
     return response
   })
+
+export const logoutUserThunk = createAsyncThunk (
+    '/user/logoutUser', async () => {
+        const response = await service.logoutUser()
+        return response
+    })
+
+export const updateUserThunk = createAsyncThunk (
+    'user/updateUser', async (user) => {
+        const response = await service.updateUser(user)
+        return response
+    })

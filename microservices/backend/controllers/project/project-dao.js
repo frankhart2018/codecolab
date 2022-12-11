@@ -1,15 +1,21 @@
-import projectModel from "./project-model.js";
 import AWS from "aws-sdk";
+
+import projectModel from "./project-model.js";
+import userModel from "../users/user-model.js";
+
 const s3 = new AWS.S3({
-  accessKeyId: "AKIA6PYYRQR36PAYRLES",
-  secretAccessKey: "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",
+  accessKeyId: process.env.AWS_S3_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_S3_SECRET_ACCESS_KEY,
 });
-export const createProject = (name, owner_id) => {
+
+export const createProject = (name, description, owner_id) => {
   return projectModel.create({
     name: name,
     owner_id: owner_id,
+    description: description,
     language: "python",
     file_structure: {},
+    stars: 0,
   });
 };
 
@@ -235,3 +241,40 @@ export const createS3URL = async (project_id, path, code) => {
     .promise();
   return data.Location;
 };
+
+export const starProject = async (project, project_id, user_id) => {
+  project.stars += 1;
+
+  const project_res = await projectModel.findByIdAndUpdate(
+    project_id,
+    {
+      stars: project.stars,
+    },
+    { new: true }
+  );
+
+  const user = await userModel.findOne({ _id: user_id });
+
+  user.starred_projects.push({
+    project_id: project_id,
+    project_name: project.name,
+  });
+
+  const user_res = await userModel.findByIdAndUpdate(
+    user_id,
+    {
+      starred_projects: user.starred_projects,
+    },
+    { new: true }
+  );
+
+  return {
+    project: project_res,
+    user: user_res,
+  };
+};
+
+export const fetchAllProjects = async (owner_id) => {
+  const projects = await projectModel.find({ owner_id: owner_id }, { file_structure: false });
+  return projects;
+}

@@ -34,6 +34,14 @@ export const createFileInProjectThunk = createAsyncThunk(
   }
 );
 
+export const createProjectThunk = createAsyncThunk(
+  "/project/createProject",
+  async (payload) => {
+    const response = await project_service.createProject(payload);
+    return response;
+  }
+)
+
 export const deleteInProjectThunk = createAsyncThunk(
   "/project/deleteInProject",
   async (payload) => {

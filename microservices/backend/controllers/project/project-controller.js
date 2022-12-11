@@ -1,15 +1,15 @@
 import * as projectDao from "./project-dao.js";
 
 const createProject = async (req, res) => {
-  const { name, owner_id } = req.body;
+  const { name, description, owner_id } = req.body;
 
   const project = await projectDao.findProjectByName(name, owner_id);
 
   if (project) {
-    res.status(400).send("Project already exists");
+    return res.status(400).json({ message: 'Project already exists' });
   } else {
-    const newProject = await projectDao.createProject(name, owner_id);
-    res.status(201).send(newProject);
+    const newProject = await projectDao.createProject(name, description, owner_id);
+    return res.status(201).json({ status: 201, message: "Project created successfully", newProject });
   }
 };
 
@@ -115,6 +115,7 @@ const fetchS3URL = async (req, res) => {
 const updateCodeInProject = async (req, res) => {
   const { project_id } = req.params;
   const { path, code } = req.body;
+  
   const project = await projectDao.findProjectById(project_id);
   if (!project) {
     return res.status(400).json({ status: 400, message: "Project not found" });
@@ -132,8 +133,37 @@ const updateCodeInProject = async (req, res) => {
     message: "Code updated successfully",
   });
 };
+
+const starProject = async (req, res) => {
+  const { project_id } = req.params;
+  const { user_id } = req.body;
+
+  const project = await projectDao.findProjectById(project_id);
+
+  if (!project) {
+    res.status(400).send("Project doesn't exist");
+  } else {
+    const updated_project = await projectDao.starProject(
+      project,
+      project_id,
+      user_id
+    );
+    res.status(201).send(updated_project);
+  }
+};
+
+const getAllProject = async (req, res) => {
+  const { owner_id } = req.params;
+  const projects = await projectDao.fetchAllProjects(owner_id);
+  if (!projects) {
+    return res.status(400).json({ status: 400, message: "No projects available" });
+  }
+  return res.status(200).json({ status: 200, projects: projects });
+}
+
 const ProjectController = (app) => {
-  app.post("/api/get-project/:project_id", fetchS3URL);
+  app.get("/api/get-project/:project_id", fetchS3URL);
+  app.get("/api/get-all-projects/:owner_id", getAllProject);
   app.post("/api/update-project/:project_id", updateCodeInProject);
   app.post("/api/create-project", createProject);
   app.post("/api/create-project/dir/:project_id", createDirInProject);
@@ -141,6 +171,7 @@ const ProjectController = (app) => {
   app.get("/api/project/:project_id", findProjectById);
   app.delete("/api/delete-project/:project_id", deleteInProject);
   app.put("/api/rename-project/:project_id", findInProject);
+  app.post("/api/star-project/:project_id", starProject);
 };
 
 export default ProjectController;
