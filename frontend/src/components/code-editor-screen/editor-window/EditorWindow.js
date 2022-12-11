@@ -1,5 +1,5 @@
 import Editor from "@monaco-editor/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
@@ -30,6 +30,8 @@ const EditorWindow = () => {
   const handleRunCode = () => {
     dispatch(runCodeThunk({ s3URI }));
   };
+
+  console.log(openFileMap);
 
   return (
     <>
