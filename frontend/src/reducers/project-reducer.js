@@ -119,9 +119,6 @@ const projectSlice = createSlice({
         return child;
       });
     },
-    [renameInProjectThunk.rejected]: (state, action) => {
-      state.fileMapLoading = true;
-    },
   },
 });
 

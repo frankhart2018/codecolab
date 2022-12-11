@@ -109,14 +109,13 @@ const fetchS3URL = async (req, res) => {
   }
   const s3URL = await projectDao.getS3URL(project, project_id, path);
 
-  return res.status(200).json({ status: 200, url: s3URL });
+  return res.status(200).json({ status: 200, url: s3URL, path: path });
 };
 
 const updateCodeInProject = async (req, res) => {
   const { project_id } = req.params;
   const { path, code } = req.body;
-  console.log("path, code", path, code);
-  console.log("project_id", project_id);
+  
   const project = await projectDao.findProjectById(project_id);
   if (!project) {
     return res.status(400).json({ status: 400, message: "Project not found" });

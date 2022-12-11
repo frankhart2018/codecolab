@@ -19,12 +19,16 @@ import CurrentUser from "./Home/components/CurrentUser";
 import ProfilePage from "./Home/components/ProfilePage";
 import EditProfilePage from "./Home/components/EditProfilePage";
 import ProtectedRoute from "./Home/components/ProtectedRoute";
+import fileReducer from "./reducers/file-reducer";
+import runReducer from "./reducers/run-reducer";
 
 const store = configureStore({
   reducer: {
     userDetails: userDetailsReducer,
     pyrunner: pyrunnerReducer,
     project: projectReducer,
+    file: fileReducer,
+    run: runReducer,
   },
 });
 

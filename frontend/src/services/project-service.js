@@ -57,3 +57,11 @@ export const createProject = async (payload) => {
   console.log("response", response);
   return response.data;
 }
+
+export const openFileInProject = async (project_id, path) => {
+  const response = await axios.post(`${API_BASE}/get-project/${project_id}`, {
+    path,
+  });
+
+  return response.data;
+};
