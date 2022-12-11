@@ -8,10 +8,11 @@ const s3 = new AWS.S3({
   secretAccessKey: process.env.AWS_S3_SECRET_ACCESS_KEY,
 });
 
-export const createProject = (name, owner_id) => {
+export const createProject = (name, description, owner_id) => {
   return projectModel.create({
     name: name,
     owner_id: owner_id,
+    description: description,
     language: "python",
     file_structure: {},
     stars: 0,
@@ -272,3 +273,8 @@ export const starProject = async (project, project_id, user_id) => {
     user: user_res,
   };
 };
+
+export const fetchAllProjects = async (owner_id) => {
+  const projects = await projectModel.find({ owner_id: owner_id }, { file_structure: false });
+  return projects;
+}

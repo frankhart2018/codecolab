@@ -15,6 +15,7 @@ const schema = new mongoose.Schema(
     language: String,
     owner_id: String,
     stars: Number,
+    description: String,
     file_structure: FileStructureSchema,
   },
   { collection: "projects" }
