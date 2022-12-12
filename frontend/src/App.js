@@ -28,7 +28,7 @@ const store = configureStore({
     userDetails: userDetailsReducer,
     pyrunner: pyrunnerReducer,
     project: projectReducer,
-    searchDetails: searchReducer
+    searchDetails: searchReducer,
   },
 });
 
