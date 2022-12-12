@@ -64,7 +64,6 @@ const EditorWindow = () => {
   }, [currentTab]);
 
   useEffect(() => {
-    console.log("Socket is changed");
     socket.on("recv_code", (data) => {
       setCode(data);
     });
