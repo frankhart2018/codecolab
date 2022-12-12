@@ -2,6 +2,7 @@ import * as codeSessionDao from "../code-sessions/code-session-dao.js";
 import * as socketSessionDao from "../socket-sessions/socket-session-dao.js";
 
 const viewCode = async (socket, data) => {
+  console.log(`User ${socket.id} is viewing code for room ${data.room_id}`);
   socket.join(data.room_id);
   let codeSession = await codeSessionDao.findCodeSession(data.room_id);
   await socketSessionDao.createSocketSession({
@@ -26,6 +27,7 @@ const viewCode = async (socket, data) => {
 };
 
 const removeUser = async (socket) => {
+  console.log(`User ${socket.id} is no longer viewing code`);
   const socketSession = await socketSessionDao.findSocketSession(socket.id);
 
   if (socketSession) {
@@ -47,6 +49,7 @@ const removeUser = async (socket) => {
 };
 
 const updateCode = async (socket, data) => {
+  console.log(`User ${socket.id} is updating code for room ${data.room_id}`);
   let newData = await codeSessionDao.findCodeSession(data.room_id);
   newData.code = data.code;
   await codeSessionDao.updateCodeSession(data.room_id, newData);

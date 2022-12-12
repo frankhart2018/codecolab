@@ -46,34 +46,35 @@ const EditorWindow = () => {
   };
 
   useEffect(() => {
-    setCurrentTab(currentlyOpenedFilePath);
-    setCurrentS3URI(s3URI);
-    setTabCode(tabCode.set(currentlyOpenedFilePath, [fileContents, s3URI]));
-
-    if (currentlyOpenedFilePath !== null) {
-      if (!socket.connected) {
-        socket.connect();
+    if (currentTab !== "" && currentTab !== undefined && currentTab !== null) {
+      if (socket.connected) {
+        socket.disconnect();
       }
-
+      socket.connect();
       socket.emit("view_code", {
-        room_id: `${projectId}/${currentlyOpenedFilePath}`,
-        code: fileContents,
+        room_id: `${projectId}/${currentTab}`,
+        code: tabCode.get(currentTab)[0],
       });
-
       socket.on("code", (data) => {
         setCode(data);
       });
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentlyOpenedFilePath, fileContents, s3URI]);
+  }, [currentTab]);
 
   useEffect(() => {
+    console.log("Socket is changed");
     socket.on("recv_code", (data) => {
       setCode(data);
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket, code]);
+
+  useEffect(() => {
+    setCurrentTab(currentlyOpenedFilePath);
+    setCurrentS3URI(s3URI);
+    setTabCode(tabCode.set(currentlyOpenedFilePath, [fileContents, s3URI]));
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentlyOpenedFilePath, fileContents, s3URI]);
 
   useEffect(() => {
     const latestTab = openFileStack[openFileStack.length - 1];
@@ -112,7 +113,8 @@ const EditorWindow = () => {
 
   return (
     <>
-      {(noFileSelected || openFileStack.length === 0) && <NoFileSelected />}
+      {(noFileSelected || openFileStack.length === 0) &&
+        !fileContentsLoading && <NoFileSelected />}
       {!noFileSelected && fileContentsLoading && (
         <NoFileSelected message="Loading file..." />
       )}
