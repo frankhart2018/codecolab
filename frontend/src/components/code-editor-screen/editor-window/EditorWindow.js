@@ -59,6 +59,8 @@ const EditorWindow = () => {
         setCode(data);
       });
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTab]);
 
   useEffect(() => {
@@ -66,6 +68,8 @@ const EditorWindow = () => {
     socket.on("recv_code", (data) => {
       setCode(data);
     });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket, code]);
 
   useEffect(() => {
