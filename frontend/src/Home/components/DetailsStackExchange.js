@@ -10,6 +10,7 @@ import {useSelector} from "react-redux";
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import {Divider, Stack, Typography} from "@mui/material";
+import NavBar from "./NavBar";
 
 const DetailsStackExchange = () => {
     const [checked, setChecked] = useState([1]);
@@ -31,6 +32,7 @@ const DetailsStackExchange = () => {
 
     return (
         <>
+            <NavBar/>
         <List dense sx={{ width: '100%', maxWidth: "100%", bgcolor: 'background.paper' }}>
             {currentSearch.map((value) => {
                 const labelId = `checkbox-list-secondary-label-${value}`;

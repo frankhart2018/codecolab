@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { signUpUserThunk } from '../../services/thunks';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
+import NavBar from "./NavBar";
 
 function SignUp() {
   const [sent, setSent] = React.useState(false);
@@ -47,6 +48,7 @@ function SignUp() {
     }
     setSent(true);
     const response = await dispatch(signUpUserThunk(user));
+    console.log("responise", response)
     if (response?.payload?.status === "ok") {
       enqueueSnackbar(response?.payload?.message, { variant: "success" });
       navigate("/all-projects", { replace: true });
@@ -54,7 +56,7 @@ function SignUp() {
 
     }
     else {
-      enqueueSnackbar(response?.payload?.message, { variant: "error" });
+      enqueueSnackbar("User already exists", { variant: "error" });
       setSent(false);
     }
 
@@ -62,6 +64,7 @@ function SignUp() {
 
   return (
     <React.Fragment>
+      <NavBar/>
       <AppForm>
         <React.Fragment>
           <Typography variant="h3" gutterBottom marked="center" align="center">

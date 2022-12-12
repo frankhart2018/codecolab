@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { loginUserThunk } from '../../services/thunks';
 import { useNavigate } from 'react-router';
 import { useSnackbar } from 'notistack';
+import NavBar from "./NavBar";
 
 function SignIn() {
   const [sent, setSent] = React.useState(false);
@@ -51,6 +52,7 @@ function SignIn() {
 
   return (
     <React.Fragment>
+      <NavBar/>
       <AppForm>
         <React.Fragment>
           <Typography variant="h3" gutterBottom marked="center" align="center">

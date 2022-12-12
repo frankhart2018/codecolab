@@ -21,9 +21,9 @@ import EditProfilePage from "./Home/components/EditProfilePage";
 import ProtectedRoute from "./Home/components/ProtectedRoute";
 import searchReducer from "./reducers/search-reducer";
 import DetailsStackExchange from "./Home/components/DetailsStackExchange";
-import NavBar from "./Home/components/NavBar";
 import fileReducer from "./reducers/file-reducer";
 import runReducer from "./reducers/run-reducer";
+import ViewProfile from "./Home/components/ViewProfile";
 
 const store = configureStore({
   reducer: {
@@ -43,7 +43,6 @@ const App = () => {
         <ThemeProvider theme={theme}>
           <div className="container">
             <CurrentUser>
-              <NavBar/>
               <Routes>
                 <Route path="/*" element={<Home />} />
                 <Route path="/login" element={<SignIn />} />
@@ -54,6 +53,7 @@ const App = () => {
                     <ProfilePage />
                   </ProtectedRoute>
                 } />
+                <Route path="/profile/:id" element={<ViewProfile />} />
                 <Route path="/edit-profile" element={
                   <ProtectedRoute>
                     <EditProfilePage />

@@ -8,11 +8,13 @@ import ListItemText from "@mui/material/ListItemText";
 import SearchStackExchange from "./SearchStackExchange";
 import {Link} from "react-router-dom";
 import {useSelector} from "react-redux";
+import NavBar from "./NavBar";
 
 const HomePage = () => {
     const { currentUser } = useSelector((state) => state.userDetails)
     return (
         <>
+            <NavBar/>
             <Box
                 sx={{
                     bgcolor: 'background.paper',

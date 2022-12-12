@@ -8,6 +8,8 @@ const UsersController = (app) => {
   app.post("/api/login", findUser);
   app.post("/api/register", createUser);
   app.post("/api/userData", userData);
+  app.get("/api/search-user/:username", searchUsers);
+  app.get("/api/starred-projects/:id", starredProjects);
   app.post("/api/forget-password", forgetPassword);
   app.get("/api/reset-password/:id/:token", resetPassword);
   app.post("/api/update-password/:id/:token", updatePassword);
@@ -39,13 +41,19 @@ const createUser = async (req, res) => {
   const { email, password, name, username } = req.body;
   const encryptedPassword = await bcrypt.hash(password, 10);
   const userPresent = await userDao.findUser(email);
+
   const token = Jwt.sign({ email: email }, JWT_SECRET, {
     expiresIn: 86400,
   });
   if (userPresent) {
     return res.status(400).json({ message: "User already exists" });
   } else {
-    await userDao.createUser(email, encryptedPassword, name, username);
+    try {
+      await userDao.createUser(email, encryptedPassword, name, username);
+    }
+    catch (error) {
+      return res.status(400).json({ message: "User already exists" });
+    }
     res
       .status(201)
       .json({
@@ -68,6 +76,31 @@ const userData = async (req, res) => {
   }
 };
 
+
+const searchUsers = async (req, res) => {
+  const { username } = req.params;
+
+  try {
+    const users = await userDao.findUserByUsername({ username });
+    res.status(201).json({ status: 201, users: users });
+  }
+  catch (error) {
+    res.status(400).json({ status: 400, message: "User Not Exists!!" });
+  }
+}
+
+const starredProjects = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await userDao.findUserById({ _id: id });
+
+    const starredProjects = user.starred_projects;
+    res.status(201).json({ status: 201, starredProjects: starredProjects });
+  }
+  catch (error) {
+    res.status(400).json({ status: 400, message: "User Not Exists!!" });
+  }
+}
 const forgetPassword = async (req, res) => {
   const { email } = req.body;
   const user = await userDao.findUser(email);

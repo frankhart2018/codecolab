@@ -5,7 +5,7 @@ const schema = mongoose.Schema(
     email: String,
     password: String,
     name: String,
-    username: String,
+    username: { type: String, unique: true },
     starred_projects: { type: Map, of: String, default: {} },
   },
   { collection: "users" }
