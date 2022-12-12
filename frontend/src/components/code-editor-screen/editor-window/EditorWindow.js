@@ -6,10 +6,13 @@ import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
+import CloseIcon from "@mui/icons-material/Close";
+import { IconButton } from "@mui/material";
 
 import NoFileSelected from "../no-file-selected/NoFileSelected";
 import RunTaskBar from "../run-taskbar/RunTaskBar";
 import { runCodeThunk } from "../../../services/run-thunk";
+import { closeFile } from "../../../reducers/file-reducer";
 
 const EditorWindow = () => {
   const {
@@ -18,6 +21,7 @@ const EditorWindow = () => {
     s3URI,
     noFileSelected,
     openFileStack,
+    openFileMap,
   } = useSelector((state) => state.file);
 
   const { currentlyOpenedFilePath } = useSelector((state) => state.project);
@@ -33,7 +37,6 @@ const EditorWindow = () => {
 
   const handleChange = (event, newValue) => {
     setTabCode(tabCode.set(currentTab, [code, currentS3URI]));
-    console.log(tabCode);
     setCurrentTab(newValue);
     setCode(tabCode.get(newValue)[0]);
     setCurrentS3URI(tabCode.get(newValue)[1]);
@@ -46,6 +49,16 @@ const EditorWindow = () => {
     setTabCode(tabCode.set(currentlyOpenedFilePath, [fileContents, s3URI]));
   }, [currentlyOpenedFilePath, fileContents, s3URI]);
 
+  useEffect(() => {
+    const latestTab = openFileStack[openFileStack.length - 1];
+    setCurrentTab(latestTab);
+
+    if (tabCode.has(latestTab)) {
+      setCode(tabCode.get(latestTab)[0]);
+      setCurrentS3URI(tabCode.get(latestTab)[1]);
+    }
+  }, [openFileStack]);
+
   const handleRunCode = () => {
     dispatch(
       runCodeThunk({
@@ -57,13 +70,24 @@ const EditorWindow = () => {
     );
   };
 
+  const handleCloseClick = (file) => {
+    dispatch(
+      closeFile({
+        file: file,
+      })
+    );
+
+    setTabCode(new Map([...tabCode].filter(([key]) => key !== file)));
+    setCurrentTab(openFileStack[openFileStack.length - 1]);
+  };
+
   return (
     <>
-      {noFileSelected && <NoFileSelected />}
+      {(noFileSelected || openFileStack.length === 0) && <NoFileSelected />}
       {!noFileSelected && fileContentsLoading && (
         <NoFileSelected message="Loading file..." />
       )}
-      {!noFileSelected && !fileContentsLoading && (
+      {!noFileSelected && !fileContentsLoading && openFileStack.length > 0 && (
         <Box
           sx={{
             width: "50%",
@@ -80,7 +104,19 @@ const EditorWindow = () => {
               >
                 {openFileStack.map((file) => (
                   <Tab
-                    label={file}
+                    label={
+                      <span>
+                        {file}
+                        <IconButton
+                          size="small"
+                          onClick={() => {
+                            handleCloseClick(file);
+                          }}
+                        >
+                          <CloseIcon sx={{ color: "#cdcdcc" }} />
+                        </IconButton>
+                      </span>
+                    }
                     value={file}
                     style={{ color: "#cdcdcc", textTransform: "none" }}
                   />
