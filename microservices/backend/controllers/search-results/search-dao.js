@@ -9,6 +9,12 @@ export const findSearchByIdLink = (q_id, q_link) => {
     });
 };
 
+export const findSearchById = (q_id) => {
+    return searchModel.findOne({
+        question_id: q_id
+    });
+};
+
 export const createSearch = (q_id, q_link) => {
     return searchModel.create({
         question_id: q_id,

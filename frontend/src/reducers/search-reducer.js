@@ -19,7 +19,6 @@ const searchSlice = createSlice({
         [createQuestionThunk.fulfilled]:
             (state, {payload}) => {
             if (payload.data.newSearch) {
-                console.log("fulfilled")
                 state.localSearch.push(payload.data.newSearch)
             }
             }

@@ -21,7 +21,15 @@ const createSearch = async (req, res) => {
     }
 }
 
+const getSearch = async (req, res) => {
+    const {q_id} = req.params
+    const search = await searchDao.findSearchById(q_id);
+    console.log("in server", search)
+    return res.json(search)
+}
+
 export default (app) => {
     app.put('/api/details/:qid', updateSearch)
     app.post('/api/create-search', createSearch)
+    app.get('/api/get-search/:q_id', getSearch)
 }

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import Container from '@mui/material/Container';
-import {Divider, Grid, ListItem, Stack, Typography} from "@mui/material";
+import {Grid, ListItem, Stack, Typography} from "@mui/material";
 import Button from "./form/Button";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
@@ -12,27 +12,21 @@ import NavBar from "./NavBar";
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import Avatar from "@mui/material/Avatar";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
-import {useNavigate} from "react-router";
 
 const HomePage = () => {
     const { currentUser } = useSelector((state) => state.userDetails)
     const [projects, setProjects] = useState([]);
     const [username, setUsername] = useState("");
-    const navigate = useNavigate();
     useEffect(() => {
-        const fetchProjects = async () => {
+        const fetchProjectsHome = async () => {
             const res = await fetch(`${process.env.REACT_APP_API_URL}/api/get-all-projects/${currentUser?._id}`);
             const data = await res.json();
             setProjects(data?.projects);
             setUsername(currentUser?.username);
         };
-        fetchProjects();
+        fetchProjectsHome();
     }, [currentUser?._id, currentUser?.username]);
     const slicedProjects = projects.reverse().slice(0, 2);
-
-    const handleOpenProject = (id) => {
-        navigate(`/code-editor/${id}`);
-    }
 
     return (
         <>
@@ -41,7 +35,7 @@ const HomePage = () => {
                 sx={{
                     bgcolor: 'background.paper',
                     pt: 8,
-                    pb: 6,
+                    pb: 6
                 }}
             >
                 <Container maxWidth="sm">
@@ -77,13 +71,13 @@ const HomePage = () => {
                 </Container>
             </Box>
             {currentUser &&
-                <Container sx={{py: 5, pt:0, pb:0}} maxWidth="md" disableGutters={true}>
+                <Container sx={{py: 5, pt:1, pb:0}} maxWidth="md" disableGutters={true}>
                     <Box justifyContent={"center"}>
                         <Container>
                             <Grid container spacing={4}>
                                 <Grid item xs={12} sm={12} md={12}>
                                     <Typography variant="h3" component="div" align="left" gutterBottom>
-                                        <u>Welcome {currentUser.name}!</u>
+                                        <u>Welcome {username}!</u>
                                     </Typography>
                                     <Typography variant="h5" component="div" align="left" gutterBottom>
                                         See your latest projects
@@ -92,11 +86,12 @@ const HomePage = () => {
                                 <Grid item xs={12} sm={12} md={12}>
                     <List sx={{width: '100%', bgcolor: 'background.paper'}}>
                         {slicedProjects?.map((project) => (
-                            <Link to={`/code-editor/${project?._id}`} style={{ textDecoration: 'none' }}>
+
                             <ListItem alignItems="flex-start">
                                 <ListItemAvatar>
-                                    <Avatar alt="Remy Sharp" src="/python_logo.png" alt="python logo" />
+                                    <Avatar src="/python_logo.png" alt="python logo" />
                                 </ListItemAvatar>
+                                <Link to={`/code-editor/${project?._id}`} style={{ textDecoration: 'none' }}>
                                 <ListItemText
                                     primary={project?.name}
                                     secondary={
@@ -112,9 +107,9 @@ const HomePage = () => {
                                         </React.Fragment>
                                     }
                                 />
+                                </Link>
                             </ListItem>
-                            <Divider variant="inset" component="li" />
-                            </Link>
+
                         ))}
                     </List>
                     <Button

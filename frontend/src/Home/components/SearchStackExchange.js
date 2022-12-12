@@ -1,33 +1,25 @@
 import {useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {createQuestionThunk, getQuestionsThunk} from "../../services/search-thunks";
+import {useDispatch} from "react-redux";
+import {getQuestionsThunk} from "../../services/search-thunks";
 import {Grid, InputBase} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from '@mui/icons-material/Search';
 import * as React from "react";
-import Paper from "./form/Paper";
-import Container from "@mui/material/Container";
 import {Link} from "react-router-dom";
-import Box from "@mui/material/Box";
 
 
 const SearchStackExchange = () => {
     const dispatch = useDispatch()
     const [searchQuery, setSearchQuery] = useState("");
-    const {currentSearch} = useSelector((state) => state.searchDetails)
     const handleSearchClick = async () => {
         await dispatch(getQuestionsThunk(searchQuery))
-        currentSearch.forEach((search) => {
-            dispatch(createQuestionThunk(search))
-        })
+        // await currentSearch.forEach((search) => {
+        //     dispatch(createQuestionThunk(search))
+        // })
     }
 
     return (
         <div>
-            {/*<Paper*/}
-            {/*    component="form"*/}
-            {/*    sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: '100%' }}*/}
-            {/*    background={"light"}>*/}
             <Grid container spacing={0}>
                 <Grid item xs={11} lg={11} sm={11} md={11} >
                 <InputBase
@@ -49,7 +41,6 @@ const SearchStackExchange = () => {
                 </Link>
                 </Grid>
             </Grid>
-            {/*</Paper>*/}
         </div>
     )
 };
