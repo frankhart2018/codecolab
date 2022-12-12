@@ -18,7 +18,7 @@ import { closeFileInProject } from "../../../reducers/project-reducer";
 
 const socket = io.connect(process.env.REACT_APP_CODE_SHARER_API_BASE);
 
-const EditorWindow = () => {
+const EditorWindow = ({ hasWriteAccess }) => {
   const {
     fileContents,
     fileContentsLoading,
@@ -158,11 +158,12 @@ const EditorWindow = () => {
               </TabList>
             </Box>
           </TabContext>
-          <RunTaskBar handleRunCode={handleRunCode} />
+          {hasWriteAccess && <RunTaskBar handleRunCode={handleRunCode} />}
           <Editor
             height="100vh"
             defaultLanguage="python"
             value={code}
+            options={{ readOnly: !hasWriteAccess }}
             onChange={(value) => {
               setCode(value);
               socket.emit("update_code", {
