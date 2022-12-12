@@ -56,4 +56,50 @@ export const createProject = async (payload) => {
   const response = await axios.post(`${API_BASE}/create-project`, payload);
   console.log("response", response);
   return response.data;
-}
+};
+
+export const openFileInProject = async (project_id, path) => {
+  const response = await axios.post(`${API_BASE}/get-project/${project_id}`, {
+    path,
+  });
+
+  return response.data;
+};
+
+export const starProject = async (project_id, user_id) => {
+  const response = await axios.post(`${API_BASE}/star-project/${project_id}`, {
+    user_id,
+  });
+  return response.data;
+};
+
+export const unstarProject = async (project_id, user_id) => {
+  const response = await axios.post(
+    `${API_BASE}/unstar-project/${project_id}`,
+    {
+      user_id,
+    }
+  );
+  return response.data;
+};
+
+export const isProjectStarred = async (project_id, user_id) => {
+  const response = await axios.post(
+    `${API_BASE}/is-project-starred/${project_id}`,
+    {
+      user_id,
+    }
+  );
+  return response.data;
+};
+
+export const updateCodeInS3 = async (project_id, path, code) => {
+  const response = await axios.post(
+    `${API_BASE}/update-project/${project_id}`,
+    {
+      path,
+      code,
+    }
+  );
+  return response.data;
+};
