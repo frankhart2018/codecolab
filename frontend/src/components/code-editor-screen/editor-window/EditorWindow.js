@@ -1,6 +1,7 @@
-import Editor from "@monaco-editor/react";
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
+import Editor from "@monaco-editor/react";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
@@ -16,20 +17,36 @@ const EditorWindow = () => {
     fileContentsLoading,
     s3URI,
     noFileSelected,
-    openFileMap,
     openFileStack,
   } = useSelector((state) => state.file);
 
+  const { currentlyOpenedFilePath } = useSelector((state) => state.project);
+
   const [value, setValue] = useState("1");
+  const [code, setCode] = useState(fileContents);
   const dispatch = useDispatch();
+
+  const { pathname } = useLocation();
+  const projectId = pathname.split("/")[2];
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   const handleRunCode = () => {
-    dispatch(runCodeThunk({ s3URI }));
+    dispatch(
+      runCodeThunk({
+        s3URI,
+        project_id: projectId,
+        code: code,
+        path: currentlyOpenedFilePath,
+      })
+    );
   };
+
+  useEffect(() => {
+    setCode(fileContents);
+  }, [fileContents]);
 
   return (
     <>
@@ -65,7 +82,8 @@ const EditorWindow = () => {
           <Editor
             height="100vh"
             defaultLanguage="python"
-            defaultValue={fileContents}
+            value={fileContents}
+            onChange={(value) => setCode(value)}
             theme="vs-dark"
           />
         </Box>

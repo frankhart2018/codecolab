@@ -79,21 +79,23 @@ const OutputWindow = () => {
         )}
         Star
       </Button>
-      <Typography variant="body1" sx={{ padding: "10px" }}>
-        {pythonVersionLoading && "Loading..."}
-        {!pythonVersionLoading &&
-          pythonVersion !== null &&
-          pythonVersion.version}
-      </Typography>
-      <Typography variant="body1" sx={{ padding: "10px" }}>
-        {outputLoading && "Loading..."}
-        {!outputLoading && output !== null && (
-          <Typography variant="body1">
-            Output: <br />
-            {output}
-          </Typography>
-        )}
-      </Typography>
+      <Box sx={{ overflowX: "scroll" }}>
+        <Typography variant="body1" sx={{ padding: "10px" }}>
+          {pythonVersionLoading && "Loading..."}
+          {!pythonVersionLoading &&
+            pythonVersion !== null &&
+            pythonVersion.version}
+        </Typography>
+        <Typography variant="body1" sx={{ padding: "10px" }}>
+          {outputLoading && "Loading..."}
+          {!outputLoading && output !== null && (
+            <Typography variant="body1">
+              Output: <br />
+              <pre>{output}</pre>
+            </Typography>
+          )}
+        </Typography>
+      </Box>
     </Box>
   );
 };

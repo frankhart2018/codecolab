@@ -1,6 +1,5 @@
 import Button from "@mui/material/Button";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import { StarBorder, Star } from "@mui/icons-material";
 
 const RunTaskBar = ({ handleRunCode }) => {
   return (

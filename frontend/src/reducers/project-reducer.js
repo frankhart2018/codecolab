@@ -9,12 +9,14 @@ import {
   isProjectStarredThunk,
   starProjectThunk,
   unstarProjectThunk,
+  openFileInProjectThunk,
 } from "../services/project-thunk";
 
 let initialState = {
   fileMap: null,
   fileMapLoading: false,
   isProjectStarred: false,
+  currentlyOpenedFilePath: null,
 };
 
 const setOpenState = (root) => {
@@ -131,6 +133,9 @@ const projectSlice = createSlice({
     },
     [unstarProjectThunk.fulfilled]: (state, action) => {
       state.isProjectStarred = false;
+    },
+    [openFileInProjectThunk.fulfilled]: (state, action) => {
+      state.currentlyOpenedFilePath = action.payload.path;
     },
   },
 });

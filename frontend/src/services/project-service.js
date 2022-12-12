@@ -92,3 +92,14 @@ export const isProjectStarred = async (project_id, user_id) => {
   );
   return response.data;
 };
+
+export const updateCodeInS3 = async (project_id, path, code) => {
+  const response = await axios.post(
+    `${API_BASE}/update-project/${project_id}`,
+    {
+      path,
+      code,
+    }
+  );
+  return response.data;
+};
