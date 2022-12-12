@@ -61,6 +61,9 @@ const projectSlice = createSlice({
 
       state.fileMap = JSON.parse(JSON.stringify(fixedRoot));
     },
+    closeFileInProject(state, action) {
+      state.currentlyOpenedFilePath = null;
+    },
   },
   extraReducers: {
     [getProjectByIdThunk.pending]: (state, action) => {
@@ -140,5 +143,5 @@ const projectSlice = createSlice({
   },
 });
 
-export const { updateFileMap } = projectSlice.actions;
+export const { updateFileMap, closeFileInProject } = projectSlice.actions;
 export default projectSlice.reducer;
