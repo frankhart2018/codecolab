@@ -204,6 +204,22 @@ const getAllProject = async (req, res) => {
   return res.status(200).json({ status: 200, projects: projects });
 };
 
+const getTopKStarredProjects = async (req, res) => {
+  const { k } = req.params;
+  const projects = await projectDao.getTopStarredProjects();
+  const kProjects = projects.slice(0, k);
+
+  return res.status(200).json({ status: 200, projects: kProjects });
+};
+
+const getTopKStarredProjectsUser = async (req, res) => {
+  const { k, user_id } = req.params;
+  const projects = await projectDao.getTopStarredProjectsUser(user_id);
+  const kProjects = projects.slice(0, k);
+
+  return res.status(200).json({ status: 200, projects: kProjects });
+};
+
 const ProjectController = (app) => {
   app.post("/api/get-project/:project_id", fetchS3URL);
   app.get("/api/get-all-projects/:owner_id", getAllProject);
@@ -217,6 +233,11 @@ const ProjectController = (app) => {
   app.post("/api/star-project/:project_id", starProject);
   app.post("/api/unstar-project/:project_id", unstarProject);
   app.post("/api/is-project-starred/:project_id", isProjectStarred);
+  app.post("/api/get-top-starred-projects/:k", getTopKStarredProjects);
+  app.post(
+    "/api/get-top-starred-projects-user/:k/:user_id",
+    getTopKStarredProjectsUser
+  );
 };
 
 export default ProjectController;

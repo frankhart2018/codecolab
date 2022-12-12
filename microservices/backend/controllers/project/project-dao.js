@@ -317,3 +317,34 @@ export const fetchAllProjects = async (owner_id) => {
   );
   return projects;
 };
+
+export const getTopStarredProjects = async () => {
+  const projects = await projectModel.find(
+    {},
+    { file_structure: false, language: false, owner_id: false },
+    { sort: { stars: -1 } }
+  );
+  return projects;
+};
+
+export const getTopStarredProjectsUser = async (user_id) => {
+  const user = await userModel.findOne({ _id: user_id });
+
+  const starred_projects = user.starred_projects;
+  let all_starred_projects = [];
+
+  for (let pair of starred_projects) {
+    const key = pair[0];
+    const project = await projectModel.findOne(
+      { _id: key },
+      { file_structure: false, language: false, owner_id: false }
+    );
+    all_starred_projects.push(project);
+  }
+
+  all_starred_projects = all_starred_projects.sort((a, b) => {
+    return b.stars - a.stars;
+  });
+
+  return all_starred_projects;
+};
