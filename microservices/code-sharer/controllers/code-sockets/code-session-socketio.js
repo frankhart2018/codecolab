@@ -56,6 +56,7 @@ const updateCode = async (socket, data) => {
 
 export default (socket) => {
   socket.on("view_code", (data) => viewCode(socket, data));
+  socket.on("stop_viewing_code", () => removeUser(socket));
   socket.on("disconnect", () => removeUser(socket));
   socket.on("update_code", (data) => updateCode(socket, data));
 };

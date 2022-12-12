@@ -14,15 +14,11 @@ import NoFileSelected from "../no-file-selected/NoFileSelected";
 import RunTaskBar from "../run-taskbar/RunTaskBar";
 import { runCodeThunk } from "../../../services/run-thunk";
 import { closeFile } from "../../../reducers/file-reducer";
+import { closeFileInProject } from "../../../reducers/project-reducer";
 
 const socket = io.connect(process.env.REACT_APP_CODE_SHARER_API_BASE);
 
 const EditorWindow = () => {
-  console.log(
-    "Connected to socket server: ",
-    process.env.REACT_APP_CODE_SHARER_API_BASE
-  );
-
   const {
     fileContents,
     fileContentsLoading,
@@ -51,10 +47,33 @@ const EditorWindow = () => {
 
   useEffect(() => {
     setCurrentTab(currentlyOpenedFilePath);
-    setCode(fileContents);
     setCurrentS3URI(s3URI);
     setTabCode(tabCode.set(currentlyOpenedFilePath, [fileContents, s3URI]));
-  }, [currentlyOpenedFilePath, fileContents, s3URI, tabCode]);
+
+    if (currentlyOpenedFilePath !== null) {
+      if (!socket.connected) {
+        socket.connect();
+      }
+
+      socket.emit("view_code", {
+        room_id: `${projectId}/${currentlyOpenedFilePath}`,
+        code: fileContents,
+      });
+
+      socket.on("code", (data) => {
+        setCode(data);
+      });
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentlyOpenedFilePath, fileContents, s3URI]);
+
+  useEffect(() => {
+    socket.on("recv_code", (data) => {
+      setCode(data);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [socket, code]);
 
   useEffect(() => {
     const latestTab = openFileStack[openFileStack.length - 1];
@@ -84,8 +103,11 @@ const EditorWindow = () => {
       })
     );
 
+    dispatch(closeFileInProject());
+
     setTabCode(new Map([...tabCode].filter(([key]) => key !== file)));
     setCurrentTab(openFileStack[openFileStack.length - 1]);
+    socket.disconnect();
   };
 
   return (
@@ -138,6 +160,10 @@ const EditorWindow = () => {
             value={code}
             onChange={(value) => {
               setCode(value);
+              socket.emit("update_code", {
+                room_id: `${projectId}/${currentTab}`,
+                code: value,
+              });
             }}
             theme="vs-dark"
           />
