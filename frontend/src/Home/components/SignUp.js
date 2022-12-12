@@ -48,6 +48,7 @@ function SignUp() {
     }
     setSent(true);
     const response = await dispatch(signUpUserThunk(user));
+    console.log("responise", response)
     if (response?.payload?.status === "ok") {
       enqueueSnackbar(response?.payload?.message, { variant: "success" });
       navigate("/all-projects", { replace: true });
@@ -55,7 +56,7 @@ function SignUp() {
 
     }
     else {
-      enqueueSnackbar(response?.payload?.message, { variant: "error" });
+      enqueueSnackbar("User already exists", { variant: "error" });
       setSent(false);
     }
 

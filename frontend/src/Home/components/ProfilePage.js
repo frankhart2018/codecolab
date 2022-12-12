@@ -7,7 +7,7 @@ import { Avatar, Card, CardContent, Divider, Grid, Stack, Typography } from "@mu
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import { useEffect, useState } from "react";
-import StarRateIcon from '@mui/icons-material/StarRate';
+import StarredProjects from "./StarredProjects";
 const ProfilePage = () => {
     const { currentUser } = useSelector((state) => state.userDetails)
     const [name, setName] = useState("")
@@ -155,13 +155,15 @@ const ProfilePage = () => {
                                 </Grid>
                             </Grid>
                             <Grid container spacing={4} sx={{ paddingTop: 5 }}>
-                                <Grid item xs={12} sm={12} md={12} style={{ display: "flex" }}>
+                                <Grid item xs={12} sm={12} md={12} >
                                     <Typography variant="h1" component="div" align="left" gutterBottom>
-                                        <StarRateIcon fontSize="large" color="starred" />
+                                        <u>Starred-Projects</u>
                                     </Typography>
-                                    <Typography variant="h1" component="div" align="left" gutterBottom>
-                                        <u>Starred</u>
-                                    </Typography>
+
+                                </Grid>
+                                <Grid item xs={12} sm={12} md={12} >
+                                    <StarredProjects />
+
                                 </Grid>
                             </Grid>
                         </Container>

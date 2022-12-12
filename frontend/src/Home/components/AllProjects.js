@@ -1,16 +1,18 @@
 import { Card, Container, Divider, Grid, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import CreateButton from "./CreateButton";
 import NavBar from "./NavBar";
 import CardContent from '@mui/material/CardContent';
 import { CardActionArea } from '@mui/material';
+import { useNavigate } from "react-router";
 
 function AllProjects() {
   const { currentUser } = useSelector((state) => state.userDetails)
-  const [projects, setProjects] = React.useState([]);
-  const [username, setUsername] = React.useState("");
-  React.useEffect(() => {
+  const [projects, setProjects] = useState([]);
+  const [username, setUsername] = useState("");
+  const navigate = useNavigate();
+  useEffect(() => {
     const fetchProjects = async () => {
       const res = await fetch(`${process.env.REACT_APP_API_URL}/api/get-all-projects/${currentUser?._id}`);
       const data = await res.json();
@@ -22,6 +24,7 @@ function AllProjects() {
 
   const handleOpenProject = (id) => {
     console.log("project id", id)
+    navigate(`/code-editor/${id}`);
   }
   const onCreateProject = async () => {
     const res = await fetch(`${process.env.REACT_APP_API_URL}/api/get-all-projects/${currentUser?._id}`);
