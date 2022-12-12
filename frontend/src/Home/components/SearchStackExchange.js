@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {getQuestionsThunk} from "../../services/search-thunks";
+import {createQuestionThunk, getQuestionsThunk} from "../../services/search-thunks";
 import {InputBase} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from '@mui/icons-material/Search';
@@ -13,9 +13,12 @@ import {Link} from "react-router-dom";
 const SearchStackExchange = () => {
     const dispatch = useDispatch()
     const [searchQuery, setSearchQuery] = useState("");
-
+    const {currentSearch} = useSelector((state) => state.searchDetails)
     const handleSearchClick = async () => {
-        await dispatch(getQuestionsThunk(searchQuery));
+        await dispatch(getQuestionsThunk(searchQuery))
+        currentSearch.forEach((search) => {
+            dispatch(createQuestionThunk(search))
+        })
     }
 
     return (

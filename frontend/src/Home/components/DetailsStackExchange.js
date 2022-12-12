@@ -6,19 +6,15 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import {useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import NavBar from "./NavBar";
+import {useSelector} from "react-redux";
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import {Divider, Stack, Typography} from "@mui/material";
-import Collapse from "@mui/material/Collapse";
-import {ExpandLess, ExpandMore} from "@mui/icons-material";
-import {getQuestionsThunk} from "../../services/search-thunks";
 
 const DetailsStackExchange = () => {
-    const dispatch = useDispatch()
     const [checked, setChecked] = useState([1]);
     const {currentSearch} = useSelector((state) => state.searchDetails)
+    const {localSearch} = useSelector((state) => state.searchDetails)
 
     const handleToggle = (value) => () => {
         const currentIndex = checked.indexOf(value);
@@ -32,12 +28,11 @@ const DetailsStackExchange = () => {
 
         setChecked(newChecked);
     };
-    console.log("in details page", currentSearch)
 
     return (
         <>
         <List dense sx={{ width: '100%', maxWidth: "100%", bgcolor: 'background.paper' }}>
-            {Object.values(currentSearch).map((value) => {
+            {currentSearch.map((value) => {
                 const labelId = `checkbox-list-secondary-label-${value}`;
                 return (
                     <>
@@ -62,11 +57,11 @@ const DetailsStackExchange = () => {
                                 <a href={value['link']} target="_blank" rel="noopener noreferrer"><ListItemText id={labelId} primary={`${value['link']}`} /></a>
                                 <Stack direction="row">
                                     <Typography gutterBottom>
-                                        Upvotes: {value['up_vote_count']}
+                                        Upvotes: {localSearch.upvotes}
                                     </Typography>
                                     <Divider variant="inset" component="li" orientation="vertical"/>
                                     <Typography gutterBottom>
-                                        Downvotes: {value['down_vote_count']}
+                                        Downvotes: {localSearch.downvotes}
                                     </Typography>
                                 </Stack>
                             </Stack>

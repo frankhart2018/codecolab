@@ -1,8 +1,12 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import { AppBar, Link } from "@mui/material";
-import Toolbar from "./ToolBar";
+import {AppBar, InputBase, Link} from "@mui/material";
+
 import {useSelector} from "react-redux";
+import Container from "@mui/material/Container";
+import IconButton from "@mui/material/IconButton";
+import SearchIcon from "@mui/icons-material/Search";
+import Toolbar from "./ToolBar";
 
 const rightLink = {
   fontSize: 16,
@@ -15,16 +19,36 @@ function NavBar() {
   return (
     <div>
       <AppBar position="fixed">
-        <Toolbar sx={{ justifyContent: "space-between" }}>
-          <Box sx={{ flex: 1 }} />
+        <Toolbar>
+          <Box sx={{ flex: 1 }} >
           <Link
             variant="h6"
             underline="none"
             color="inherit"
+            href={'/'}
             sx={{ fontSize: 24 }}
           >
             Code Connect
           </Link>
+          </Box>
+          <Box sx={{ flex: 3 }} >
+          <Container >
+            <InputBase
+                id="search-bar"
+                className="text"
+                placeholder="Search for users"
+                fullWidth={true}
+                sx={{backgroundColor:"white", border: 1, borderRadius: 2, boxShadow: 1}}
+            />
+
+          </Container>
+          </Box>
+            <Box sx={{ flex: 1 }} >
+              <IconButton type="button" sx={{ p: '10px', color:"white"}} aria-label="search">
+                <SearchIcon />
+              </IconButton>
+            </Box>
+
           {!currentUser &&
               <Box sx={{flex: 1, display: 'flex', justifyContent: 'flex-end'}}>
                 <Link
@@ -69,6 +93,7 @@ function NavBar() {
               </Box>
               </>
           }
+
         </Toolbar>
       </AppBar>
       <Toolbar />

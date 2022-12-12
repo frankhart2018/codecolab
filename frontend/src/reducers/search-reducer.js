@@ -1,4 +1,4 @@
-import {getAnswersThunk, getQuestionsThunk, updateQuestionThunk} from "../services/search-thunks";
+import {createQuestionThunk, getQuestionsThunk, updateQuestionThunk} from "../services/search-thunks";
 import {createSlice} from "@reduxjs/toolkit";
 
 const searchSlice = createSlice({
@@ -15,6 +15,13 @@ const searchSlice = createSlice({
         [updateQuestionThunk.fulfilled]:
             (state, {payload}) => {
                 state.localSearch = payload
+            },
+        [createQuestionThunk.fulfilled]:
+            (state, {payload}) => {
+            if (payload.data.newSearch) {
+                console.log("fulfilled")
+                state.localSearch.push(payload.data.newSearch)
+            }
             }
     }
 })

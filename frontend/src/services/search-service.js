@@ -10,8 +10,13 @@ export const getQuestions = async (query) => {
     return response.data;
 };
 
+export const createQuestion = async (query) => {
+    const response = await axios.post(`${API_BASE}/api/create-search`, query)
+    return response
+}
+
 export const updateQuestions = async (question) => {
-    await axios.put(`${API_BASE}/${question._id}`, question);
+    await axios.put(`${API_BASE}/api/${question._id}`, question);
     return question;
 }
 

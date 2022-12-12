@@ -6,8 +6,11 @@ import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import ListItemText from "@mui/material/ListItemText";
 import SearchStackExchange from "./SearchStackExchange";
+import {Link} from "react-router-dom";
+import {useSelector} from "react-redux";
 
 const HomePage = () => {
+    const { currentUser } = useSelector((state) => state.userDetails)
     return (
         <>
             <Box
@@ -36,8 +39,16 @@ const HomePage = () => {
                         spacing={2}
                         justifyContent="center"
                     >
-                        <Button variant="contained">Get Started</Button>
-                        <Button variant="outlined">Login</Button>
+                        {!currentUser &&
+                            <>
+                            <Link to="/sign-up" style={{textDecoration: 'none'}}>
+                                <Button variant="contained">Get Started</Button>
+                            </Link>
+                            <Link to="/login" style={{textDecoration: 'none'}}>
+                            <Button variant="outlined">Login</Button>
+                            </Link>
+                            </>
+                        }
                     </Stack>
                 </Container>
             </Box>

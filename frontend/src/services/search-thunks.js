@@ -16,3 +16,11 @@ export const updateQuestionThunk = createAsyncThunk(
         return response
     }
 )
+
+export const createQuestionThunk = createAsyncThunk(
+    "create/query",
+    async(query) => {
+        const response = await service.createQuestion(query)
+        return response
+    }
+)
