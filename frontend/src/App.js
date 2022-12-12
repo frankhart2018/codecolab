@@ -22,6 +22,8 @@ import ProtectedRoute from "./Home/components/ProtectedRoute";
 import searchReducer from "./reducers/search-reducer";
 import DetailsStackExchange from "./Home/components/DetailsStackExchange";
 import NavBar from "./Home/components/NavBar";
+import fileReducer from "./reducers/file-reducer";
+import runReducer from "./reducers/run-reducer";
 
 const store = configureStore({
   reducer: {
@@ -29,6 +31,8 @@ const store = configureStore({
     pyrunner: pyrunnerReducer,
     project: projectReducer,
     searchDetails: searchReducer
+    file: fileReducer,
+    run: runReducer
   },
 });
 
