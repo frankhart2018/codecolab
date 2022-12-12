@@ -90,7 +90,6 @@ const ProfilePage = () => {
 
     return(
         <div>
-            <NavBar/>
             {currentUser &&
                 <>
                     <Box justifyContent={"center"}>

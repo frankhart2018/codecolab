@@ -54,7 +54,6 @@ const EditProfilePage = () => {
 
     return (
         <div>
-            <NavBar/>
             {currentUser &&
                 <>
                     <Box justifyContent={"center"}>

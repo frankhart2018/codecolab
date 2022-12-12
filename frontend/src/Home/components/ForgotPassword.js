@@ -46,7 +46,6 @@ function ForgotPassword() {
   return (
 
     <React.Fragment>
-      <NavBar />
       <AppForm>
         <React.Fragment>
           <Typography variant="h3" gutterBottom marked="center" align="center">

@@ -5,6 +5,7 @@ import Button from "./form/Button";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import ListItemText from "@mui/material/ListItemText";
+import SearchStackExchange from "./SearchStackExchange";
 
 const HomePage = () => {
     return (
@@ -78,6 +79,9 @@ const HomePage = () => {
                         />
                     </ListItem>
                 </List>
+            </Container>
+            <Container sx={{ py: 5 }} maxWidth="md">
+                <SearchStackExchange/>
             </Container>
         </>
     )

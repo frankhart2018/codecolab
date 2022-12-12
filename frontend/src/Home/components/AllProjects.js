@@ -31,7 +31,6 @@ function AllProjects() {
   }
   return (
     <Grid container>
-      <NavBar />
       <Grid container spacing={4}>
         <Grid item xs={12} md={12} spacing={4}>
           <Typography variant="h2" component="h1" gutterBottom style={{ marginLeft: '15px', paddingTop: 10 }}>

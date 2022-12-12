@@ -19,12 +19,16 @@ import CurrentUser from "./Home/components/CurrentUser";
 import ProfilePage from "./Home/components/ProfilePage";
 import EditProfilePage from "./Home/components/EditProfilePage";
 import ProtectedRoute from "./Home/components/ProtectedRoute";
+import searchReducer from "./reducers/search-reducer";
+import DetailsStackExchange from "./Home/components/DetailsStackExchange";
+import NavBar from "./Home/components/NavBar";
 
 const store = configureStore({
   reducer: {
     userDetails: userDetailsReducer,
     pyrunner: pyrunnerReducer,
     project: projectReducer,
+    searchDetails: searchReducer
   },
 });
 
@@ -35,10 +39,12 @@ const App = () => {
         <ThemeProvider theme={theme}>
           <div className="container">
             <CurrentUser>
+              <NavBar/>
               <Routes>
                 <Route path="/*" element={<Home />} />
                 <Route path="/login" element={<SignIn />} />
                 <Route path="/sign-up" element={<SignUp />} />
+                <Route path="/details/*" element={<DetailsStackExchange />} />
                 <Route path="/profile" element={
                   <ProtectedRoute>
                     <ProfilePage />

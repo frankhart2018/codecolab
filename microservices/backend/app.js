@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 
 import UsersController from "./controllers/users/user-controller.js";
 import ProjectController from "./controllers/project/project-controller.js";
+import SearchController from "./controllers/search-results/search-controller.js";
 
 const CONNECTION_STRING =
   process.env.DB_CONNECTION_STRING || "mongodb://localhost:27017/Codify";
@@ -21,5 +22,6 @@ app.use(express.json());
 
 UsersController(app);
 ProjectController(app);
+SearchController(app);
 
 app.listen(process.env.PORT || 4000);
