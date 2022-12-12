@@ -40,7 +40,7 @@ export const createProjectThunk = createAsyncThunk(
     const response = await project_service.createProject(payload);
     return response;
   }
-)
+);
 
 export const deleteInProjectThunk = createAsyncThunk(
   "/project/deleteInProject",
@@ -83,5 +83,38 @@ export const openFileInProjectThunk = createAsyncThunk(
       path: payload.path,
       s3URI: response.url,
     };
+  }
+);
+
+export const starProjectThunk = createAsyncThunk(
+  "/project/starProject",
+  async (payload) => {
+    const response = await project_service.starProject(
+      payload.project_id,
+      payload.user_id
+    );
+    return response;
+  }
+);
+
+export const unstarProjectThunk = createAsyncThunk(
+  "/project/unstarProject",
+  async (payload) => {
+    const response = await project_service.unstarProject(
+      payload.project_id,
+      payload.user_id
+    );
+    return response;
+  }
+);
+
+export const isProjectStarredThunk = createAsyncThunk(
+  "/project/isProjectStarred",
+  async (payload) => {
+    const response = await project_service.isProjectStarred(
+      payload.project_id,
+      payload.user_id
+    );
+    return response;
   }
 );
