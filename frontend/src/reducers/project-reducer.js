@@ -6,11 +6,15 @@ import {
   createFileInProjectThunk,
   deleteInProjectThunk,
   renameInProjectThunk,
+  isProjectStarredThunk,
+  starProjectThunk,
+  unstarProjectThunk,
 } from "../services/project-thunk";
 
 let initialState = {
   fileMap: null,
   fileMapLoading: false,
+  isProjectStarred: false,
 };
 
 const setOpenState = (root) => {
@@ -118,6 +122,15 @@ const projectSlice = createSlice({
         setOpenState(child);
         return child;
       });
+    },
+    [isProjectStarredThunk.fulfilled]: (state, action) => {
+      state.isProjectStarred = action.payload.res;
+    },
+    [starProjectThunk.fulfilled]: (state, action) => {
+      state.isProjectStarred = true;
+    },
+    [unstarProjectThunk.fulfilled]: (state, action) => {
+      state.isProjectStarred = false;
     },
   },
 });

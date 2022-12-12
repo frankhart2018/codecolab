@@ -1,5 +1,6 @@
-import * as Icon from "react-feather";
 import Button from "@mui/material/Button";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import { StarBorder, Star } from "@mui/icons-material";
 
 const RunTaskBar = ({ handleRunCode }) => {
   return (
@@ -9,7 +10,7 @@ const RunTaskBar = ({ handleRunCode }) => {
         sx={{ width: "100%" }}
         onClick={handleRunCode}
       >
-        <Icon.Play size={20} className="menu__icon" />
+        <PlayArrowIcon size={20} className="menu__icon" />
         Run
       </Button>
     </>

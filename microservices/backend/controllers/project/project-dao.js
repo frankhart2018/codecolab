@@ -255,10 +255,9 @@ export const starProject = async (project, project_id, user_id) => {
 
   const user = await userModel.findOne({ _id: user_id });
 
-  user.starred_projects.push({
-    project_id: project_id,
-    project_name: project.name,
-  });
+  if (!user.starred_projects.has(project_id)) {
+    user.starred_projects.set(project_id, project.name);
+  }
 
   const user_res = await userModel.findByIdAndUpdate(
     user_id,
@@ -274,7 +273,47 @@ export const starProject = async (project, project_id, user_id) => {
   };
 };
 
+export const unstarProject = async (project, project_id, user_id) => {
+  project.stars -= 1;
+
+  const project_res = await projectModel.findByIdAndUpdate(
+    project_id,
+    {
+      stars: project.stars,
+    },
+    { new: true }
+  );
+
+  const user = await userModel.findOne({ _id: user_id });
+
+  if (user.starred_projects.has(project_id)) {
+    user.starred_projects.delete(project_id);
+  }
+
+  const user_res = await userModel.findByIdAndUpdate(
+    user_id,
+    {
+      starred_projects: user.starred_projects,
+    },
+    { new: true }
+  );
+
+  return {
+    project: project_res,
+    user: user_res,
+  };
+};
+
+export const isProjectStarred = async (project_id, user_id) => {
+  const user = await userModel.findOne({ _id: user_id });
+
+  return { res: user.starred_projects.has(project_id) };
+};
+
 export const fetchAllProjects = async (owner_id) => {
-  const projects = await projectModel.find({ owner_id: owner_id }, { file_structure: false });
+  const projects = await projectModel.find(
+    { owner_id: owner_id },
+    { file_structure: false }
+  );
   return projects;
-}
+};
