@@ -39,7 +39,7 @@ function SignIn() {
     console.log("res", res);
     if (res?.payload?.status === "ok") {
       enqueueSnackbar("Login Successful", { variant: "success" });
-      navigate("/all-projects", { replace: true });
+      navigate("/", { replace: true });
       setSent(false);
     }
     else {

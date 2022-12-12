@@ -51,7 +51,7 @@ function SignUp() {
     console.log("responise", response)
     if (response?.payload?.status === "ok") {
       enqueueSnackbar(response?.payload?.message, { variant: "success" });
-      navigate("/all-projects", { replace: true });
+      navigate("/", { replace: true });
       setSent(false);
 
     }

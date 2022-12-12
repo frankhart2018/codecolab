@@ -5,6 +5,7 @@ import CreateButton from "./CreateButton";
 import CardContent from '@mui/material/CardContent';
 import { CardActionArea } from '@mui/material';
 import { useNavigate } from "react-router";
+import NavBar from "./NavBar";
 
 function AllProjects() {
   const { currentUser } = useSelector((state) => state.userDetails)
@@ -33,13 +34,6 @@ function AllProjects() {
   }
   return (
     <Grid container>
-<<<<<<< HEAD
-      <Grid container spacing={4}>
-        <Grid item xs={12} md={12} spacing={4}>
-          <Typography variant="h2" component="h1" gutterBottom style={{ marginLeft: '15px', paddingTop: 10 }}>
-            Welcome, <u>{currentUser?.name}</u>
-          </Typography>
-=======
       <NavBar />
       <Container>
         <Grid container sx={{ paddingTop: 10 }} spacing={2}>
@@ -47,7 +41,6 @@ function AllProjects() {
             <Typography variant="h2" component="h1" gutterBottom style={{ paddingTop: 10 }}>
               Welcome, <u>{currentUser?.name}</u>
             </Typography>
->>>>>>> master
 
           </Grid>
           <Grid item xs={6} md={6}>
