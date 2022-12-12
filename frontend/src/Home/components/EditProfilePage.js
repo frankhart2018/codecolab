@@ -2,7 +2,6 @@ import {useDispatch, useSelector} from "react-redux";
 import React, {useState} from "react";
 import {updateUserThunk, userDataThunk} from "../../services/thunks";
 import {Link} from "react-router-dom";
-import NavBar from "./NavBar";
 import Box from "@mui/material/Box";
 import {Card, CardContent, Divider, Grid, Typography} from "@mui/material";
 import Button from "@mui/material/Button";

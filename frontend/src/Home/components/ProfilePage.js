@@ -2,7 +2,6 @@ import {logoutUserThunk} from "../../services/thunks";
 import {useDispatch, useSelector} from "react-redux";
 import {Link} from "react-router-dom";
 import * as React from "react";
-import NavBar from "./NavBar";
 import Box from "@mui/material/Box";
 import {Card, CardContent, Divider, Grid, Stack, Typography} from "@mui/material";
 import Button from "@mui/material/Button";

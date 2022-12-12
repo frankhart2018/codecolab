@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Field, Form, FormSpy } from 'react-final-form';
 import Box from '@mui/material/Box';
 import { email, required } from './form/validation';
-import NavBar from './NavBar';
 import AppForm from './AppForm';
 import FormFeedback from './form/FormFeedback';
 import FormButton from './form/FormButton';
