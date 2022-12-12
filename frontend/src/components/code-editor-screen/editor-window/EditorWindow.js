@@ -22,31 +22,40 @@ const EditorWindow = () => {
 
   const { currentlyOpenedFilePath } = useSelector((state) => state.project);
 
-  const [value, setValue] = useState("1");
-  const [code, setCode] = useState(fileContents);
+  const [currentTab, setCurrentTab] = useState("");
+  const [code, setCode] = useState("");
+  const [currentS3URI, setCurrentS3URI] = useState("");
+  const [tabCode, setTabCode] = useState(new Map());
   const dispatch = useDispatch();
 
   const { pathname } = useLocation();
   const projectId = pathname.split("/")[2];
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    setTabCode(tabCode.set(currentTab, [code, currentS3URI]));
+    console.log(tabCode);
+    setCurrentTab(newValue);
+    setCode(tabCode.get(newValue)[0]);
+    setCurrentS3URI(tabCode.get(newValue)[1]);
   };
+
+  useEffect(() => {
+    setCurrentTab(currentlyOpenedFilePath);
+    setCode(fileContents);
+    setCurrentS3URI(s3URI);
+    setTabCode(tabCode.set(currentlyOpenedFilePath, [fileContents, s3URI]));
+  }, [currentlyOpenedFilePath, fileContents, s3URI]);
 
   const handleRunCode = () => {
     dispatch(
       runCodeThunk({
-        s3URI,
+        s3URI: currentS3URI,
         project_id: projectId,
         code: code,
-        path: currentlyOpenedFilePath,
+        path: currentTab,
       })
     );
   };
-
-  useEffect(() => {
-    setCode(fileContents);
-  }, [fileContents]);
 
   return (
     <>
@@ -62,16 +71,17 @@ const EditorWindow = () => {
             background: "#1F1F1E",
           }}
         >
-          <TabContext value={value}>
+          <TabContext value={currentTab}>
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
               <TabList
                 onChange={handleChange}
                 aria-label="lab API tabs example"
+                TabIndicatorProps={{ style: { backgroundColor: "white" } }}
               >
-                {openFileStack.map((file, index) => (
+                {openFileStack.map((file) => (
                   <Tab
                     label={file}
-                    value={(index + 1).toString()}
+                    value={file}
                     style={{ color: "#cdcdcc", textTransform: "none" }}
                   />
                 ))}
@@ -82,8 +92,10 @@ const EditorWindow = () => {
           <Editor
             height="100vh"
             defaultLanguage="python"
-            value={fileContents}
-            onChange={(value) => setCode(value)}
+            value={code}
+            onChange={(value) => {
+              setCode(value);
+            }}
             theme="vs-dark"
           />
         </Box>
