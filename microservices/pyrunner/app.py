@@ -61,7 +61,7 @@ def run(file: File):
     output = subprocess.run(["python", new_file_name], capture_output=True)
     os.remove(new_file_name)
 
-    return {"output": output.stdout.decode("utf-8")}
+    return {"output": output.stdout.decode("utf-8"), "error": output.stderr.decode("utf-8")}
 
 @app.get("/get-packages", tags=["packages"], description=tags_metadata[3]["description"])
 def get_packages():
