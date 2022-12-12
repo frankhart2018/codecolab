@@ -1,59 +1,98 @@
-import {logoutUserThunk} from "../../services/thunks";
-import {useDispatch, useSelector} from "react-redux";
-import {Link} from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import * as React from "react";
 import NavBar from "./NavBar";
 import Box from "@mui/material/Box";
-import {Card, CardContent, Divider, Grid, Stack, Typography} from "@mui/material";
+import { Avatar, Card, CardContent, Divider, Grid, Stack, Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
-
-
+import { useEffect, useState } from "react";
+import StarRateIcon from '@mui/icons-material/StarRate';
 const ProfilePage = () => {
     const { currentUser } = useSelector((state) => state.userDetails)
-    const dispatch = useDispatch()
-    const handleLogout = () => {
-        dispatch(logoutUserThunk());
+    const [name, setName] = useState("")
+
+
+    useEffect(() => {
+        if (currentUser) {
+            setName(currentUser.name)
+        }
     }
+        , [currentUser])
+
+
+    function stringToColor(string) {
+        let hash = 0;
+        let i;
+
+        /* eslint-disable no-bitwise */
+        for (i = 0; i < string.length; i += 1) {
+            hash = string.charCodeAt(i) + ((hash << 15) - hash);
+        }
+
+        let color = '#';
+
+        for (i = 0; i < 3; i += 1) {
+            const value = (hash >> (i * 8)) & 0xff;
+            color += `00${value.toString(16)}`.slice(-2);
+        }
+        /* eslint-enable no-bitwise */
+
+        return color;
+    }
+
+    function stringAvatar({ name }) {
+        return {
+            sx: {
+                bgcolor: stringToColor(name),
+                width: 100, height: 100,
+            },
+        };
+    }
+
+
+
 
     const WelcomeCard = () => {
         return (
-        <>
-            <Box sx={{ pt: 10 }}>
-                <Card variant="outlined" align="center">
-                    <CardContent>
-                        <Typography sx={{fontSize: 24}} component="div">
-                            Welcome {currentUser.name}
-                        </Typography>
-                    </CardContent>
-                    <Box justifyContent={"center"}>
-                        <Stack
-                            justifyContent={"center"}
-                            direction="row"
-                            spacing={2}
-                            pb={2}
-                        >
-                            <Link to="/edit-profile" style={{ textDecoration: 'none' }}>
-                                <Button variant="contained">Edit profile</Button>
-                            </Link>
-                            <Link to="/logout" style={{ textDecoration: 'none' }}>
-                                <Button onClick={handleLogout} variant="outlined">Logout</Button>
-                            </Link>
-                        </Stack>
-                    </Box>
-                </Card>
-            </Box>
-        </>
+            <>
+                <Box sx={{ p: 1 }}>
+                    <Card variant="outlined" align="center" >
+                        <CardContent>
+                            <Avatar
+                                alt="profile picture"
+                                {...stringAvatar({ name: currentUser.name })}
+                            />
+                            <Typography sx={{ fontSize: 24 }} component="div">
+                                {name}
+                            </Typography>
+                        </CardContent>
+                        <Box justifyContent={"center"}>
+                            <Stack
+                                justifyContent={"center"}
+                                direction="row"
+                                spacing={2}
+                                pb={2}
+                            >
+                                <Link to="/edit-profile" style={{ textDecoration: 'none' }}>
+                                    <Button variant="contained">Edit profile</Button>
+                                </Link>
+                            </Stack>
+                        </Box>
+                    </Card>
+                </Box >
+            </>
         )
     }
 
     const ProfileInfoCard = () => {
         return (
             <>
-                <Box sx={{ pt: 10 }}>
-                    <Card variant="outlined" align="center">
+                <Box sx={{ p: 1 }}>
+                    <Card variant="outlined" align="center" >
                         <CardContent>
-                            <Typography sx={{fontSize: 18}} component="div">
+
+                            <><Typography sx={{ fontSize: 18 }} component="div">
                                 <Grid container spacing={2} pb={2}>
                                     <Grid item xs={6} md={4} textAlign='left'>
                                         Name
@@ -62,7 +101,7 @@ const ProfilePage = () => {
                                         {currentUser.name}
                                     </Grid>
                                 </Grid>
-                                <Divider/>
+                                <Divider />
                                 <Grid container spacing={2} pt={2} pb={2}>
                                     <Grid item xs={6} md={4} textAlign='left'>
                                         Username
@@ -71,7 +110,7 @@ const ProfilePage = () => {
                                         {currentUser.username}
                                     </Grid>
                                 </Grid>
-                                <Divider/>
+                                <Divider />
                                 <Grid container spacing={2} pt={2}>
                                     <Grid item xs={6} md={4} textAlign='left'>
                                         Email
@@ -80,7 +119,8 @@ const ProfilePage = () => {
                                         {currentUser.email}
                                     </Grid>
                                 </Grid>
-                            </Typography>
+                            </Typography></>
+
                         </CardContent>
                     </Card>
                 </Box>
@@ -88,26 +128,47 @@ const ProfilePage = () => {
         )
     }
 
-    return(
+    return (
         <div>
-            <NavBar/>
+            <NavBar />
             {currentUser &&
                 <>
                     <Box justifyContent={"center"}>
-                        <Container>
-                        <Grid container spacing={2}>
-                            <Grid item md={4}>
-                                <WelcomeCard/>
+                        <Container maxWidth="lg">
+                            <Grid container spacing={4} sx={{ paddingTop: 5 }}>
+                                <Grid item xs={12} sm={12} md={12}>
+                                    <Typography variant="h1" component="div" align="left" gutterBottom>
+                                        <u>Profile</u>
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={12} sm={12} md={12} >
+                                    <Typography variant="body1" component="div" align="left" gutterBottom>
+                                        User information
+                                    </Typography>
+                                    <Divider />
+                                </Grid>
+                                <Grid item xs={12} lg={4} sm={12} md={4} >
+                                    <WelcomeCard />
+                                </Grid>
+                                <Grid item xs={12} lg={8} sm={12} md={8} >
+                                    <ProfileInfoCard />
+                                </Grid>
                             </Grid>
-                            <Grid item md={8}>
-                                <ProfileInfoCard/>
+                            <Grid container spacing={4} sx={{ paddingTop: 5 }}>
+                                <Grid item xs={12} sm={12} md={12} style={{ display: "flex" }}>
+                                    <Typography variant="h1" component="div" align="left" gutterBottom>
+                                        <StarRateIcon fontSize="large" color="starred" />
+                                    </Typography>
+                                    <Typography variant="h1" component="div" align="left" gutterBottom>
+                                        <u>Starred</u>
+                                    </Typography>
+                                </Grid>
                             </Grid>
-                        </Grid>
                         </Container>
                     </Box>
                 </>
             }
-        </div>
+        </div >
     )
 }
 

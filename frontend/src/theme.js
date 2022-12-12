@@ -27,6 +27,9 @@ const rawTheme = createTheme({
       main: green[500],
       dark: green[700],
     },
+    starred: {
+      main: "#FFD60B",
+    }
   },
   typography: {
     fontFamily: "Karla",
@@ -97,7 +100,7 @@ const theme = {
     body1: {
       ...rawTheme.typography.body2,
       fontWeight: rawTheme.typography.fontWeightRegular,
-      fontSize: 16,
+      fontSize: 20,
     },
     body2: {
       ...rawTheme.typography.body1,
