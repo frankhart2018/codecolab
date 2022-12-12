@@ -91,6 +91,7 @@ function CreateButton({ owner_id, handleProjectList }) {
 
         return errors;
     };
+    
     const handleSubmit = async (e) => {
         const data = {
             name: e.name,

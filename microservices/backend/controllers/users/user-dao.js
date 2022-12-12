@@ -13,6 +13,15 @@ export const createUser = (email, encryptedPassword, name, username) => {
   });
 };
 
+
+export const findUserByUsername = ({ username }) => {
+  console.log("username", username)
+  return userModel.findOne({
+    username:
+      username
+  }, { password: false });
+}
+
 export const findUserById = (id) => {
   return userModel.findOne({ _id: id });
 };
@@ -20,5 +29,5 @@ export const updatePassword = (id, password) => {
   return userModel.updateOne({ _id: id }, { password: password });
 };
 export const updateUser = (id, content) => {
-  return userModel.updateOne({_id: id}, {$set: content})
+  return userModel.updateOne({ _id: id }, { $set: content })
 };
