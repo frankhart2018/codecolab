@@ -21,6 +21,7 @@ import EditProfilePage from "./Home/components/EditProfilePage";
 import ProtectedRoute from "./Home/components/ProtectedRoute";
 import fileReducer from "./reducers/file-reducer";
 import runReducer from "./reducers/run-reducer";
+import ViewProfile from "./Home/components/ViewProfile";
 
 const store = configureStore({
   reducer: {
@@ -48,6 +49,7 @@ const App = () => {
                     <ProfilePage />
                   </ProtectedRoute>
                 } />
+                <Route path="/profile/:id" element={<ViewProfile />} />
                 <Route path="/edit-profile" element={
                   <ProtectedRoute>
                     <EditProfilePage />
