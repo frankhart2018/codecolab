@@ -13,7 +13,14 @@ let initialState = {
 const fileSlice = createSlice({
   name: "file",
   initialState,
-  reducers: {},
+  reducers: {
+    closeFile(state, action) {
+      const file = action.payload.file;
+      const idx = state.openFileMap[file];
+      state.openFileStack.splice(idx, 1);
+      delete state.openFileMap[file];
+    },
+  },
   extraReducers: {
     [openFileInProjectThunk.pending]: (state, action) => {
       state.fileContentsLoading = true;
@@ -28,7 +35,7 @@ const fileSlice = createSlice({
       if (!state.openFileMap.hasOwnProperty(action.payload.path)) {
         state.openFileStack.push(action.payload.path);
       }
-      state.openFileMap[action.payload.path] = 1;
+      state.openFileMap[action.payload.path] = state.openFileStack.length - 1;
     },
     [openFileInProjectThunk.rejected]: (state, action) => {
       state.fileContentsLoading = false;
@@ -37,4 +44,5 @@ const fileSlice = createSlice({
   },
 });
 
+export const { closeFile } = fileSlice.actions;
 export default fileSlice.reducer;
