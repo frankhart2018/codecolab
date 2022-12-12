@@ -1,4 +1,3 @@
-import NavBar from "./components/NavBar.js";
 import HomePage from "./components/HomePage";
 
 function Home() {
