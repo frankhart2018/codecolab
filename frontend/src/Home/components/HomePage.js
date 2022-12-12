@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import Container from '@mui/material/Container';
-import {Grid, ListItem, Stack, Typography} from "@mui/material";
+import {Card, CardActions, CardHeader, CardMedia, Grid, IconButton, ListItem, Stack, Typography} from "@mui/material";
 import Button from "./form/Button";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
@@ -12,21 +12,49 @@ import NavBar from "./NavBar";
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import Avatar from "@mui/material/Avatar";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
+import StarIcon from '@mui/icons-material/Star';
+import CardContent from "@mui/material/CardContent";
+import {ExpandMore} from "@mui/icons-material";
+import Collapse from "@mui/material/Collapse";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+const API = process.env.REACT_APP_API_URL || 'http://localhost:4000'
+
+
 
 const HomePage = () => {
     const { currentUser } = useSelector((state) => state.userDetails)
     const [projects, setProjects] = useState([]);
+    const [kProjects, setTopStarredProjects] = useState([])
     const [username, setUsername] = useState("");
+
+    const [expanded, setExpanded] = React.useState(false);
+
+    const handleExpandClick = () => {
+        setExpanded(!expanded);
+    };
+
+    useEffect(() => {
+        const fetchTopProjectsHome = async () => {
+            const k = 3
+            const res = await fetch(`${API}/api/get-top-starred-projects/${k}`);
+            const data = await res.json();
+            setTopStarredProjects(data?.projects);
+            console.log("starred", kProjects)
+        };
+        fetchTopProjectsHome();
+    }, []);
     useEffect(() => {
         const fetchProjectsHome = async () => {
-            const res = await fetch(`${process.env.REACT_APP_API_URL}/api/get-all-projects/${currentUser?._id}`);
+            const res = await fetch(`${API}/api/get-all-projects/${currentUser?._id}`);
             const data = await res.json();
             setProjects(data?.projects);
             setUsername(currentUser?.username);
         };
         fetchProjectsHome();
     }, [currentUser?._id, currentUser?.username]);
-    const slicedProjects = projects.reverse().slice(0, 2);
+    const slicedProjects = projects.reverse().slice(0, 3);
+
+
 
     return (
         <>
@@ -34,8 +62,8 @@ const HomePage = () => {
             <Box
                 sx={{
                     bgcolor: 'background.paper',
-                    pt: 8,
-                    pb: 6
+                    pt: 5,
+                    pb: 3
                 }}
             >
                 <Container maxWidth="sm">
@@ -51,25 +79,75 @@ const HomePage = () => {
                     <Typography variant="h5" align="center" color="text.secondary" paragraph>
                         A collaborative code editor to allow you to code together over the internet
                     </Typography>
-                    {!currentUser &&
-                        <>
+                </Container>
+            </Box>
+            {!currentUser &&
+                <Container sx={{pt:1, pb:0}} maxWidth="md" disableGutters={true}>
+                    <Box justifyContent={"center"} sx={{pt:0, pb:0}}>
                         <Stack
-                            sx={{pt: 4}}
                             direction="row"
                             spacing={2}
                             justifyContent="center"
+                            sx={{pb:2}}
                         >
-                                <Link to="/sign-up" style={{textDecoration: 'none'}}>
-                                    <Button variant="contained">Get Started</Button>
-                                </Link>
-                                <Link to="/login" style={{textDecoration: 'none'}}>
-                                    <Button variant="outlined">Login</Button>
-                                </Link>
+                            <Link to="/sign-up" style={{textDecoration: 'none'}}>
+                                <Button variant="contained">Get Started</Button>
+                            </Link>
+                            <Link to="/login" style={{textDecoration: 'none'}}>
+                                <Button variant="outlined">Login</Button>
+                            </Link>
                         </Stack>
-                        </>
-                    }
+                        <Container >
+                            <Grid container spacing={4}>
+                                <Grid item xs={12} sm={12} md={12}>
+                                    <Typography variant="h5" component="div" align="left" gutterBottom>
+                                        Check out our top rated projects!
+                                    </Typography>
+                                </Grid>
+                                <Stack direction="row" spacing={2} pl={4}>
+                                        {kProjects?.map((project) => (
+                                            <Card sx={{ width: 275 }}>
+                                                <CardHeader
+                                                    title={project.name}
+                                                />
+                                                <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: 75 }}>
+                                                    <img src="/python_logo.png" alt="python logo" style={{ width: '100px' }}></img>
+
+                                                {/*<CardMedia*/}
+                                                {/*    component="img"*/}
+                                                {/*    height="194"*/}
+                                                {/*    image="/python_logo.png"*/}
+                                                {/*    alt="python logo"*/}
+                                                {/*/>*/}
+                                                </div>
+                                                <CardActions disableSpacing>
+                                                    <IconButton aria-label="add to favorites">
+                                                        {project.stars}<StarIcon color={"gold"}/>
+                                                    </IconButton>
+                                                    <ExpandMore
+                                                        expand={expanded}
+                                                        onClick={handleExpandClick}
+                                                        aria-expanded={expanded}
+                                                        aria-label="show more"
+                                                    >
+                                                        <ExpandMoreIcon />
+                                                    </ExpandMore>
+                                                </CardActions>
+                                                <Collapse in={expanded} timeout="auto" unmountOnExit>
+                                                    <CardContent>
+                                                        <Typography paragraph>
+                                                        {project.description}
+                                                        </Typography>
+                                                    </CardContent>
+                                                </Collapse>
+                                            </Card>
+                                        ))}
+                                </Stack>
+                            </Grid>
+                        </Container>
+                    </Box>
                 </Container>
-            </Box>
+            }
             {currentUser &&
                 <Container sx={{py: 5, pt:1, pb:0}} maxWidth="md" disableGutters={true}>
                     <Box justifyContent={"center"}>
@@ -86,8 +164,14 @@ const HomePage = () => {
                                 <Grid item xs={12} sm={12} md={12}>
                     <List sx={{width: '100%', bgcolor: 'background.paper'}}>
                         {slicedProjects?.map((project) => (
-
-                            <ListItem alignItems="flex-start">
+                            <ListItem alignItems="flex-start" sx={{
+                                width: "100%",
+                                backgroundColor: 'white',
+                                '&:hover': {
+                                    backgroundColor: 'lightgrey',
+                                    opacity: [0.9, 0.8, 0.7],
+                                },
+                            }}>
                                 <ListItemAvatar>
                                     <Avatar src="/python_logo.png" alt="python logo" />
                                 </ListItemAvatar>
@@ -109,7 +193,6 @@ const HomePage = () => {
                                 />
                                 </Link>
                             </ListItem>
-
                         ))}
                     </List>
                     <Button
