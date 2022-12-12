@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
+import { io } from "socket.io-client";
 import Editor from "@monaco-editor/react";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
@@ -14,14 +15,20 @@ import RunTaskBar from "../run-taskbar/RunTaskBar";
 import { runCodeThunk } from "../../../services/run-thunk";
 import { closeFile } from "../../../reducers/file-reducer";
 
+const socket = io.connect(process.env.REACT_APP_CODE_SHARER_API_BASE);
+
 const EditorWindow = () => {
+  console.log(
+    "Connected to socket server: ",
+    process.env.REACT_APP_CODE_SHARER_API_BASE
+  );
+
   const {
     fileContents,
     fileContentsLoading,
     s3URI,
     noFileSelected,
     openFileStack,
-    openFileMap,
   } = useSelector((state) => state.file);
 
   const { currentlyOpenedFilePath } = useSelector((state) => state.project);
@@ -47,7 +54,7 @@ const EditorWindow = () => {
     setCode(fileContents);
     setCurrentS3URI(s3URI);
     setTabCode(tabCode.set(currentlyOpenedFilePath, [fileContents, s3URI]));
-  }, [currentlyOpenedFilePath, fileContents, s3URI]);
+  }, [currentlyOpenedFilePath, fileContents, s3URI, tabCode]);
 
   useEffect(() => {
     const latestTab = openFileStack[openFileStack.length - 1];
@@ -57,7 +64,7 @@ const EditorWindow = () => {
       setCode(tabCode.get(latestTab)[0]);
       setCurrentS3URI(tabCode.get(latestTab)[1]);
     }
-  }, [openFileStack]);
+  }, [openFileStack, tabCode]);
 
   const handleRunCode = () => {
     dispatch(
