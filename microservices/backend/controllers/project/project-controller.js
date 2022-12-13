@@ -208,7 +208,6 @@ const getTopKStarredProjects = async (req, res) => {
   const { k } = req.params;
   const projects = await projectDao.getTopStarredProjects();
   const kProjects = projects.slice(0, k);
-
   return res.status(200).json({ status: 200, projects: kProjects });
 };
 
@@ -250,7 +249,7 @@ const ProjectController = (app) => {
   app.post("/api/star-project/:project_id", starProject);
   app.post("/api/unstar-project/:project_id", unstarProject);
   app.post("/api/is-project-starred/:project_id", isProjectStarred);
-  app.post("/api/get-top-starred-projects/:k", getTopKStarredProjects);
+  app.get("/api/get-top-starred-projects/:k", getTopKStarredProjects);
   app.post(
     "/api/get-top-starred-projects-user/:k/:user_id",
     getTopKStarredProjectsUser

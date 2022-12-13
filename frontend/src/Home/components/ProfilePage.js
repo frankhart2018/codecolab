@@ -1,13 +1,13 @@
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import * as React from "react";
-import NavBar from "./NavBar";
 import Box from "@mui/material/Box";
 import { Avatar, Card, CardContent, Divider, Grid, Stack, Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import { useEffect, useState } from "react";
 import StarredProjects from "./StarredProjects";
+import NavBar from "./NavBar";
 const ProfilePage = () => {
     const { currentUser } = useSelector((state) => state.userDetails)
     const [name, setName] = useState("")

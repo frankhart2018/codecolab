@@ -2,10 +2,10 @@ import { Card, Container, Divider, Grid, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import CreateButton from "./CreateButton";
-import NavBar from "./NavBar";
 import CardContent from '@mui/material/CardContent';
 import { CardActionArea } from '@mui/material';
 import { useNavigate } from "react-router";
+import NavBar from "./NavBar";
 
 function AllProjects() {
   const { currentUser } = useSelector((state) => state.userDetails)

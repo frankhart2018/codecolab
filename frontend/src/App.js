@@ -19,6 +19,8 @@ import CurrentUser from "./Home/components/CurrentUser";
 import ProfilePage from "./Home/components/ProfilePage";
 import EditProfilePage from "./Home/components/EditProfilePage";
 import ProtectedRoute from "./Home/components/ProtectedRoute";
+import searchReducer from "./reducers/search-reducer";
+import DetailsStackExchange from "./Home/components/DetailsStackExchange";
 import fileReducer from "./reducers/file-reducer";
 import runReducer from "./reducers/run-reducer";
 import ViewProfile from "./Home/components/ViewProfile";
@@ -28,8 +30,9 @@ const store = configureStore({
     userDetails: userDetailsReducer,
     pyrunner: pyrunnerReducer,
     project: projectReducer,
+    searchDetails: searchReducer,
     file: fileReducer,
-    run: runReducer,
+    run: runReducer
   },
 });
 
@@ -44,6 +47,7 @@ const App = () => {
                 <Route path="/*" element={<Home />} />
                 <Route path="/login" element={<SignIn />} />
                 <Route path="/sign-up" element={<SignUp />} />
+                <Route path="/details/*" element={<DetailsStackExchange />} />
                 <Route path="/profile" element={
                   <ProtectedRoute>
                     <ProfilePage />

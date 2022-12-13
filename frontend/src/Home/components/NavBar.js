@@ -1,6 +1,8 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import { AppBar, Link, Menu, MenuItem } from "@mui/material";
+
+import Container from "@mui/material/Container";
+import { AppBar, InputBase, Link, Menu, MenuItem } from "@mui/material";
 import Toolbar from "./ToolBar";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
@@ -8,6 +10,7 @@ import Avatar from '@mui/material/Avatar';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
+import SearchIcon from "@mui/icons-material/Search";
 import Tooltip from '@mui/material/Tooltip';
 import Logout from '@mui/icons-material/Logout';
 import { logoutUserThunk } from "../../services/thunks";
@@ -86,16 +89,36 @@ function NavBar() {
   return (
     <div>
       <AppBar position="fixed">
-        <Toolbar sx={{ justifyContent: "space-between" }}>
-          <Box sx={{ flex: 1 }} />
+        <Toolbar>
+          <Box sx={{ flex: 1 }} >
           <Link
             variant="h6"
             underline="none"
             color="inherit"
+            href={'/'}
             sx={{ fontSize: 24 }}
           >
             Code Connect
           </Link>
+          </Box>
+          <Box sx={{ flex: 3 }} >
+          <Container >
+            <InputBase
+                id="search-bar"
+                className="text"
+                placeholder="Search for users"
+                fullWidth={true}
+                sx={{backgroundColor:"white", border: 1, borderRadius: 2, boxShadow: 1}}
+            />
+
+          </Container>
+          </Box>
+            <Box sx={{ flex: 1 }} >
+              <IconButton type="button" sx={{ p: '10px', color:"white"}} aria-label="search">
+                <SearchIcon />
+              </IconButton>
+            </Box>
+
           {!currentUser &&
             <Box sx={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
               <Link
@@ -190,6 +213,7 @@ function NavBar() {
               </Menu>
             </>
           }
+
         </Toolbar>
       </AppBar>
       <Toolbar />
