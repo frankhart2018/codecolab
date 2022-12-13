@@ -7,7 +7,6 @@ import FileStructure from "./file-structure/FileStructure";
 import EditorWindow from "./editor-window/EditorWindow";
 import OutputWindow from "./output-window/OutputWindow";
 import { hasWritePermissionThunk } from "../../services/project-thunk";
-import { userDataThunk } from "../../services/thunks";
 
 const CodeEditorScreen = () => {
   const { currentUser } = useSelector((state) => state.userDetails);
@@ -26,6 +25,8 @@ const CodeEditorScreen = () => {
         })
       );
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
