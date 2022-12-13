@@ -33,7 +33,7 @@ const HomePage = () => {
             console.log("starred", kProjects)
         };
         fetchTopProjectsHome();
-    });
+    }, []);
     useEffect(() => {
         const fetchProjectsHome = async () => {
             const res = await fetch(`${API}/api/get-all-projects/${currentUser?._id}`);
