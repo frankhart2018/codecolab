@@ -18,6 +18,7 @@ import Box from "@mui/material/Box";
 import { useSnackbar } from 'notistack';
 import { useDispatch } from "react-redux";
 import { createProjectThunk } from '../../services/project-thunk';
+import { FormLabel, Radio } from '@mui/material';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -91,7 +92,7 @@ function CreateButton({ owner_id, handleProjectList }) {
 
         return errors;
     };
-    
+
     const handleSubmit = async (e) => {
         const data = {
             name: e.name,
@@ -134,6 +135,7 @@ function CreateButton({ owner_id, handleProjectList }) {
                         New Project
                     </BootstrapDialogTitle>
                     <DialogContent dividers>
+
                         <Form
                             onSubmit={handleSubmit}
                             subscription={{ submitting: true }}
@@ -179,6 +181,12 @@ function CreateButton({ owner_id, handleProjectList }) {
                                         label="Language"
                                         type="text"
                                         margin="normal"
+                                    />
+                                    <FormLabel id="demo-customized-radios">Admin</FormLabel>
+                                    <Radio
+                                        defaultValue={true}
+                                        name="radio-buttons"
+                                        checked={true}
                                     />
                                     <FormSpy subscription={{ submitError: true }}>
                                         {({ submitError }) =>
