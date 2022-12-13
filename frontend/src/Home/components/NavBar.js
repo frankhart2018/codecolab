@@ -24,7 +24,6 @@ const rightLink = {
 };
 
 
-
 function NavBar() {
   const { currentUser } = useSelector((state) => state.userDetails)
   const initials = currentUser?.name?.split(" ").map((name) => name[0]).join("")
