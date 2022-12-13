@@ -51,10 +51,13 @@ const removeUser = async (socket) => {
 const updateCode = async (socket, data) => {
   console.log(`User ${socket.id} is updating code for room ${data.room_id}`);
   let newData = await codeSessionDao.findCodeSession(data.room_id);
-  newData.code = data.code;
-  await codeSessionDao.updateCodeSession(data.room_id, newData);
 
-  socket.to(newData.room_id).emit("recv_code", newData.code);
+  if (newData) {
+    newData.code = data.code;
+    await codeSessionDao.updateCodeSession(data.room_id, newData);
+
+    socket.to(newData.room_id).emit("recv_code", newData.code);
+  }
 };
 
 export default (socket) => {

@@ -16,10 +16,7 @@ const runSlice = createSlice({
     },
     [runCodeThunk.fulfilled]: (state, action) => {
       state.outputLoading = false;
-      state.output =
-        action.payload.error !== ""
-          ? action.payload.error
-          : action.payload.output;
+      state.output = action.payload;
     },
     [runCodeThunk.rejected]: (state, action) => {
       state.outputLoading = false;

@@ -178,6 +178,7 @@ export default function FileStructure() {
         dir_name: newDirName,
       })
     );
+
     setOpenNewDirDialog(false);
     setNewDirName("");
   };

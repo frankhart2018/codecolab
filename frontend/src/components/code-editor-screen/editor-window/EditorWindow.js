@@ -9,6 +9,7 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import CloseIcon from "@mui/icons-material/Close";
 import { IconButton } from "@mui/material";
+import { useSnackbar } from "notistack";
 
 import NoFileSelected from "../no-file-selected/NoFileSelected";
 import RunTaskBar from "../run-taskbar/RunTaskBar";
@@ -34,6 +35,7 @@ const EditorWindow = ({ hasWriteAccess }) => {
   const [currentS3URI, setCurrentS3URI] = useState("");
   const [tabCode, setTabCode] = useState(new Map());
   const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
 
   const { pathname } = useLocation();
   const projectId = pathname.split("/")[2];
@@ -89,8 +91,8 @@ const EditorWindow = ({ hasWriteAccess }) => {
     }
   }, [openFileStack, tabCode]);
 
-  const handleRunCode = () => {
-    dispatch(
+  const handleRunCode = async () => {
+    const response = await dispatch(
       runCodeThunk({
         s3URI: currentS3URI,
         project_id: projectId,
@@ -98,6 +100,16 @@ const EditorWindow = ({ hasWriteAccess }) => {
         path: currentTab,
       })
     );
+
+    if (response.payload.error !== "") {
+      enqueueSnackbar("There seems to be some error in your code!", {
+        variant: "error",
+      });
+    } else {
+      enqueueSnackbar("Code ran successfully!", {
+        variant: "success",
+      });
+    }
   };
 
   const handleCloseClick = (file) => {

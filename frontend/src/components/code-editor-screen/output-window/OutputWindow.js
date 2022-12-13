@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useLocation } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { Box, Button, Typography } from "@mui/material";
-import { Star, StarBorder } from "@mui/icons-material";
+import { Star, StarBorder, Share } from "@mui/icons-material";
 
 import { getPythonVersionThunk } from "../../../services/pyrunner-thunk";
 import {
@@ -11,7 +11,7 @@ import {
   unstarProjectThunk,
 } from "../../../services/project-thunk";
 
-const OutputWindow = () => {
+const OutputWindow = ({ hasWriteAccess }) => {
   const { pythonVersion, pythonVersionLoading } = useSelector(
     (state) => state.pyrunner
   );
@@ -71,7 +71,7 @@ const OutputWindow = () => {
     >
       <Button
         variant="contained"
-        sx={{ width: "100%" }}
+        sx={{ width: "50%" }}
         onClick={handleStarProject}
       >
         {isProjectStarred ? (
@@ -81,6 +81,16 @@ const OutputWindow = () => {
         )}
         Star
       </Button>
+      {hasWriteAccess && (
+        <Button
+          variant="contained"
+          sx={{ width: "50%" }}
+          onClick={handleStarProject}
+        >
+          <Share size={20} className="menu__icon" />
+          Share
+        </Button>
+      )}
       <Box sx={{ overflowX: "scroll" }}>
         <Typography variant="body1" sx={{ padding: "10px" }}>
           {pythonVersionLoading && "Loading..."}
@@ -93,8 +103,24 @@ const OutputWindow = () => {
           {!outputLoading && output !== null && (
             <Typography variant="body1">
               Output: <br />
-              <pre>{output}</pre>
+              {output !== null && output.error !== "" ? (
+                <pre>{output.error}</pre>
+              ) : (
+                <pre>{output.output}</pre>
+              )}
             </Typography>
+          )}
+          {!outputLoading && output !== null && output.error !== "" && (
+            <Button
+              variant="contained"
+              onClick={() => {
+                const errorList = output.error.split("\n");
+                const errorMsg = errorList[errorList.length - 2];
+                console.log(errorMsg);
+              }}
+            >
+              Search in stackoverflow
+            </Button>
           )}
         </Typography>
       </Box>
