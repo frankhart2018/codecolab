@@ -15,17 +15,6 @@ const UsersController = (app) => {
   app.post("/api/update-password/:id/:token", updatePassword);
   app.put("/api/update/:id", updateUser);
   app.post("/api/logout", logoutUser);
-  app.post("/api/user-exists", doesUserExists);
-};
-
-const doesUserExists = async (req, res) => {
-  const { email } = req.body;
-  const user = await userDao.findUser(email);
-  if (user) {
-    return res.json({ res: true });
-  } else {
-    return res.json({ res: false });
-  }
 };
 
 const findUser = async (req, res) => {

@@ -21,7 +21,7 @@ const HomePage = () => {
     const [kProjects, setTopStarredProjects] = useState([]);
     const [username, setUsername] = useState("");
     const navigate = useNavigate();
-
+    
     useEffect(() => {
         const fetchTopProjectsHome = async () => {
             const k = 3

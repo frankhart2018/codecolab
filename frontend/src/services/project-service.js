@@ -114,3 +114,23 @@ export const hasWritePermission = async (project_id, user_id) => {
   );
   return response.data;
 };
+
+export const giveViewPermission = async (project_id, email_id) => {
+  const response = await axios.post(
+    `${API_BASE}/give-view-permission/${project_id}`,
+    {
+      email_id,
+    }
+  );
+  return response.data;
+};
+
+export const giveEditPermission = async (project_id, email_id) => {
+  const response = await axios.post(
+    `${API_BASE}/give-edit-permission/${project_id}`,
+    {
+      email_id,
+    }
+  );
+  return response.data;
+};

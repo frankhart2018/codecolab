@@ -129,3 +129,25 @@ export const hasWritePermissionThunk = createAsyncThunk(
     return response;
   }
 );
+
+export const giveViewPermissionThunk = createAsyncThunk(
+  "/project/giveViewPermission",
+  async (payload) => {
+    const response = await project_service.giveViewPermission(
+      payload.project_id,
+      payload.email_id
+    );
+    return response;
+  }
+);
+
+export const giveEditPermissionThunk = createAsyncThunk(
+  "/project/giveEditPermission",
+  async (payload) => {
+    const response = await project_service.giveEditPermission(
+      payload.project_id,
+      payload.email_id
+    );
+    return response;
+  }
+);

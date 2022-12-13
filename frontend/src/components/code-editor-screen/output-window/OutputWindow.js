@@ -18,11 +18,12 @@ import { Star, StarBorder, Share } from "@mui/icons-material";
 
 import { getPythonVersionThunk } from "../../../services/pyrunner-thunk";
 import {
+  giveEditPermissionThunk,
+  giveViewPermissionThunk,
   isProjectStarredThunk,
   starProjectThunk,
   unstarProjectThunk,
 } from "../../../services/project-thunk";
-import { doesUserExistThunk } from "../../../services/thunks";
 import { useSnackbar } from "notistack";
 
 const OutputWindow = ({ hasWriteAccess }) => {
@@ -87,15 +88,35 @@ const OutputWindow = ({ hasWriteAccess }) => {
   };
 
   const handleShareDialogSubmit = async () => {
-    const response = await dispatch(doesUserExistThunk(shareEmail));
-    console.log(response.payload.res);
-    if (response.payload.res) {
-      enqueueSnackbar("User is now added to this project!", {
+    let response;
+
+    if (sharePermission === "viewer") {
+      response = await dispatch(
+        giveViewPermissionThunk({
+          project_id: projectId,
+          email_id: shareEmail,
+        })
+      );
+    } else {
+      response = await dispatch(
+        giveEditPermissionThunk({
+          project_id: projectId,
+          email_id: shareEmail,
+        })
+      );
+    }
+
+    if (response.payload.status === 201) {
+      enqueueSnackbar(response.payload.message, {
         variant: "success",
       });
     } else {
-      enqueueSnackbar("User does not exist!", { variant: "error" });
+      enqueueSnackbar(response.payload.message, { variant: "error" });
     }
+
+    setShowShareDialog(false);
+    setShareEmail("");
+    setSharePermission("viewer");
   };
 
   const handleSharePermissionChange = (e) => {
@@ -123,7 +144,7 @@ const OutputWindow = ({ hasWriteAccess }) => {
         )}
         Star
       </Button>
-      {hasWriteAccess && (
+      {hasWriteAccess === 2 && (
         <Button
           variant="contained"
           sx={{ width: "50%" }}

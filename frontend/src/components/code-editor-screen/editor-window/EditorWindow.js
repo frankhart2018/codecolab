@@ -170,12 +170,14 @@ const EditorWindow = ({ hasWriteAccess }) => {
               </TabList>
             </Box>
           </TabContext>
-          {hasWriteAccess && <RunTaskBar handleRunCode={handleRunCode} />}
+          {(hasWriteAccess === 1 || hasWriteAccess === 2) && (
+            <RunTaskBar handleRunCode={handleRunCode} />
+          )}
           <Editor
             height="100vh"
             defaultLanguage="python"
             value={code}
-            options={{ readOnly: !hasWriteAccess }}
+            options={{ readOnly: hasWriteAccess === 0 }}
             onChange={(value) => {
               setCode(value);
               socket.emit("update_code", {
