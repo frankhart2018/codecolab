@@ -31,7 +31,7 @@ const CodeEditorScreen = () => {
 
   return (
     <Stack direction="row" alignItems="center">
-      <FileStructure />
+      <FileStructure hasWriteAccess={hasWritePermission} />
       <EditorWindow hasWriteAccess={hasWritePermission} />
       <OutputWindow hasWriteAccess={hasWritePermission} />
     </Stack>

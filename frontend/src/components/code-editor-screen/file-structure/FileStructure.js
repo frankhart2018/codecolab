@@ -124,7 +124,7 @@ const generateFileStructure = (
   );
 };
 
-export default function FileStructure() {
+export default function FileStructure({ hasWriteAccess }) {
   const { fileMap, fileMapLoading } = useSelector((state) => state.project);
   const [currentPath, setCurrentPath] = useState("");
   const [currentType, setCurrentType] = useState("");
@@ -229,22 +229,26 @@ export default function FileStructure() {
             </Typography>
           }
         >
-          <Button
-            variant="contained"
-            sx={{ width: "50%" }}
-            onClick={handleOpenNewFileDialogOpen}
-          >
-            <Icon.File size={20} className="menu__icon" />
-            New File
-          </Button>
-          <Button
-            variant="contained"
-            sx={{ width: "50%" }}
-            onClick={handleOpenNewDirDialogOpen}
-          >
-            <Icon.Folder size={20} className="menu__icon" />
-            New Directory
-          </Button>
+          {hasWriteAccess !== 0 && (
+            <>
+              <Button
+                variant="contained"
+                sx={{ width: "50%" }}
+                onClick={handleOpenNewFileDialogOpen}
+              >
+                <Icon.File size={20} className="menu__icon" />
+                New File
+              </Button>
+              <Button
+                variant="contained"
+                sx={{ width: "50%" }}
+                onClick={handleOpenNewDirDialogOpen}
+              >
+                <Icon.Folder size={20} className="menu__icon" />
+                New Directory
+              </Button>
+            </>
+          )}
           {fileMapLoading && "Loading..."}
           {!fileMapLoading &&
             fileMap !== null &&
