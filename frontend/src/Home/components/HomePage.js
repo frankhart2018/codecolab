@@ -1,13 +1,12 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Container from '@mui/material/Container';
-import {Card, CardActions, CardHeader, Grid, IconButton, ListItem, Stack, Typography} from "@mui/material";
-import Button from "./form/Button";
+import { Button, Card, CardActions, CardHeader, Grid, IconButton, ListItem, Stack, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import ListItemText from "@mui/material/ListItemText";
 import SearchStackExchange from "./SearchStackExchange";
-import {Link, useNavigate} from "react-router-dom";
-import {useSelector} from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import NavBar from "./NavBar";
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import Avatar from "@mui/material/Avatar";
@@ -30,10 +29,9 @@ const HomePage = () => {
             const res = await fetch(`${API}/api/get-top-starred-projects/${k}`);
             const data = await res.json();
             setTopStarredProjects(data?.projects);
-            console.log("starred", kProjects)
         };
         fetchTopProjectsHome();
-    });
+    }, []);
     useEffect(() => {
         const fetchProjectsHome = async () => {
             const res = await fetch(`${API}/api/get-all-projects/${currentUser?._id}`);
@@ -51,7 +49,7 @@ const HomePage = () => {
 
     return (
         <>
-            <NavBar/>
+            <NavBar />
             <Box
                 sx={{
                     bgcolor: 'background.paper',
@@ -75,59 +73,61 @@ const HomePage = () => {
                 </Container>
             </Box>
             {!currentUser &&
-                <Container sx={{pt:1, pb:0}} maxWidth="md" disableGutters={true}>
-                    <Box justifyContent={"center"} sx={{pt:0, pb:0}}>
+                <Container sx={{ pt: 1, pb: 0 }} maxWidth="md" disableGutters={true}>
+                    <Box justifyContent={"center"} sx={{ pt: 0, pb: 0 }}>
                         <Stack
                             direction="row"
                             spacing={2}
                             justifyContent="center"
-                            sx={{pb:2}}
+                            sx={{ pb: 2 }}
                         >
-                            <Link to="/sign-up" style={{textDecoration: 'none'}}>
-                                <Button variant="contained">Get Started</Button>
+                            <Link to="/sign-up" style={{ textDecoration: 'none' }}>
+                                <Button variant="contained" size="large">Get Started</Button>
                             </Link>
-                            <Link to="/login" style={{textDecoration: 'none'}}>
-                                <Button variant="outlined">Login</Button>
+                            <Link to="/login" style={{ textDecoration: 'none' }}>
+                                <Button variant="outlined" size="large">Login</Button>
                             </Link>
                         </Stack>
                         <Container >
-                            <Grid container spacing={4}>
+                            <Grid container spacing={4} style={{ paddingTop: 10 }}>
                                 <Grid item xs={12} sm={12} md={12}>
                                     <Typography variant="h5" component="div" align="left" gutterBottom>
                                         Check out our top rated projects!
                                     </Typography>
                                 </Grid>
                                 <Stack direction="row" spacing={2} pl={4}>
-                                        {kProjects?.map((project) => (
-                                            <Card sx={{ width: 275,
-                                                backgroundColor: 'white',
-                                                '&:hover': {
-                                                    backgroundColor: 'lightgrey',
-                                                    opacity: [0.9, 0.8, 0.7],
-                                                }}}
-                                                  onClick={() => handleOpenProject(project?._id)}
-                                                  >
-                                                <CardHeader
-                                                    title={project.name}
-                                                />
-                                                <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: 75}}>
-                                                    <img src="/python_logo.png" alt="python logo" style={{ width: '100px' }}></img>
-                                                </div>
-                                                <CardContent>
-                                                    <Typography variant="body2" color="text.secondary">
-                                                        {project.description}
+                                    {kProjects?.map((project) => (
+                                        <Card sx={{
+                                            width: 275,
+                                            backgroundColor: 'white',
+                                            '&:hover': {
+                                                backgroundColor: 'lightgrey',
+                                                opacity: [0.9, 0.8, 0.7],
+                                            }
+                                        }}
+                                            onClick={() => handleOpenProject(project?._id)}
+                                        >
+                                            <CardHeader
+                                                title={project.name}
+                                            />
+                                            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: 75 }}>
+                                                <img src="/python_logo.png" alt="python logo" style={{ width: '100px' }}></img>
+                                            </div>
+                                            <CardContent>
+                                                <Typography variant="body2" color="text.secondary">
+                                                    {project.description}
+                                                </Typography>
+                                            </CardContent>
+                                            <CardActions disableSpacing>
+                                                <IconButton aria-label="add to favorites">
+                                                    <StarRateIcon color="starred" fontSize="medium" />
+                                                    <Typography variant="body2" color="text.secondary" pt={0.5}>
+                                                        Starred by {project.stars} users
                                                     </Typography>
-                                                </CardContent>
-                                                <CardActions disableSpacing>
-                                                    <IconButton aria-label="add to favorites">
-                                                        <StarRateIcon color="starred" fontSize="medium" />
-                                                        <Typography variant="body2" color="text.secondary" pt={0.5}>
-                                                            Starred by {project.stars} users
-                                                        </Typography>
-                                                    </IconButton>
-                                                </CardActions>
-                                            </Card>
-                                        ))}
+                                                </IconButton>
+                                            </CardActions>
+                                        </Card>
+                                    ))}
                                 </Stack>
                             </Grid>
                         </Container>
@@ -135,7 +135,7 @@ const HomePage = () => {
                 </Container>
             }
             {currentUser &&
-                <Container sx={{py: 5, pt:1, pb:0}} maxWidth="md" disableGutters={true}>
+                <Container sx={{ py: 5, pt: 1, pb: 0 }} maxWidth="md" disableGutters={true}>
                     <Box justifyContent={"center"}>
                         <Container>
                             <Grid container spacing={4}>
@@ -148,59 +148,59 @@ const HomePage = () => {
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={12} sm={12} md={12}>
-                    <List sx={{width: '100%', bgcolor: 'background.paper'}}>
-                        {slicedProjects?.map((project) => (
-                            <ListItem alignItems="flex-start" sx={{
-                                width: "100%",
-                                backgroundColor: 'white',
-                                '&:hover': {
-                                    backgroundColor: 'lightgrey',
-                                    opacity: [0.9, 0.8, 0.7],
-                                },
-                            }}>
-                                <ListItemAvatar>
-                                    <Avatar src="/python_logo.png" alt="python logo" />
-                                </ListItemAvatar>
-                                <Link to={`/code-editor/${project?._id}`} style={{ textDecoration: 'none' }}>
-                                <ListItemText
-                                    primary={project?.name}
-                                    secondary={
-                                        <React.Fragment>
-                                            <Typography
-                                                sx={{display: 'inline'}}
-                                                component="span"
-                                                variant="body2"
-                                                color="text.primary"
-                                            >
-                                                {project?.description}
-                                            </Typography>
-                                        </React.Fragment>
-                                    }
-                                />
-                                </Link>
-                            </ListItem>
-                        ))}
-                    </List>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        endIcon={<NavigateNextIcon/>}
-                        style={{float: 'right'}}
-                        href={'/all-projects'}
-                    >
-                        See all projects
-                    </Button>
+                                    <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+                                        {slicedProjects?.map((project) => (
+                                            <ListItem alignItems="flex-start" sx={{
+                                                width: "100%",
+                                                backgroundColor: 'white',
+                                                '&:hover': {
+                                                    backgroundColor: 'lightgrey',
+                                                    opacity: [0.9, 0.8, 0.7],
+                                                },
+                                            }}>
+                                                <ListItemAvatar>
+                                                    <Avatar src="/python_logo.png" alt="python logo" />
+                                                </ListItemAvatar>
+                                                <Link to={`/code-editor/${project?._id}`} style={{ textDecoration: 'none' }}>
+                                                    <ListItemText
+                                                        primary={project?.name}
+                                                        secondary={
+                                                            <React.Fragment>
+                                                                <Typography
+                                                                    sx={{ display: 'inline' }}
+                                                                    component="span"
+                                                                    variant="body2"
+                                                                    color="text.primary"
+                                                                >
+                                                                    {project?.description}
+                                                                </Typography>
+                                                            </React.Fragment>
+                                                        }
+                                                    />
+                                                </Link>
+                                            </ListItem>
+                                        ))}
+                                    </List>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        endIcon={<NavigateNextIcon />}
+                                        style={{ float: 'right' }}
+                                        href={'/all-projects'}
+                                    >
+                                        See all projects
+                                    </Button>
                                 </Grid>
-                        </Grid>
-                    </Container>
-                </Box>
+                            </Grid>
+                        </Container>
+                    </Box>
                 </Container>
             }
             <Container sx={{ py: 5 }} maxWidth="md">
                 <Typography variant="h5" component="div" align="left" gutterBottom>
                     Ask a question here. Get the top results from Stack Exchange
                 </Typography>
-                <SearchStackExchange/>
+                <SearchStackExchange />
             </Container>
         </>
     )

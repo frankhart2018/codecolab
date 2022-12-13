@@ -1,9 +1,9 @@
-import {useState} from "react";
-import {Grid, InputBase} from "@mui/material";
+import { useState } from "react";
+import { Grid, InputBase, Paper } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from '@mui/icons-material/Search';
 import * as React from "react";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 
 const SearchStackExchange = () => {
@@ -17,22 +17,27 @@ const SearchStackExchange = () => {
         <div>
             <Grid container spacing={0}>
                 <Grid item xs={11} lg={11} sm={11} md={11} >
-                <InputBase
-                    id="search-bar"
-                    className="text"
-                    onInput={(e) => {
-                        setSearchQuery(e.target.value);
-                    }}
-                    placeholder="Search StackExchange"
-                    fullWidth={true}
-                    sx={{backgroundColor:"white", border: 1, borderRadius: 2, boxShadow: 1}}
-                />
+                    <Paper
+                        component="form"
+                        sx={{ p: '2px 4px', display: 'flex' }}
+
+                    >
+                        <InputBase
+                            sx={{ ml: 1, flex: 1 }}
+                            placeholder="Search StackExchange"
+                            onInput={(e) => {
+                                setSearchQuery(e.target.value);
+                            }}
+                            fullWidth={true}
+                            inputProps={{ 'aria-label': 'Search StackExchange' }}
+                        />
+                        <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
+                            <SearchIcon onClick={handleSearchClick} />
+                        </IconButton>
+                    </Paper>
+
                 </Grid>
-                <Grid item xs={1} lg={1} sm={1} md={1} >
-                    <IconButton onClick={handleSearchClick} type="button" sx={{ p: '10px' }} aria-label="search">
-                        <SearchIcon />
-                    </IconButton>
-                </Grid>
+
             </Grid>
         </div>
     )

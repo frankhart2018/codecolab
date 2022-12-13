@@ -1,8 +1,7 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 
-import Container from "@mui/material/Container";
-import { AppBar, InputBase, Link, Menu, MenuItem } from "@mui/material";
+import { AppBar, InputBase, Link, Menu, MenuItem, Paper } from "@mui/material";
 import Toolbar from "./ToolBar";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
@@ -31,6 +30,7 @@ function NavBar() {
   const [name, setName] = useState("")
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const [searchUser, setSearchUser] = useState("")
   const dispatch = useDispatch()
   const navigate = useNavigate();
 
@@ -58,7 +58,7 @@ function NavBar() {
     setAnchorEl(null);
     dispatch(logoutUserThunk());
   }
-  
+
   function stringToColor(string) {
     let hash = 0;
     let i;
@@ -91,36 +91,37 @@ function NavBar() {
       <AppBar position="fixed">
         <Toolbar>
           <Box sx={{ flex: 1 }} >
-          <Link
-            variant="h6"
-            underline="none"
-            color="inherit"
-            href={'/'}
-            sx={{ fontSize: 24 }}
-          >
-            Code Connect
-          </Link>
+            <Link
+              variant="h6"
+              underline="none"
+              color="inherit"
+              href={'/'}
+              sx={{ fontSize: 24 }}
+            >
+              Code Connect
+            </Link>
           </Box>
           <Box sx={{ flex: 3 }} >
-          <Container >
-            <InputBase
-                id="search-bar"
-                className="text"
-                placeholder="Search for users"
-                fullWidth={true}
-                sx={{backgroundColor:"white", border: 1, borderRadius: 2, boxShadow: 1}}
-            />
+            <Paper
+              component="form"
+              sx={{ p: '2px 4px', display: 'flex', float: 'right', maxWidth: 400 }}
 
-          </Container>
-          </Box>
-            <Box sx={{ flex: 1 }} >
-              <IconButton type="button" sx={{ p: '10px', color:"white"}} aria-label="search">
-                <SearchIcon />
+            >
+              <InputBase
+                sx={{ ml: 1, flex: 1 }}
+                placeholder="Search for users"
+                value={searchUser}
+                onChange={(e) => setSearchUser(e.target.value)}
+                inputProps={{ 'aria-label': 'Search for users' }}
+              />
+              <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
+                <SearchIcon onClick={() => navigate(`/profile/${searchUser}`)} />
               </IconButton>
-            </Box>
+            </Paper>
+          </Box>
 
           {!currentUser &&
-            <Box sx={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
               <Link
                 color="inherit"
                 variant="h6"
