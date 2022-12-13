@@ -348,3 +348,14 @@ export const getTopStarredProjectsUser = async (user_id) => {
 
   return all_starred_projects;
 };
+
+export const hasWritePermission = async (project_id, user_id) => {
+  const project = await projectModel.findOne({ _id: project_id });
+
+  let has_permission = false;
+  if (project.owner_id === user_id) {
+    has_permission = true;
+  }
+
+  return { res: has_permission };
+};

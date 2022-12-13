@@ -10,6 +10,7 @@ import {
   starProjectThunk,
   unstarProjectThunk,
   openFileInProjectThunk,
+  hasWritePermissionThunk,
 } from "../services/project-thunk";
 
 let initialState = {
@@ -17,6 +18,7 @@ let initialState = {
   fileMapLoading: false,
   isProjectStarred: false,
   currentlyOpenedFilePath: null,
+  hasWritePermission: false,
 };
 
 const setOpenState = (root) => {
@@ -60,6 +62,9 @@ const projectSlice = createSlice({
       }
 
       state.fileMap = JSON.parse(JSON.stringify(fixedRoot));
+    },
+    closeFileInProject(state, action) {
+      state.currentlyOpenedFilePath = null;
     },
   },
   extraReducers: {
@@ -137,8 +142,11 @@ const projectSlice = createSlice({
     [openFileInProjectThunk.fulfilled]: (state, action) => {
       state.currentlyOpenedFilePath = action.payload.path;
     },
+    [hasWritePermissionThunk.fulfilled]: (state, action) => {
+      state.hasWritePermission = action.payload.res;
+    },
   },
 });
 
-export const { updateFileMap } = projectSlice.actions;
+export const { updateFileMap, closeFileInProject } = projectSlice.actions;
 export default projectSlice.reducer;

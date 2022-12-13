@@ -8,7 +8,6 @@ const CurrentUser = ({ children }) => {
     localStorage.getItem("token");
 
   const { currentUser } = useSelector((state) => state.userDetails);
-  console.log("token", token);
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchUser = async () => {

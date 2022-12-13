@@ -104,3 +104,13 @@ export const updateCodeInS3 = async (project_id, path, code) => {
   );
   return response.data;
 };
+
+export const hasWritePermission = async (project_id, user_id) => {
+  const response = await axios.post(
+    `${API_BASE}/has-write-permission/${project_id}`,
+    {
+      user_id,
+    }
+  );
+  return response.data;
+};

@@ -118,3 +118,14 @@ export const isProjectStarredThunk = createAsyncThunk(
     return response;
   }
 );
+
+export const hasWritePermissionThunk = createAsyncThunk(
+  "/project/hasWritePermission",
+  async (payload) => {
+    const response = await project_service.hasWritePermission(
+      payload.project_id,
+      payload.user_id
+    );
+    return response;
+  }
+);

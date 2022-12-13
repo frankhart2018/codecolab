@@ -219,6 +219,23 @@ const getTopKStarredProjectsUser = async (req, res) => {
   return res.status(200).json({ status: 200, projects: kProjects });
 };
 
+const hasWritePermission = async (req, res) => {
+  const { project_id } = req.params;
+  const { user_id } = req.body;
+
+  const project = await projectDao.findProjectById(project_id);
+
+  if (!project) {
+    res.status(400).send("Project doesn't exist");
+  } else {
+    const hasPermission = await projectDao.hasWritePermission(
+      project_id,
+      user_id
+    );
+    res.status(201).send(hasPermission);
+  }
+};
+
 const ProjectController = (app) => {
   app.post("/api/get-project/:project_id", fetchS3URL);
   app.get("/api/get-all-projects/:owner_id", getAllProject);
@@ -237,6 +254,7 @@ const ProjectController = (app) => {
     "/api/get-top-starred-projects-user/:k/:user_id",
     getTopKStarredProjectsUser
   );
+  app.post("/api/has-write-permission/:project_id", hasWritePermission);
 };
 
 export default ProjectController;

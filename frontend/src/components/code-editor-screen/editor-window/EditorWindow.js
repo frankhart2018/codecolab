@@ -14,15 +14,11 @@ import NoFileSelected from "../no-file-selected/NoFileSelected";
 import RunTaskBar from "../run-taskbar/RunTaskBar";
 import { runCodeThunk } from "../../../services/run-thunk";
 import { closeFile } from "../../../reducers/file-reducer";
+import { closeFileInProject } from "../../../reducers/project-reducer";
 
 const socket = io.connect(process.env.REACT_APP_CODE_SHARER_API_BASE);
 
-const EditorWindow = () => {
-  console.log(
-    "Connected to socket server: ",
-    process.env.REACT_APP_CODE_SHARER_API_BASE
-  );
-
+const EditorWindow = ({ hasWriteAccess }) => {
   const {
     fileContents,
     fileContentsLoading,
@@ -50,11 +46,38 @@ const EditorWindow = () => {
   };
 
   useEffect(() => {
+    if (currentTab !== "" && currentTab !== undefined && currentTab !== null) {
+      if (socket.connected) {
+        socket.disconnect();
+      }
+      socket.connect();
+      socket.emit("view_code", {
+        room_id: `${projectId}/${currentTab}`,
+        code: tabCode.get(currentTab)[0],
+      });
+      socket.on("code", (data) => {
+        setCode(data);
+      });
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentTab]);
+
+  useEffect(() => {
+    socket.on("recv_code", (data) => {
+      setCode(data);
+    });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [socket, code]);
+
+  useEffect(() => {
     setCurrentTab(currentlyOpenedFilePath);
-    setCode(fileContents);
     setCurrentS3URI(s3URI);
     setTabCode(tabCode.set(currentlyOpenedFilePath, [fileContents, s3URI]));
-  }, [currentlyOpenedFilePath, fileContents, s3URI, tabCode]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentlyOpenedFilePath, fileContents, s3URI]);
 
   useEffect(() => {
     const latestTab = openFileStack[openFileStack.length - 1];
@@ -84,13 +107,17 @@ const EditorWindow = () => {
       })
     );
 
+    dispatch(closeFileInProject());
+
     setTabCode(new Map([...tabCode].filter(([key]) => key !== file)));
     setCurrentTab(openFileStack[openFileStack.length - 1]);
+    socket.disconnect();
   };
 
   return (
     <>
-      {(noFileSelected || openFileStack.length === 0) && <NoFileSelected />}
+      {(noFileSelected || openFileStack.length === 0) &&
+        !fileContentsLoading && <NoFileSelected />}
       {!noFileSelected && fileContentsLoading && (
         <NoFileSelected message="Loading file..." />
       )}
@@ -131,13 +158,18 @@ const EditorWindow = () => {
               </TabList>
             </Box>
           </TabContext>
-          <RunTaskBar handleRunCode={handleRunCode} />
+          {hasWriteAccess && <RunTaskBar handleRunCode={handleRunCode} />}
           <Editor
             height="100vh"
             defaultLanguage="python"
             value={code}
+            options={{ readOnly: !hasWriteAccess }}
             onChange={(value) => {
               setCode(value);
+              socket.emit("update_code", {
+                room_id: `${projectId}/${currentTab}`,
+                code: value,
+              });
             }}
             theme="vs-dark"
           />
