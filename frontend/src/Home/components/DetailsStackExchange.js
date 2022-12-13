@@ -14,7 +14,7 @@ import {useDispatch} from "react-redux";
 
 const KEY = 'Zv*dAp7WeF3GFkGdRgaZeA(('
 const REMOTE_API_BASE = 'https://api.stackexchange.com/2.3/'
-const SEARCH_QUESTION = 'search/advanced?page=1&pagesize=5&order=desc&sort=relevance&site=stackoverflow&filter=!6Wfm_gRpwPVC8'
+const SEARCH_QUESTION = 'search/advanced?page=1&pagesize=10&order=desc&sort=relevance&site=stackoverflow&filter=!6Wfm_gRpwPVC8'
 
 const DetailsStackExchange = () => {
     const [currentSearch, setCurrentSearch] = useState([]);
