@@ -4,8 +4,8 @@ import * as service from "./search-service";
 export const getQuestionsThunk = createAsyncThunk(
     "search/query",
     async (query) => {
-        const response = await service.getQuestions(query);
-        return response;
+        // const response = await service.getQuestions(query);
+        return query;
     }
 )
 

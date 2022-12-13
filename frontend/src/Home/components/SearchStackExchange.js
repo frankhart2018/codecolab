@@ -1,21 +1,16 @@
 import {useState} from "react";
-import {useDispatch} from "react-redux";
-import {getQuestionsThunk} from "../../services/search-thunks";
 import {Grid, InputBase} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from '@mui/icons-material/Search';
 import * as React from "react";
-import {Link} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 
 const SearchStackExchange = () => {
-    const dispatch = useDispatch()
     const [searchQuery, setSearchQuery] = useState("");
+    const navigate = useNavigate();
     const handleSearchClick = async () => {
-        await dispatch(getQuestionsThunk(searchQuery))
-        // await currentSearch.forEach((search) => {
-        //     dispatch(createQuestionThunk(search))
-        // })
+        navigate(`/details/q=${searchQuery}`);
     }
 
     return (
@@ -34,11 +29,9 @@ const SearchStackExchange = () => {
                 />
                 </Grid>
                 <Grid item xs={1} lg={1} sm={1} md={1} >
-                <Link to={`/details/q=${searchQuery}`} style={{ textDecoration: 'none'}}>
                     <IconButton onClick={handleSearchClick} type="button" sx={{ p: '10px' }} aria-label="search">
                         <SearchIcon />
                     </IconButton>
-                </Link>
                 </Grid>
             </Grid>
         </div>

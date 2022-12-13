@@ -4,13 +4,13 @@ import {createSlice} from "@reduxjs/toolkit";
 const searchSlice = createSlice({
     name: "searchDetails",
     initialState: {
-        currentSearch: [],
+        currentSearchQuery: [],
         localSearch: []
     },
     extraReducers: {
         [getQuestionsThunk.fulfilled]:
             (state, {payload}) => {
-                state.currentSearch = payload.items
+                state.currentSearchQuery = payload
             },
         [updateQuestionThunk.fulfilled]:
             (state, {payload}) => {

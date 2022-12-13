@@ -25,7 +25,7 @@ const getSearch = async (req, res) => {
     const {q_id} = req.params
     const search = await searchDao.findSearchById(q_id);
     console.log("in server", search)
-    return res.json(search)
+    return res.status(201).json({ status: 201, search });
 }
 
 export default (app) => {

@@ -1,24 +1,20 @@
 import React, {useEffect, useState} from "react";
 import Container from '@mui/material/Container';
-import {Card, CardActions, CardHeader, CardMedia, Grid, IconButton, ListItem, Stack, Typography} from "@mui/material";
+import {Card, CardActions, CardHeader, Grid, IconButton, ListItem, Stack, Typography} from "@mui/material";
 import Button from "./form/Button";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import ListItemText from "@mui/material/ListItemText";
 import SearchStackExchange from "./SearchStackExchange";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 import NavBar from "./NavBar";
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import Avatar from "@mui/material/Avatar";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
-import StarIcon from '@mui/icons-material/Star';
+import StarRateIcon from "@mui/icons-material/StarRate";
 import CardContent from "@mui/material/CardContent";
-import {ExpandMore} from "@mui/icons-material";
-import Collapse from "@mui/material/Collapse";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 const API = process.env.REACT_APP_API_URL || 'http://localhost:4000'
-
 
 
 const HomePage = () => {
@@ -26,12 +22,7 @@ const HomePage = () => {
     const [projects, setProjects] = useState([]);
     const [kProjects, setTopStarredProjects] = useState([])
     const [username, setUsername] = useState("");
-
-    const [expanded, setExpanded] = React.useState(false);
-
-    const handleExpandClick = () => {
-        setExpanded(!expanded);
-    };
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchTopProjectsHome = async () => {
@@ -42,7 +33,7 @@ const HomePage = () => {
             console.log("starred", kProjects)
         };
         fetchTopProjectsHome();
-    }, []);
+    });
     useEffect(() => {
         const fetchProjectsHome = async () => {
             const res = await fetch(`${API}/api/get-all-projects/${currentUser?._id}`);
@@ -54,7 +45,9 @@ const HomePage = () => {
     }, [currentUser?._id, currentUser?.username]);
     const slicedProjects = projects.reverse().slice(0, 3);
 
-
+    const handleOpenProject = (id) => {
+        navigate(`/code-editor/${id}`);
+    }
 
     return (
         <>
@@ -106,40 +99,33 @@ const HomePage = () => {
                                 </Grid>
                                 <Stack direction="row" spacing={2} pl={4}>
                                         {kProjects?.map((project) => (
-                                            <Card sx={{ width: 275 }}>
+                                            <Card sx={{ width: 275,
+                                                backgroundColor: 'white',
+                                                '&:hover': {
+                                                    backgroundColor: 'lightgrey',
+                                                    opacity: [0.9, 0.8, 0.7],
+                                                }}}
+                                                  onClick={() => handleOpenProject(project?._id)}
+                                                  >
                                                 <CardHeader
                                                     title={project.name}
                                                 />
-                                                <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: 75 }}>
+                                                <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: 75}}>
                                                     <img src="/python_logo.png" alt="python logo" style={{ width: '100px' }}></img>
-
-                                                {/*<CardMedia*/}
-                                                {/*    component="img"*/}
-                                                {/*    height="194"*/}
-                                                {/*    image="/python_logo.png"*/}
-                                                {/*    alt="python logo"*/}
-                                                {/*/>*/}
                                                 </div>
+                                                <CardContent>
+                                                    <Typography variant="body2" color="text.secondary">
+                                                        {project.description}
+                                                    </Typography>
+                                                </CardContent>
                                                 <CardActions disableSpacing>
                                                     <IconButton aria-label="add to favorites">
-                                                        {project.stars}<StarIcon color={"gold"}/>
-                                                    </IconButton>
-                                                    <ExpandMore
-                                                        expand={expanded}
-                                                        onClick={handleExpandClick}
-                                                        aria-expanded={expanded}
-                                                        aria-label="show more"
-                                                    >
-                                                        <ExpandMoreIcon />
-                                                    </ExpandMore>
-                                                </CardActions>
-                                                <Collapse in={expanded} timeout="auto" unmountOnExit>
-                                                    <CardContent>
-                                                        <Typography paragraph>
-                                                        {project.description}
+                                                        <StarRateIcon color="starred" fontSize="medium" />
+                                                        <Typography variant="body2" color="text.secondary" pt={0.5}>
+                                                            Starred by {project.stars} users
                                                         </Typography>
-                                                    </CardContent>
-                                                </Collapse>
+                                                    </IconButton>
+                                                </CardActions>
                                             </Card>
                                         ))}
                                 </Stack>

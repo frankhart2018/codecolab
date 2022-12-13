@@ -6,17 +6,39 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import {useEffect, useState} from "react";
-import {useSelector} from "react-redux";
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import {Divider, Stack, Typography} from "@mui/material";
 import NavBar from "./NavBar";
+import { useParams } from 'react-router';
+
+const KEY = 'Zv*dAp7WeF3GFkGdRgaZeA(('
+const REMOTE_API_BASE = 'https://api.stackexchange.com/2.3/'
+const SEARCH_QUESTION = 'search/advanced?page=1&pagesize=5&order=desc&sort=relevance&site=stackoverflow&filter=!6Wfm_gRpwPVC8'
 
 const DetailsStackExchange = () => {
     const [checked, setChecked] = useState([1]);
-    const [localSearch, setLocalSearch] = useState([]);
-    const {currentSearch} = useSelector((state) => state.searchDetails)
-    console.log("currentSearch", currentSearch)
+    const [currentSearch, setCurrentSearch] = useState([]);
+    const currentSearchQuery = useParams()
+
+    useEffect( () => {
+        const getQuestions = async () => {
+            await fetch(`${REMOTE_API_BASE}${SEARCH_QUESTION}&${currentSearchQuery["*"]}&key=${KEY}`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            ).then((response) => {
+                return response.json();
+            })
+                .then((data) => {
+                    setCurrentSearch(data.items)
+                });
+        }
+        getQuestions();
+    }, [currentSearchQuery])
 
     const handleToggle = (value) => () => {
         const currentIndex = checked.indexOf(value);
@@ -27,36 +49,8 @@ const DetailsStackExchange = () => {
         } else {
             newChecked.splice(currentIndex, 1);
         }
-
         setChecked(newChecked);
     };
-    const getLocalSearch = (question_id) => {
-        console.log("in function", question_id)
-        fetch(
-            `http://localhost:4000/api/get-search/${question_id}`,
-            {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }
-
-        )
-            .then((response) => {
-                return response.json();
-            })
-            .then((data) => {
-                console.log(question_id, data)
-                setLocalSearch(data
-                );
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
-        return localSearch
-    };
-
-    console.log("local search", localSearch)
 
     return (
         <>
@@ -86,13 +80,10 @@ const DetailsStackExchange = () => {
                                 <ListItemText id={labelId} primary={`${value['title']}`} />
                                 <a href={value['link']} target="_blank" rel="noopener noreferrer"><ListItemText id={labelId} primary={`${value['link']}`} /></a>
                                 <Stack direction="row">
-                                    {/*{localSearch.length !== 0 &&*/}
                                         <Typography gutterBottom>
                                             {/*{getLocalSearch(value.question_id)['upvotes']}*/}
                                             {/*Upvotes: {getLocalSearch(value.question_id)[0]['upvotes']}*/}
-
                                         </Typography>
-                                    {/*}*/}
                                     <Divider variant="inset" component="li" orientation="vertical"/>
                                     <Typography gutterBottom>
                                         {/*Downvotes: {localSearch.downvotes}*/}

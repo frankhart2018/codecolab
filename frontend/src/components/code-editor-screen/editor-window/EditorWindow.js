@@ -15,7 +15,7 @@ import RunTaskBar from "../run-taskbar/RunTaskBar";
 import { runCodeThunk } from "../../../services/run-thunk";
 import { closeFile } from "../../../reducers/file-reducer";
 
-// const socket = io.connect(process.env.REACT_APP_CODE_SHARER_API_BASE);
+const socket = io.connect(process.env.REACT_APP_CODE_SHARER_API_BASE);
 
 const EditorWindow = () => {
   console.log(
