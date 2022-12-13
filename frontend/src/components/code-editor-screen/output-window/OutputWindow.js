@@ -116,7 +116,7 @@ const OutputWindow = ({ hasWriteAccess }) => {
               onClick={() => {
                 const errorList = output.error.split("\n");
                 const errorMsg = errorList[errorList.length - 2];
-                console.log(errorMsg);
+                window.open(`/details/q=${errorMsg}`, "_blank");
               }}
             >
               Search in stackoverflow

@@ -13,8 +13,6 @@ const CodeEditorScreen = () => {
   const { currentUser } = useSelector((state) => state.userDetails);
   const { hasWritePermission } = useSelector((state) => state.project);
 
-  console.log(`Current User: ${currentUser?._id}`);
-
   const { pathname } = useLocation();
 
   const dispatch = useDispatch();
