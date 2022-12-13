@@ -55,11 +55,3 @@ export const updateUserThunk = createAsyncThunk(
     return response;
   }
 );
-
-export const doesUserExistThunk = createAsyncThunk(
-  "user/doesUserExist",
-  async (email) => {
-    const response = await service.doesUserExist(email);
-    return response;
-  }
-);

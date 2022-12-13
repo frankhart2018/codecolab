@@ -192,7 +192,6 @@ export const getS3URL = async (
       const file = current_dir.children.find(
         (child) => child.name === path_split[0]
       );
-      console.log(file);
       file.s3_uri = uri;
       await projectModel.findByIdAndUpdate(
         project_id,
@@ -357,5 +356,51 @@ export const hasWritePermission = async (project_id, user_id) => {
     has_permission = true;
   }
 
-  return { res: has_permission };
+  return has_permission;
+};
+
+export const giveViewPermission = async (project_id, user, user_id) => {
+  const project = await projectModel.findOne({ _id: project_id });
+
+  if (!user.viewing_projects.has(project_id)) {
+    user.viewing_projects.set(project_id, project.name);
+  }
+
+  if (user.editing_projects.has(project_id)) {
+    user.editing_projects.delete(project_id);
+  }
+
+  const user_res = await userModel.findByIdAndUpdate(
+    user_id,
+    {
+      viewing_projects: user.viewing_projects,
+      editing_projects: user.editing_projects,
+    },
+    { new: true }
+  );
+
+  return { user: user_res };
+};
+
+export const giveEditPermission = async (project_id, user, user_id) => {
+  const project = await projectModel.findOne({ _id: project_id });
+
+  if (!user.editing_projects.has(project_id)) {
+    user.editing_projects.set(project_id, project.name);
+  }
+
+  if (user.viewing_projects.has(project_id)) {
+    user.viewing_projects.delete(project_id);
+  }
+
+  const user_res = await userModel.findByIdAndUpdate(
+    user_id,
+    {
+      viewing_projects: user.viewing_projects,
+      editing_projects: user.editing_projects,
+    },
+    { new: true }
+  );
+
+  return { user: user_res };
 };

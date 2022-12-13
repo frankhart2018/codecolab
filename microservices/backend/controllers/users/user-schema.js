@@ -7,6 +7,8 @@ const schema = mongoose.Schema(
     name: String,
     username: { type: String, unique: true },
     starred_projects: { type: Map, of: String, default: {} },
+    viewing_projects: { type: Map, of: String, default: {} },
+    editing_projects: { type: Map, of: String, default: {} },
   },
   { collection: "users" }
 );

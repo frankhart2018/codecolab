@@ -1,4 +1,5 @@
 import * as projectDao from "./project-dao.js";
+import * as userDao from "../users/user-dao.js";
 
 const createProject = async (req, res) => {
   const { name, description, owner_id } = req.body;
@@ -195,12 +196,18 @@ const isProjectStarred = async (req, res) => {
 
 const getAllProject = async (req, res) => {
   const { owner_id } = req.params;
-  const projects = await projectDao.fetchAllProjects(owner_id);
+  let projects = await projectDao.fetchAllProjects(owner_id);
   if (!projects) {
     return res
       .status(400)
       .json({ status: 400, message: "No projects available" });
   }
+
+  if (owner_id !== "undefined") {
+    const shared_projects = await userDao.getAllSharedProjects(owner_id);
+    projects = projects.concat(shared_projects);
+  }
+
   return res.status(200).json({ status: 200, projects: projects });
 };
 
@@ -232,7 +239,68 @@ const hasWritePermission = async (req, res) => {
       project_id,
       user_id
     );
-    res.status(201).send(hasPermission);
+
+    let permission_level = 0;
+    if (hasPermission) {
+      permission_level = 2;
+    }
+
+    const userHasEditPermission = await userDao.userHasEditPermission(
+      project_id,
+      user_id
+    );
+
+    if (userHasEditPermission) {
+      permission_level = 1;
+    }
+
+    res.status(201).send({ permission_level: permission_level });
+  }
+};
+
+const giveViewPermission = async (req, res) => {
+  const { project_id } = req.params;
+  const { email_id } = req.body;
+
+  const user = await userDao.findUser(email_id);
+
+  if (!user) {
+    res.status(200).send({ status: 400, message: "User doesn't exist!" });
+  } else {
+    const updated_user = await projectDao.giveViewPermission(
+      project_id,
+      user,
+      user._id
+    );
+
+    if (!updated_user) {
+      res.status(200).send({ status: 400, message: "There was an error!" });
+    } else {
+      res.status(201).send({ status: 201, message: "Permission given!" });
+    }
+  }
+};
+
+const giveEditPermission = async (req, res) => {
+  const { project_id } = req.params;
+  const { email_id } = req.body;
+
+  const user = await userDao.findUser(email_id);
+
+  if (!user) {
+    res.status(200).send({ status: 400, message: "User doesn't exist!" });
+  } else {
+    const updated_user = await projectDao.giveEditPermission(
+      project_id,
+      user,
+      user._id
+    );
+
+    if (!updated_user) {
+      res.status(200).send({ status: 400, message: "There was an error!" });
+    } else {
+      res.status(201).send({ status: 201, message: "Permission given!" });
+    }
   }
 };
 
@@ -255,6 +323,8 @@ const ProjectController = (app) => {
     getTopKStarredProjectsUser
   );
   app.post("/api/has-write-permission/:project_id", hasWritePermission);
+  app.post("/api/give-view-permission/:project_id", giveViewPermission);
+  app.post("/api/give-edit-permission/:project_id", giveEditPermission);
 };
 
 export default ProjectController;

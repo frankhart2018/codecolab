@@ -53,6 +53,7 @@ const HomePage = () => {
     };
     fetchProjectsHome();
   }, [currentUser?._id, currentUser?.username]);
+
   const slicedProjects = projects.reverse().slice(0, 3);
 
   const handleOpenProject = (id) => {

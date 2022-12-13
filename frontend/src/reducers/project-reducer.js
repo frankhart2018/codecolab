@@ -143,7 +143,8 @@ const projectSlice = createSlice({
       state.currentlyOpenedFilePath = action.payload.path;
     },
     [hasWritePermissionThunk.fulfilled]: (state, action) => {
-      state.hasWritePermission = action.payload.res;
+      console.log(action.payload);
+      state.hasWritePermission = action.payload.permission_level;
     },
   },
 });

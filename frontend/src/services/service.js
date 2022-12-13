@@ -43,10 +43,3 @@ export const updateUser = async (user) => {
   );
   return response;
 };
-
-export const doesUserExist = async (email) => {
-  const response = await axios.post(`${API_BASE}/api/user-exists`, {
-    email: email,
-  });
-  return response.data;
-};
