@@ -1,7 +1,19 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { Box, Button, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Star, StarBorder, Share } from "@mui/icons-material";
 
 import { getPythonVersionThunk } from "../../../services/pyrunner-thunk";
@@ -10,6 +22,8 @@ import {
   starProjectThunk,
   unstarProjectThunk,
 } from "../../../services/project-thunk";
+import { doesUserExistThunk } from "../../../services/thunks";
+import { useSnackbar } from "notistack";
 
 const OutputWindow = ({ hasWriteAccess }) => {
   const { pythonVersion, pythonVersionLoading } = useSelector(
@@ -18,6 +32,10 @@ const OutputWindow = ({ hasWriteAccess }) => {
   const { currentUser } = useSelector((state) => state.userDetails);
   const { output, outputLoading } = useSelector((state) => state.run);
   const { isProjectStarred } = useSelector((state) => state.project);
+  const [showShareDialog, setShowShareDialog] = useState(false);
+  const [shareEmail, setShareEmail] = useState("");
+  const [sharePermission, setSharePermission] = useState("viewer");
+  const { enqueueSnackbar } = useSnackbar();
 
   const { pathname } = useLocation();
   const projectId = pathname.split("/")[2];
@@ -60,6 +78,30 @@ const OutputWindow = ({ hasWriteAccess }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
 
+  const handleShareDialogOpen = () => {
+    setShowShareDialog(true);
+  };
+
+  const handleShareDialogClose = () => {
+    setShowShareDialog(false);
+  };
+
+  const handleShareDialogSubmit = async () => {
+    const response = await dispatch(doesUserExistThunk(shareEmail));
+    console.log(response.payload.res);
+    if (response.payload.res) {
+      enqueueSnackbar("User is now added to this project!", {
+        variant: "success",
+      });
+    } else {
+      enqueueSnackbar("User does not exist!", { variant: "error" });
+    }
+  };
+
+  const handleSharePermissionChange = (e) => {
+    setSharePermission(e.target.value);
+  };
+
   return (
     <Box
       sx={{
@@ -85,7 +127,7 @@ const OutputWindow = ({ hasWriteAccess }) => {
         <Button
           variant="contained"
           sx={{ width: "50%" }}
-          onClick={handleStarProject}
+          onClick={handleShareDialogOpen}
         >
           <Share size={20} className="menu__icon" />
           Share
@@ -124,6 +166,41 @@ const OutputWindow = ({ hasWriteAccess }) => {
           )}
         </Typography>
       </Box>
+
+      {showShareDialog && (
+        <Dialog open={showShareDialog} onClose={handleShareDialogClose}>
+          <DialogContent>
+            <DialogContentText>Share with someone</DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="shareemail"
+              label="Collaborator email id"
+              type="text"
+              fullWidth
+              variant="standard"
+              value={shareEmail}
+              onChange={(e) => setShareEmail(e.target.value)}
+            />
+            <InputLabel id="permission-select">Permission</InputLabel>
+            <Select
+              labelId="permission-select"
+              id="demo-simple-select"
+              defaultValue="viewer"
+              value={sharePermission}
+              label="Age"
+              onChange={handleSharePermissionChange}
+            >
+              <MenuItem value="viewer">Viewer</MenuItem>
+              <MenuItem value="editor">Editor</MenuItem>
+            </Select>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleShareDialogClose}>Cancel</Button>
+            <Button onClick={handleShareDialogSubmit}>Share</Button>
+          </DialogActions>
+        </Dialog>
+      )}
     </Box>
   );
 };
