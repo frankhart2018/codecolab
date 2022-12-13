@@ -13,6 +13,7 @@ export const updateQuestionThunk = createAsyncThunk(
     "update/query",
     async (question) => {
         const response = await service.updateQuestions(question);
+        console.log("updated in db thunk", response)
         return response
     }
 )

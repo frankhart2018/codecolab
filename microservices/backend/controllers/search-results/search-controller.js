@@ -4,8 +4,8 @@ const updateSearch = async (req, res) => {
     console.log("updating search", req.params.qid)
     const searchIdToUpdate = req.params.qid;
     const updates = req.body;
-    const status = await searchDao.updateSearch(searchIdToUpdate, updates);
-    res.json(status)
+    const response = await searchDao.updateSearch(searchIdToUpdate, updates);
+    return res.status(201)
 }
 
 const createSearch = async (req, res) => {
